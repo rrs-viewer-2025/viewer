@@ -67,7 +67,7 @@ public class PoliceforceLoader : MonoBehaviour
                     GameObject Policeforce = Instantiate(PoliceforcePrefab, position, Quaternion.identity);
 
                     Policeforces[entityID] = Policeforce; //IDとオブジェクトの紐付け
-                    
+
                     // コライダーがなければ追加
                     if (Policeforce.GetComponent<Collider>() == null)
                     {
