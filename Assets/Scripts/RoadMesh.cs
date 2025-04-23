@@ -96,11 +96,6 @@ public class RoadMesh : MonoBehaviour
                 mytriangles[k + 1] = mytriangles[k + 2];
                 mytriangles[k + 2] = temp;
                 
-                Debug.Log($"三角形 {k/3}: 時計回り → 修正（反時計回り）");
-            }
-            else
-            {
-                Debug.Log($"三角形 {k/3}: 反時計回り");
             }
         }
 

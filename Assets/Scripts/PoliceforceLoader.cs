@@ -8,38 +8,33 @@ using UnityEngine.UI;
 public class PoliceforceLoader : MonoBehaviour
 {
     public GameObject PoliceforcePrefab; // 救急隊のプレハブ
-    public int MaxStep = 270; //最大ステップ
-    public int Step = 1; //現在のステップ
+    // public int MaxStep = 270; //最大ステップ
+    // public int Step = 1; //現在のステップ
     private string logfolder;
     private Dictionary<int, GameObject> Policeforces = new Dictionary<int, GameObject>(); //IDとオブジェクトの紐付け
-    private float lastUpdateTime = 0f; //最後に更新した時間
-    public float updateInterval = 1.0f; //更新間隔（秒）
+    // private float lastUpdateTime = 0f; //最後に更新した時間
+    // public float updateInterval = 1.0f; //更新間隔（秒）
+
+    StepManager stepManager;
+
+    void Awake()
+    {
+        stepManager = FindObjectOfType<StepManager>();
+    }
 
     void Start()
     {
-        Setting setting = FindObjectOfType<Setting>();
-        logfolder = setting.LogfolderPath;
-        LoadInitialConditions(); //初期状態の読み込み
-
         // リセットボタンの設定
         Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
         resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
 
-    void Update()
+    public void SetLogFolderPath(string path)
     {
-        if (Time.time - lastUpdateTime > updateInterval)
-        {
-            if (Step <= MaxStep)
-            {
-                getstepdata();
-                Step++;
-                lastUpdateTime = Time.time; // 更新時間をリセット
-            }
-        }
+        logfolder = path;
     }
 
-    void LoadInitialConditions()
+    public void LoadInitialConditions()
     {
         string filePath = logfolder + "/INITIAL_CONDITIONS.json";
 
@@ -84,8 +79,16 @@ public class PoliceforceLoader : MonoBehaviour
         }
     }
 
+    public void StartStep()
+    {
+        Debug.Log("StartStep called in PoliceforceLoader"); // ここでStartStepが呼ばれているか確認
+        getstepdata();
+        StartCoroutine(NotifyStepCompletedWithDelay());
+    }
+
     void getstepdata()
     {
+        int Step = stepManager.GetCurrentStep();
         string updatePath = logfolder + "/" + Step + "/UPDATES.json";
 
         if (!File.Exists(updatePath))
@@ -150,18 +153,24 @@ public class PoliceforceLoader : MonoBehaviour
                 Vector3 position = new Vector3(x / 1000f, 2, y / 1000f); // スケール調整
                 Policeforces[entityID].transform.position = position;
             }
-        }
+        }  
+    }
+
+    IEnumerator NotifyStepCompletedWithDelay()
+    {
+        yield return new WaitForSeconds(1f); // 2秒待つ
+        stepManager.NotifyCompleted();
     }
 
     // リセット処理
     void ResetSimulation()
     {
-        Step = 1; // ステップを1に戻す
+        // Step = 1; // ステップを1に戻す
         foreach (var policeforce in Policeforces.Values)
         {
-            Destroy(policeforce); // 市民を削除
+            Destroy(policeforce); // 土木隊を削除
         }
-        Policeforces.Clear(); // 市民の辞書をクリア
+        Policeforces.Clear(); // 土木隊の辞書をクリア
 
         LoadInitialConditions(); // 初期状態から再読込
     }

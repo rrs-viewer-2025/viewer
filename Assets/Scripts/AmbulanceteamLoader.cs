@@ -8,38 +8,34 @@ using UnityEngine.UI;
 public class AmbulanceteamLoader : MonoBehaviour
 {
     public GameObject AmbulanceteamPrefab; // 救急隊のプレハブ
-    public int MaxStep = 270; //最大ステップ
-    public int Step = 1; //現在のステップ
+    // public int MaxStep = 270; //最大ステップ
+    // public int Step = 1; //現在のステップ
     public string logfolder;
     private Dictionary<int, GameObject> Ambulanceteams = new Dictionary<int, GameObject>(); //IDとオブジェクトの紐付け
-    private float lastUpdateTime = 0f; //最後に更新した時間
-    public float updateInterval = 1.0f; //更新間隔（秒）
+    // private float lastUpdateTime = 0f; //最後に更新した時間
+    // public float updateInterval = 1.0f; //更新間隔（秒）
+
+    StepManager stepManager;
+
+    void Awake()
+    {
+        stepManager = FindObjectOfType<StepManager>();
+    }
+    
 
     void Start()
     {
-        Setting setting = FindObjectOfType<Setting>();
-        logfolder = setting.LogfolderPath;
-        LoadInitialConditions(); //初期状態の読み込み
-
         // リセットボタンの設定
         Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
         resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
 
-    void Update()
+    public void SetLogFolderPath(string path)
     {
-        if (Time.time - lastUpdateTime > updateInterval)
-        {
-            if (Step <= MaxStep)
-            {
-                getstepdata();
-                Step++;
-                lastUpdateTime = Time.time; // 更新時間をリセット
-            }
-        }
+        logfolder = path;
     }
 
-    void LoadInitialConditions()
+    public void LoadInitialConditions()
     {
         string filePath = logfolder + "/INITIAL_CONDITIONS.json";
 
@@ -84,8 +80,18 @@ public class AmbulanceteamLoader : MonoBehaviour
         }
     }
 
+    public void StartStep()
+    {
+        Debug.Log("StartStep called in AmbulanceteamLoader"); // ここでStartStepが呼ばれているか確認
+        getstepdata();
+        StartCoroutine(NotifyStepCompletedWithDelay());
+    }
+
     void getstepdata()
     {
+        int Step = stepManager.GetCurrentStep();
+        // Debug.Log($"Current Step: {Step}"); // Stepが取得できているか確認
+        // Debug.Log($"logfolder: {logfolder}");
         string updatePath = logfolder + "/" + Step + "/UPDATES.json";
 
         if (!File.Exists(updatePath))
@@ -153,10 +159,17 @@ public class AmbulanceteamLoader : MonoBehaviour
         }
     }
 
+    IEnumerator NotifyStepCompletedWithDelay()
+    {
+        yield return new WaitForSeconds(1f); // 2秒待つ
+        stepManager.NotifyCompleted();
+    }
+
+
     // リセット処理
     void ResetSimulation()
     {
-        Step = 1; // ステップを1に戻す
+        // Step = 1; // ステップを1に戻す
         foreach (var Ambulance in Ambulanceteams.Values)
         {
             Destroy(Ambulance); // 救急隊を削除

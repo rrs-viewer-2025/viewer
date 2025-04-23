@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.5748165, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 90968215}
   - component: {fileID: 90968216}
+  - component: {fileID: 90968217}
   m_Layer: 0
   m_Name: StepManager
   m_TagString: Untagged
@@ -168,8 +169,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stepText: {fileID: 1276048778}
-  resetButton: {fileID: 291934826}
-  updateInterval: 1
+--- !u!114 &90968217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90968214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2fac7670ff02462bbe8ed54a8ab72a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &210457690
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,9 +211,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PoliceforcePrefab: {fileID: 1510087614134854271, guid: a10acadba451a9643bd9de2355620073, type: 3}
-  MaxStep: 270
-  Step: 1
-  updateInterval: 1
 --- !u!4 &210457692
 Transform:
   m_ObjectHideFlags: 0
@@ -1199,10 +1207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BlockadePrefab: {fileID: 2684695994064820914, guid: 86509780b07285a44a69b1eb089a3ed1, type: 3}
-  MaxStep: 270
-  Step: 1
   logfolder: 
-  updateInterval: 1
 --- !u!1 &635096963
 GameObject:
   m_ObjectHideFlags: 0
@@ -2915,10 +2920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AmbulanceteamPrefab: {fileID: 6262635755001553110, guid: bfb45da033094461d83a9a6054ee4c55, type: 3}
-  MaxStep: 270
-  Step: 1
   logfolder: "/Users/x22036xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/Viewer/setting/deserialize-rrs_log-cs/output/"
-  updateInterval: 1
 --- !u!4 &1462688104
 Transform:
   m_ObjectHideFlags: 0
@@ -3818,9 +3820,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FirebrigadePrefab: {fileID: 3257083264415493559, guid: 05a357c739fcd4330b9773407e8d9331, type: 3}
-  MaxStep: 270
-  Step: 1
-  updateInterval: 1
 --- !u!1 &2013047742
 GameObject:
   m_ObjectHideFlags: 0
@@ -4030,10 +4029,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   citizenPrefab: {fileID: 3191293194562004155, guid: 344e5bc5b26a34542848678562e23c45, type: 3}
-  MaxStep: 270
-  Step: 1
   logfolder: "/Users/x22036xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/Viewer/setting/deserialize-rrs_log-cs/output/"
-  updateInterval: 1
 --- !u!4 &2100497534
 Transform:
   m_ObjectHideFlags: 0

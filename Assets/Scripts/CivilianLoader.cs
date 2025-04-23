@@ -8,40 +8,35 @@ using Newtonsoft.Json.Linq;
 public class CivilianLoader : MonoBehaviour
 {
     public GameObject citizenPrefab; // 市民のプレハブ
-    public int MaxStep = 270; // 最大ステップ
-    public int Step = 1; // 現在のステップ
+    // public int MaxStep = 270; // 最大ステップ
+    // public int Step = 1; // 現在のステップ
     public string logfolder;
     
     private Dictionary<int, GameObject> civilians = new Dictionary<int, GameObject>(); // エンティティIDとGameObjectの紐づけ
-    private float lastUpdateTime = 0f; // 最後に更新した時間
-    public float updateInterval = 1.0f; // 更新間隔（秒）
+    // private float lastUpdateTime = 0f; // 最後に更新した時間
+    // public float updateInterval = 1.0f; // 更新間隔（秒）
+
+    StepManager stepManager;
+    int Step;
+
+    void Awake()
+    {
+        stepManager = FindObjectOfType<StepManager>();
+    }
 
     void Start()
     {
-        Setting setting = FindObjectOfType<Setting>();
-        logfolder = setting.LogfolderPath;
-        LoadInitialConditions();
-
         // リセットボタンの設定
         Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
         resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
 
-    void Update()
+    public void SetLogFolderPath(string path)
     {
-        if (Time.time - lastUpdateTime > updateInterval)
-        {
-            if (Step <= MaxStep)
-            {
-                getstepdata();
-                LoadCitizenLoad();
-                Step++;
-                lastUpdateTime = Time.time; // 更新時間をリセット
-            }
-        }
+        logfolder = path;
     }
 
-    void LoadInitialConditions()
+    public void LoadInitialConditions()
     {
         string filePath = logfolder + "/INITIAL_CONDITIONS.json";
 
@@ -102,9 +97,17 @@ public class CivilianLoader : MonoBehaviour
         }
     }
 
+    public void StartStep()
+    {
+        Debug.Log("StartStep called in CivilianLoader"); // ここでStartStepが呼ばれているか確認
+        Step = stepManager.GetCurrentStep();
+        getstepdata();
+        LoadCitizenLoad();
+        StartCoroutine(NotifyStepCompletedWithDelay());
+    }
+
     void getstepdata() //市民のパラメータの変更を記録する処理を後で追加しようかな
     {
-        Debug.Log($"ステップ: {Step}");
         string updatePath = logfolder + "/" + Step + "/UPDATES.json";
 
         if (!File.Exists(updatePath))
@@ -280,10 +283,16 @@ public class CivilianLoader : MonoBehaviour
 
     }
 
+    IEnumerator NotifyStepCompletedWithDelay()
+    {
+        yield return new WaitForSeconds(1f); // 2秒待つ
+        stepManager.NotifyCompleted();
+    }
+
     // リセット処理
     void ResetSimulation()
     {
-        Step = 1; // ステップを1に戻す
+        // Step = 1; // ステップを1に戻す
         foreach (var citizen in civilians.Values)
         {
             Destroy(citizen); // 市民を削除
