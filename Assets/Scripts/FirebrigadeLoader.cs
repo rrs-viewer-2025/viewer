@@ -171,6 +171,7 @@ public class FirebrigadeLoader : MonoBehaviour
         }
         Firebrigades.Clear(); // 救急隊の辞書をクリア
 
-        LoadInitialConditions(); // 初期状態から再読込
+        // LoadInitialConditions(); // 初期状態から再読込
+        stepManager.ResetComplete();
     }
 }
