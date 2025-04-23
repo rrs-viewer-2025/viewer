@@ -172,6 +172,7 @@ public class PoliceforceLoader : MonoBehaviour
         }
         Policeforces.Clear(); // 土木隊の辞書をクリア
 
-        LoadInitialConditions(); // 初期状態から再読込
+        // LoadInitialConditions(); // 初期状態から再読込
+        stepManager.ResetComplete();
     }
 }

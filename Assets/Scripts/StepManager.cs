@@ -9,6 +9,7 @@ public class StepManager : MonoBehaviour
     private int currentStep = 1;
     private int scriptsToWait = 5; //ステップごとの実行するスクリプトの数
     private int completedCount = 0; //完了したスクリプトの数
+    private int resetcompletedCount = 0; //リセット処理が完了したスクリプトの数
     private int maxStep; //最大のステップ数
     private string logfolder; // ログのパスを入れる変数
     AmbulanceteamLoader ambulanceteamLoader;
@@ -50,22 +51,31 @@ public class StepManager : MonoBehaviour
         firebrigadeLoader.SetLogFolderPath(logfolder);
         civilianLoader.SetLogFolderPath(logfolder);
         blockadeLoader.SetLogFolderPath(logfolder);
+        simulation();
 
+        // リセットボタンの設定
+        // Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
+        // resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
+    }
+
+    void simulation()
+    {
         ambulanceteamLoader.LoadInitialConditions();
         policeforceLoader.LoadInitialConditions();
         firebrigadeLoader.LoadInitialConditions();
         civilianLoader.LoadInitialConditions();
         
         StartStep(); // 一度だけ
-
-        // リセットボタンの設定
-        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
-        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
 
     public int GetCurrentStep() //他のステップからこいつを呼び出す
     {
         return currentStep;
+    }
+
+    public int GetMaxStep()
+    {
+        return maxStep;
     }
 
     public void NotifyCompleted() //他のスクリプトの処理が完了したらこいつを実行
@@ -111,9 +121,21 @@ public class StepManager : MonoBehaviour
         blockadeLoader.StartStep();
     }
 
+    public void ResetComplete() //各スクリプトがリセット処理完了したら実行
+    {
+        resetcompletedCount++;
+        if(resetcompletedCount >= scriptsToWait)
+        {
+            RestartSimulation();
+        }
+    }
+
     // リセット処理
-    void ResetSimulation()
+    void RestartSimulation()
     {
         currentStep = 1; // ステップを1に戻す
+        completedCount = 0;
+        resetcompletedCount = 0;
+        simulation();
     }
 }

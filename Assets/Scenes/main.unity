@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 291934827}
   - component: {fileID: 291934826}
   m_Layer: 5
-  m_Name: RestartButton
+  m_Name: ResetButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -473,7 +473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc18882eda0b44cfa3a4dac5577f229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LogfolderPath: /Users/k22065kk/lab/rrs_viewer/kobe
+  LogfolderPath: "/Users/x22036xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/Viewer/setting/deserialize-rrs_log-cs/output"
 --- !u!4 &298378966
 Transform:
   m_ObjectHideFlags: 0

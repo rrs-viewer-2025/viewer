@@ -299,6 +299,7 @@ public class CivilianLoader : MonoBehaviour
         }
         civilians.Clear(); // 市民の辞書をクリア
 
-        LoadInitialConditions(); // 初期状態から再読込
+        // LoadInitialConditions(); // 初期状態から再読込
+        stepManager.ResetComplete();
     }
 }

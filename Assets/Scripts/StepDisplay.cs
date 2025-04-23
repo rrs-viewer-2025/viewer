@@ -9,6 +9,7 @@ public class StepDisplay : MonoBehaviour
 {
     public TextMeshProUGUI stepText; // ステップ数を表示するUIテキスト
     int Step = 0;
+    int MaxStep = 0;
     StepManager stepManager;
     // public Button resetButton; // リセットボタン
     // private string logFolder; // ログフォルダのパス
@@ -62,7 +63,8 @@ public class StepDisplay : MonoBehaviour
     void Update()
     {
         Step = stepManager.GetCurrentStep();
-        stepText.text = $"ステップ: {Step}";
+        MaxStep = stepManager.GetMaxStep();
+        stepText.text = $"ステップ: {Step}/{MaxStep}";
     }
 
     /// <summary>

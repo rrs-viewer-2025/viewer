@@ -179,5 +179,7 @@ public class BlockadeLoader : MonoBehaviour
             }
         }
         Blockades.Clear(); // 瓦礫リストをクリア
+
+        stepManager.ResetComplete();
     }
 }
