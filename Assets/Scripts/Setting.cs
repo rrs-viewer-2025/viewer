@@ -5,12 +5,16 @@ using System.IO;
 
 public class Setting : MonoBehaviour
 {
-    public string LogfolderPath; // インスペクターから設定可能
+    public string LogfolderPath;   // エディタ時のみInspectorから
+    public string InterfaceType;   // エディタ時のみInspectorから
 
     [System.Serializable]
     private class ConfigData
     {
         public string logFolderPath;
+
+        [JsonProperty("interface")]
+        public string interfaceType;
     }
 
     void Awake()
@@ -20,37 +24,49 @@ public class Setting : MonoBehaviour
 
     public void LoadConfig()
     {
-        string path = Path.Combine(Application.streamingAssetsPath, "config.json");
+        string configPath = Path.Combine(Application.streamingAssetsPath, "config.json");
 
 #if UNITY_EDITOR
-        // 開発中：InspectorのLogfolderPathを優先し、ログファイル存在チェック
-        if (!string.IsNullOrEmpty(LogfolderPath))
+        // エディタ時：Inspector優先（空なら config.json を使う）
+        bool needLogPath = string.IsNullOrEmpty(LogfolderPath);
+        bool needInterface = string.IsNullOrEmpty(InterfaceType);
+
+        if (File.Exists(configPath) && (needLogPath || needInterface))
         {
-            string testLogPath = Path.Combine(LogfolderPath, "INITIAL_CONDITIONS.json");
-            if (File.Exists(testLogPath))
+            string jsonText = File.ReadAllText(configPath);
+            var config = JsonConvert.DeserializeObject<ConfigData>(jsonText);
+
+            if (needLogPath)
             {
-                Debug.Log($"[Setting.cs] Using Inspector path: {LogfolderPath}");
-                return;
+                LogfolderPath = config.logFolderPath;
+                Debug.Log($"[Setting.cs] LogfolderPath loaded from config.json: {LogfolderPath}");
             }
-            else
+            if (needInterface)
             {
-                Debug.LogWarning($"[Setting.cs] Log not found at Inspector path: {testLogPath}. Falling back to config.json.");
+                InterfaceType = config.interfaceType;
+                Debug.Log($"[Setting.cs] InterfaceType loaded from config.json: {InterfaceType}");
             }
         }
-#endif
-
-        // ビルド後、もしくは Inspectorパスが無効だったとき
-        if (File.Exists(path))
+#else
+        // ビルド後：常に config.json 優先
+        if (File.Exists(configPath))
         {
-            string jsonText = File.ReadAllText(path);
-            ConfigData config = JsonConvert.DeserializeObject<ConfigData>(jsonText);
+            string jsonText = File.ReadAllText(configPath);
+            var config = JsonConvert.DeserializeObject<ConfigData>(jsonText);
+
             LogfolderPath = config.logFolderPath;
-            Debug.Log($"[Setting.cs] LogfolderPath loaded from config.json: {LogfolderPath}");
+            InterfaceType = config.interfaceType;
+
+            Debug.Log($"[Setting.cs] Loaded from config.json (build): LogfolderPath = {LogfolderPath}, InterfaceType = {InterfaceType}");
         }
         else
         {
-            Debug.LogError($"[Setting.cs] Config file not found at: {path}");
+            Debug.LogError($"[Setting.cs] config.json not found at: {configPath}");
         }
+#endif
+
+        // 最終ログ
+        Debug.Log($"[Setting.cs] Final: LogfolderPath = {LogfolderPath}, InterfaceType = {InterfaceType}");
     }
 
     public void ReloadConfig()

@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 public class PlayerCharaControl : MonoBehaviour
 {
@@ -13,8 +11,11 @@ public class PlayerCharaControl : MonoBehaviour
     private bool runFlag;
     Rigidbody rb;
 
+    private float v;
+    private float h;
 
-    // Start is called before the first frame update
+    private string interfaceType = "key"; // デフォルトはキーボード
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -22,35 +23,79 @@ public class PlayerCharaControl : MonoBehaviour
 
         // リセットボタンの設定
         Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
-        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
+        resetButton.onClick.AddListener(ResetSimulation);
+
+        // config.jsonからinterfaceを読み込む
+        string path = Path.Combine(Application.streamingAssetsPath, "config.json");
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            JObject config = JObject.Parse(json);
+            interfaceType = config["interface"]?.ToString() ?? "key";
+            Debug.Log($"[PlayerCharaControl] interface: {interfaceType}");
+        }
+        else
+        {
+            Debug.LogError($"[PlayerCharaControl] config.json not found at {path}");
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        float v = Input.GetAxis("Vertical"); //上下キーの取得
-        float h = Input.GetAxis("Horizontal"); //左右キーの取得
+        // 入力方法に応じて処理分岐
+        if (interfaceType == "key")
+        {
+            key();
+        }
+        else if (interfaceType == "mat")
+        {
+            Mat();
+        }
 
-        if(v>0.1||v<-0.1||h>0.1||h<-0.1){
+        // 共通処理（Runアニメーションと移動・回転）
+        if (Mathf.Abs(v) > 0.1f || Mathf.Abs(h) > 0.1f)
+        {
             runFlag = true;
         }
-        else{
+        else
+        {
             runFlag = false;
         }
-        anim.SetBool("Run", runFlag);
-        transform.position += transform.forward * forwardSpeed * v * Time.deltaTime; //プレイヤー移動
-        transform.Rotate(0, rotationSpeed * h * Time.deltaTime, 0); //プレイヤー回転
 
-        if(Input.GetKeyDown(KeyCode.Space)){
+        anim.SetBool("Run", runFlag);
+        transform.position += transform.forward * forwardSpeed * v * Time.deltaTime;
+        transform.Rotate(0, rotationSpeed * h * Time.deltaTime, 0);
+    }
+
+    void key()
+    {
+        v = Input.GetAxis("Vertical");
+        h = Input.GetAxis("Horizontal");
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             anim.SetTrigger("Jump");
             rb.AddForce(transform.up * 1000 * 8, ForceMode.Force);
         }
     }
 
-    // リセット処理
-    void ResetSimulation()
+    void Mat()
     {
-        transform.position = new Vector3(250,0,120);
+        v = 0.0f;
+        h = 0.0f;
+
+        MatAction mat = FindObjectOfType<MatAction>();
+        if (mat != null)
+        {
+            if (mat.Up > 0) v = 1.0f;
+            if (mat.Down > 0) v = -1.0f;
+            if (mat.Left > 0) h = -1.0f;
+            if (mat.Right > 0) h = 1.0f;
+        }
     }
 
+    void ResetSimulation()
+    {
+        transform.position = new Vector3(250, 0, 120);
+    }
 }
