@@ -25,7 +25,10 @@ public class StepManager : MonoBehaviour
         firebrigadeLoader = FindObjectOfType<FirebrigadeLoader>();
         civilianLoader = FindObjectOfType<CivilianLoader>();
         blockadeLoader = FindObjectOfType<BlockadeLoader>();
+    }
 
+    void Start()
+    {
         Setting setting = FindObjectOfType<Setting>();
         logfolder = setting.LogfolderPath;
 
@@ -42,10 +45,6 @@ public class StepManager : MonoBehaviour
             }
         }
 
-    }
-
-    void Start()
-    {
         ambulanceteamLoader.SetLogFolderPath(logfolder);
         policeforceLoader.SetLogFolderPath(logfolder);
         firebrigadeLoader.SetLogFolderPath(logfolder);
