@@ -152,6 +152,8 @@ public class CivilianLoader : MonoBehaviour
             bool flag = true;
             int x = 0, y = 0;
             bool shouldUpdatePosition = false;
+            List<Vector3> MovePath = new List<Vector3>(); // 経由地点リスト
+
 
             foreach (var prop in change["properties"])
             {
@@ -178,13 +180,26 @@ public class CivilianLoader : MonoBehaviour
                 {
                     y = prop["intValue"].ToObject<int>();
                 }
+
+                if (propUrn == URN.Property.POSITION_HISTORY && prop["intList"]?["values"] != null)
+                {
+                    JArray values = (JArray)prop["intList"]["values"];
+                    for (int i = 0; i < values.Count; i += 2)
+                    {
+                        int historyX = values[i].ToObject<int>();
+                        int historyY = values[i + 1].ToObject<int>();
+                        Vector3 his_posi = new Vector3(historyX / 1000f, 0, historyY / 1000f);
+                        MovePath.Add(his_posi);
+                    }
+                }
             }
 
-            // 救急隊が市民を運ぶときにエラー吐かれる問題を修正
             if (shouldUpdatePosition)
             {
                 Vector3 newPosition = new Vector3(x / 1000f, 0, y / 1000f);
-                civilians[entityID].transform.position = newPosition;
+                MovePath.Add(newPosition);
+                // civilians[entityID].transform.position = newPosition;
+                StartCoroutine(MoveAlongPath(civilians[entityID], MovePath));
             }
         }
     }
@@ -283,6 +298,26 @@ public class CivilianLoader : MonoBehaviour
 
     }
 
+    IEnumerator MoveAlongPath(GameObject obj, List<Vector3> path)
+    {
+        for (int i = 0; i < path.Count; i++)
+        {
+            Vector3 target = path[i];
+
+            while (Vector3.Distance(obj.transform.position, target) > 0.05f)
+            {
+                Vector3 direction = (target - obj.transform.position).normalized;
+                if (direction != Vector3.zero)
+                    obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * 5f);
+
+                obj.transform.position = Vector3.MoveTowards(obj.transform.position, target, 30f / 3f * Time.deltaTime); // 移動速度 5f
+                yield return null;
+            }
+        }
+
+        // Debug.Log($"【移動完了】{obj.name} が目的地に到達");
+    }
+
     IEnumerator NotifyStepCompletedWithDelay()
     {
         yield return new WaitForSeconds(1f); // 2秒待つ
@@ -299,6 +334,7 @@ public class CivilianLoader : MonoBehaviour
         }
         civilians.Clear(); // 市民の辞書をクリア
 
-        LoadInitialConditions(); // 初期状態から再読込
+        // LoadInitialConditions(); // 初期状態から再読込
+        stepManager.ResetComplete();
     }
 }
