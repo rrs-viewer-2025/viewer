@@ -474,8 +474,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc18882eda0b44cfa3a4dac5577f229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LogfolderPath: /Users/k22065kk/lab/rrs_viewer/logs/kobe
-  InterfaceType: ke
+  LogfolderPath: "/Users/x22036xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/Viewer/setting/deserialize-rrs_log-cs/output"
+  InterfaceType: key
 --- !u!4 &298378966
 Transform:
   m_ObjectHideFlags: 0
@@ -2161,6 +2161,7 @@ GameObject:
   - component: {fileID: 1009411138}
   - component: {fileID: 1009411137}
   - component: {fileID: 1009411136}
+  - component: {fileID: 1009411139}
   m_Layer: 0
   m_Name: Camera_01
   m_TagString: Untagged
@@ -2242,6 +2243,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1009411139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009411135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0045e573aaa648589ed150dcf1f2406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overviewCamera: {fileID: 0}
+  padding: 10
 --- !u!1 &1054364780
 GameObject:
   m_ObjectHideFlags: 0
