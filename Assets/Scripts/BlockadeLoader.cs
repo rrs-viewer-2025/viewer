@@ -164,7 +164,7 @@ public class BlockadeLoader : MonoBehaviour
 
     IEnumerator NotifyStepCompletedWithDelay()
     {
-        yield return new WaitForSeconds(1f); // 2秒待つ
+        yield return new WaitForSeconds(3f); // 2秒待つ
         stepManager.NotifyCompleted();
     }
 
@@ -179,5 +179,7 @@ public class BlockadeLoader : MonoBehaviour
             }
         }
         Blockades.Clear(); // 瓦礫リストをクリア
+
+        stepManager.ResetComplete();
     }
 }
