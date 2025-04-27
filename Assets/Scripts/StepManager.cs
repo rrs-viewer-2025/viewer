@@ -17,6 +17,7 @@ public class StepManager : MonoBehaviour
     FirebrigadeLoader firebrigadeLoader;
     CivilianLoader civilianLoader;
     BlockadeLoader blockadeLoader;
+    OverviewCamera overviewCamera;
 
     void Awake() //確実に準備させるもの
     {
@@ -25,6 +26,7 @@ public class StepManager : MonoBehaviour
         firebrigadeLoader = FindObjectOfType<FirebrigadeLoader>();
         civilianLoader = FindObjectOfType<CivilianLoader>();
         blockadeLoader = FindObjectOfType<BlockadeLoader>();
+        overviewCamera = FindObjectOfType<OverviewCamera>();
     }
 
     void Start()
@@ -50,6 +52,7 @@ public class StepManager : MonoBehaviour
         firebrigadeLoader.SetLogFolderPath(logfolder);
         civilianLoader.SetLogFolderPath(logfolder);
         blockadeLoader.SetLogFolderPath(logfolder);
+        overviewCamera.SetLogFolderPath(logfolder);
         simulation();
 
         // リセットボタンの設定
@@ -63,6 +66,7 @@ public class StepManager : MonoBehaviour
         policeforceLoader.LoadInitialConditions();
         firebrigadeLoader.LoadInitialConditions();
         civilianLoader.LoadInitialConditions();
+        overviewCamera.SetOverviewCamera();
         
         StartStep(); // 一度だけ
     }
@@ -96,7 +100,7 @@ public class StepManager : MonoBehaviour
         currentStep++; //Stepをカウント
         completedCount = 0;
 
-        if (currentStep <= maxStep)
+        if (currentStep < maxStep)
         {
             Debug.Log($"Step advanced! Now at Step {currentStep}");
             StartStep();
