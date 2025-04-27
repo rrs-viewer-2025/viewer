@@ -66,6 +66,17 @@ public class PlayerCharaControl : MonoBehaviour
 
     void Update()
     {
+
+        // 入力方法に応じて処理分岐
+        if (interfaceType == "key")
+        {
+            key();
+        }
+        else if (interfaceType == "mat")
+        {
+            Mat();
+        }
+        
         if(joycon != null){
             var stick = joycon.GetStick();
             left = joyconManager.getLeftRight(); //右のジョイコンか左のジョイコンか確認
