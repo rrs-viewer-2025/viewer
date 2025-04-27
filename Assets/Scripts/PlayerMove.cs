@@ -4,7 +4,6 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-
 public class PlayerCharaControl : MonoBehaviour
 {
     public float forwardSpeed = 5.0f;//前進速度
@@ -16,9 +15,7 @@ public class PlayerCharaControl : MonoBehaviour
     private float v;
     private float h;
     private List<Joycon> joycons; // Joy-Conのリスト
-    private Joycon joycon;        // 今使うJoy-Con（片方）
-    private float h;
-    private float v;
+    private Joycon joycon;        // 今使うJoy-Con（片方
     private bool left = false;
 
     private string interfaceType = "key"; // デフォルトはキーボード
@@ -69,15 +66,6 @@ public class PlayerCharaControl : MonoBehaviour
 
     void Update()
     {
-        // 入力方法に応じて処理分岐
-        if (interfaceType == "key")
-        {
-            key();
-        }
-        else if (interfaceType == "mat")
-        {
-            Mat();
-        }
         if(joycon != null){
             var stick = joycon.GetStick();
             left = joyconManager.getLeftRight(); //右のジョイコンか左のジョイコンか確認
