@@ -10,10 +10,6 @@ public class PlayerCharaControl : MonoBehaviour
     private Animator anim;
     private bool runFlag;
     Rigidbody rb;
-    private List<Joycon> joycons; // Joy-Conのリスト
-    private Joycon joycon;        // 今使うJoy-Con（片方）
-    private float h;
-    private float v;
 
     private float v;
     private float h;
@@ -27,20 +23,7 @@ public class PlayerCharaControl : MonoBehaviour
 
         // リセットボタンの設定
         Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
-        
-         // JoyconManager から Joy-Con のリストを取得
-        joycons = JoyconManager.Instance.j;
-
-        // 少なくとも1つJoy-Conが接続されていたら使う
-        if (joycons.Count > 0)
-        {
-            joycon = joycons[0]; // 0番目のJoy-Conを使用（通常は左）
-            //Debug.Log("Joy-Con接続成功");
-        }
-        else
-        {
-            //Debug.Log("Joy-Conが接続されていません");
-        }
+        resetButton.onClick.AddListener(ResetSimulation);
 
         // config.jsonからinterfaceを読み込む
         string path = Path.Combine(Application.streamingAssetsPath, "config.json");
@@ -59,13 +42,6 @@ public class PlayerCharaControl : MonoBehaviour
 
     void Update()
     {
-        if(joycon != null){
-            var stick = joycon.GetStick();
-            //Debug.Log("Joy-Con Input:" + stick[0] + stick[1]);  // 入力値を確認
-            v = -stick[0];
-            h = stick[1];
-        }
-     
         // 入力方法に応じて処理分岐
         if (interfaceType == "key")
         {
