@@ -454,7 +454,6 @@ GameObject:
   m_Component:
   - component: {fileID: 298378966}
   - component: {fileID: 298378965}
-  - component: {fileID: 298378967}
   m_Layer: 0
   m_Name: Setting
   m_TagString: Untagged
@@ -474,7 +473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc18882eda0b44cfa3a4dac5577f229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LogfolderPath: /Users/x22038xx/Downloads/kobe
+  LogfolderPath: "/Users/x22036xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/Viewer/setting/deserialize-rrs_log-cs/output"
   InterfaceType: key
 --- !u!4 &298378966
 Transform:
@@ -537,97 +536,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnableIMU: 1
   EnableLocalize: 1
-  m_GameObject: {fileID: 298378964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ea609bff1d20402da332e0e2d479a7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  upAction:
-    m_Name: Up
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: a11e275e-1a68-473a-a78f-a8319aebe012
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 0d4a7263-727c-4f9a-8498-bb3acf9da232
-      m_Path: <HID::USB Gamepad >/button3
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Up
-      m_Flags: 0
-    m_Flags: 0
-  downAction:
-    m_Name: Down
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 04e031d6-b98c-450c-aa49-b02e82fd2b0a
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: c1d25171-4884-4751-ad8b-6634a4aa87b6
-      m_Path: <HID::USB Gamepad >/button2
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Down
-      m_Flags: 0
-    m_Flags: 0
-  leftAction:
-    m_Name: Left
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 0e5d42af-dc77-420f-bb28-9e7e69db7f8e
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 51d442c7-034b-4f5b-adee-5a7dc482d856
-      m_Path: <HID::USB Gamepad >/trigger
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Left
-      m_Flags: 0
-    m_Flags: 0
-  rightAction:
-    m_Name: Right
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 495b9354-6ae7-47bf-a9bf-bdd7f73e10c4
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 304071f1-b089-43c2-90c4-39a1ed16d3e7
-      m_Path: <HID::USB Gamepad >/button4
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Right
-      m_Flags: 0
-    m_Flags: 0
-  stopAction:
-    m_Name: Stop
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 13252f39-8aea-4d3c-a059-a4b5429ed629
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 1c39f8f7-4238-43b9-9c91-aa1c435eda00
-      m_Path: <HID::USB Gamepad >/stick/y
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Stop
-      m_Flags: 0
-    m_Flags: 0
 --- !u!1 &336960528
 GameObject:
   m_ObjectHideFlags: 0

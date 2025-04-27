@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+
 
 public class PlayerCharaControl : MonoBehaviour
 {
@@ -14,19 +16,20 @@ public class PlayerCharaControl : MonoBehaviour
     private Joycon joycon;        // 今使うJoy-Con（片方）
     private float h;
     private float v;
-
-    private float v;
-    private float h;
+    private bool left = false;
 
     private string interfaceType = "key"; // デフォルトはキーボード
+    JoyconManager joyconManager;
+
+    void Awake()
+    {
+        joyconManager = FindObjectOfType<JoyconManager>();
+    }
 
     void Start()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-
-        // リセットボタンの設定
-        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
         
          // JoyconManager から Joy-Con のリストを取得
         joycons = JoyconManager.Instance.j;
@@ -55,26 +58,45 @@ public class PlayerCharaControl : MonoBehaviour
         {
             Debug.LogError($"[PlayerCharaControl] config.json not found at {path}");
         }
+
+        // リセットボタンの設定
+        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
+        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
 
     void Update()
     {
         if(joycon != null){
             var stick = joycon.GetStick();
+            left = joyconManager.getLeftRight(); //右のジョイコンか左のジョイコンか確認
             //Debug.Log("Joy-Con Input:" + stick[0] + stick[1]);  // 入力値を確認
-            v = -stick[0];
-            h = stick[1];
+
+            if(left) //左のジョイコン
+            {
+                v = stick[0];
+                h = -stick[1];
+            }
+            else
+            {
+                v = -stick[0];
+                h = stick[1];
+            }
+            
+        }
+        else
+        {
+            // 入力方法に応じて処理分岐
+            if (interfaceType == "key")
+            {
+                key();
+            }
+            else if (interfaceType == "mat")
+            {
+                Mat();
+            }
         }
      
-        // 入力方法に応じて処理分岐
-        if (interfaceType == "key")
-        {
-            key();
-        }
-        else if (interfaceType == "mat")
-        {
-            Mat();
-        }
+        
 
         // 共通処理（Runアニメーションと移動・回転）
         if (Mathf.Abs(v) > 0.1f || Mathf.Abs(h) > 0.1f)

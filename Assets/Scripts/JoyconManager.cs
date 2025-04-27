@@ -19,6 +19,7 @@ public class JoyconManager: MonoBehaviour
 
     public List<Joycon> j; // Array of all connected Joy-Cons
     static JoyconManager instance;
+	bool isLeft = false;
 
     public static JoyconManager Instance
     {
@@ -32,7 +33,6 @@ public class JoyconManager: MonoBehaviour
 		int i = 0;
 
 		j = new List<Joycon>();
-		bool isLeft = false;
 		Debug.Log("JoyconManager Awake 開始");
         try {
             HIDapi.hid_init();
@@ -107,4 +107,9 @@ public class JoyconManager: MonoBehaviour
 			j[i].Detach ();
 		}
     }
+
+	public bool getLeftRight()
+	{
+		return isLeft;
+	}
 }
