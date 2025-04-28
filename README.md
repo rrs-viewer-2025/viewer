@@ -14,7 +14,7 @@ viewer制作リポジトリです。
 ## インストール方法
 1. リポジトリをクローンします。
    ```sh
-   git clone https://github.com/yourusername/yourrepository.git
+   git clone https://github.com/rrs-viewer-2025/viewer.git
    ```
 2. Unity でプロジェクトを開きます。
 3. 必要な依存関係がすべてインストールされていることを確認してください。
