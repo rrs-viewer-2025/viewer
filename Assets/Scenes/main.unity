@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.5748165, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -238,6 +238,7 @@ GameObject:
   - component: {fileID: 258273894}
   - component: {fileID: 258273893}
   - component: {fileID: 258273892}
+  - component: {fileID: 258273896}
   m_Layer: 0
   m_Name: mesh
   m_TagString: Untagged
@@ -323,6 +324,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &258273896
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 258273891}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &291934824
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,7 +496,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc18882eda0b44cfa3a4dac5577f229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LogfolderPath: /Users/k22065kk/lab/rrs_viewer/logs/kobe
+  LogfolderPath: "/Users/x22036xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/Viewer/setting/deserialize-rrs_log-cs/output"
   InterfaceType: key
 --- !u!4 &298378966
 Transform:
@@ -1317,6 +1339,7 @@ GameObject:
   m_Component:
   - component: {fileID: 635096964}
   - component: {fileID: 635096965}
+  - component: {fileID: 635096966}
   m_Layer: 0
   m_Name: Camera_Event
   m_TagString: Untagged
@@ -1358,6 +1381,19 @@ MonoBehaviour:
   - {fileID: 1497741403}
   zoomSpeed: 1
   panSpeed: 5
+--- !u!114 &635096966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635096963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed76d64010c814d35b11f84a31e39bf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 558178438}
 --- !u!1 &674176263
 GameObject:
   m_ObjectHideFlags: 0
@@ -2270,7 +2306,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0045e573aaa648589ed150dcf1f2406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overviewCamera: {fileID: 0}
   padding: 10
 --- !u!1 &1054364780
 GameObject:
