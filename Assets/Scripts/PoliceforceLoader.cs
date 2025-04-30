@@ -133,6 +133,7 @@ public class PoliceforceLoader : MonoBehaviour
             int x = 0, y = 0;
             bool shouldUpdatePosition = false;
             List<Vector3> MovePath = new List<Vector3>(); // 経由地点リスト
+            int distance = 0;
 
             foreach (var prop in change["properties"])
             {
@@ -159,6 +160,10 @@ public class PoliceforceLoader : MonoBehaviour
                         MovePath.Add(his_posi);
                     }
                 }
+                if (propUrn == URN.Property.TRAVEL_DISTANCE)
+                {
+                    distance = prop["intValue"].ToObject<int>();
+                }
             }
 
             if (shouldUpdatePosition)
@@ -166,12 +171,12 @@ public class PoliceforceLoader : MonoBehaviour
                 Vector3 position = new Vector3(x / 1000f, 2, y / 1000f); // ゴール地点
                 MovePath.Add(position);
                 //Policeforces[entityID].transform.position = position;
-                StartCoroutine(MoveAlongPath(Policeforces[entityID], MovePath));
+                StartCoroutine(MoveAlongPath(Policeforces[entityID], MovePath, distance));
             }
         }  
     }
 
-    IEnumerator MoveAlongPath(GameObject obj, List<Vector3> path)
+    IEnumerator MoveAlongPath(GameObject obj, List<Vector3> path, int distance)
     {
         for (int i = 0; i < path.Count; i++)
         {
@@ -192,7 +197,7 @@ public class PoliceforceLoader : MonoBehaviour
                     }
                 }
 
-                obj.transform.position = Vector3.MoveTowards(obj.transform.position, target, 60f / 3f * Time.deltaTime); // 移動速度 5f
+                obj.transform.position = Vector3.MoveTowards(obj.transform.position, target, distance / 1000f / 2f * Time.deltaTime); // 移動速度 5f
                 yield return null;
             }
         }
