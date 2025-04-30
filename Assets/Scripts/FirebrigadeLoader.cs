@@ -132,6 +132,7 @@ public class FirebrigadeLoader : MonoBehaviour
             int x = 0, y = 0;
             bool shouldUpdatePosition = false;
             List<Vector3> MovePath = new List<Vector3>(); // 経由地点リスト
+            int distance = 0;
 
             foreach (var prop in change["properties"])
             {
@@ -158,6 +159,10 @@ public class FirebrigadeLoader : MonoBehaviour
                         MovePath.Add(his_posi);
                     }
                 }
+                if (propUrn == URN.Property.TRAVEL_DISTANCE)
+                {
+                    distance = prop["intValue"].ToObject<int>();
+                }
             }
 
             if (shouldUpdatePosition)
@@ -165,12 +170,12 @@ public class FirebrigadeLoader : MonoBehaviour
                 Vector3 newPosition = new Vector3(x / 1000f, 0, y / 1000f);
                 MovePath.Add(newPosition);
                 // Firebrigades[entityID].transform.position = newPosition;
-                StartCoroutine(MoveAlongPath(Firebrigades[entityID], MovePath));
+                StartCoroutine(MoveAlongPath(Firebrigades[entityID], MovePath, distance));
             }
         }
     }
 
-    IEnumerator MoveAlongPath(GameObject obj, List<Vector3> path)
+    IEnumerator MoveAlongPath(GameObject obj, List<Vector3> path, int distance)
     {
         for (int i = 0; i < path.Count; i++)
         {
@@ -191,7 +196,7 @@ public class FirebrigadeLoader : MonoBehaviour
                     }
                 }
 
-                obj.transform.position = Vector3.MoveTowards(obj.transform.position, target, 60f / 3f * Time.deltaTime); // 移動速度 5f
+                obj.transform.position = Vector3.MoveTowards(obj.transform.position, target, distance / 1000f / 2f * Time.deltaTime); // 移動速度 5f
                 yield return null;
             }
         }
@@ -201,7 +206,7 @@ public class FirebrigadeLoader : MonoBehaviour
 
     IEnumerator NotifyStepCompletedWithDelay()
     {
-        yield return new WaitForSeconds(1f); // 2秒待つ
+        yield return new WaitForSeconds(3f); // 2秒待つ
         stepManager.NotifyCompleted();
     }
 
