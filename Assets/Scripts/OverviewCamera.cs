@@ -8,16 +8,17 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Camera))]
 public class OverviewCamera : MonoBehaviour
 {
-    public Camera overviewCamera; // カメラを設定
     public float padding = 10f;   // 余白
     string logfolder;
     int? Max_X = null, Min_X = null;
     int? Max_Y = null, Min_Y = null;
     Camera cam;
+    PlaneManager planeManager;
 
     void Awake()
     {
         cam = GetComponent<Camera>();
+        planeManager = FindObjectOfType<PlaneManager>();
     }
 
     public void SetLogFolderPath(string path)
@@ -102,12 +103,19 @@ public class OverviewCamera : MonoBehaviour
             // 地図の範囲を計算
             float width = (float)(maxX.Value - minX.Value) / 1000f;
             float height = (float)(maxY.Value - minY.Value) / 1000f;
-            // int? を取り出し、double に変換して計算
-            double centerX = ((double)(maxX.Value + minX.Value)) / 2f / 1000f;
-            double centerZ = ((double)(maxY.Value + minY.Value)) / 2f / 1000f;
+            // int? を取り出し、float に変換して計算
+            float centerX = ((float)(maxX.Value + minX.Value)) / 2f / 1000f;
+            float centerZ = ((float)(maxY.Value + minY.Value)) / 2f / 1000f;
+
+            //PlaneManagerに渡す用
+            Vector3 center = new Vector3(centerX, -0.001f, centerZ); //中心座標
+
+            //PlaneManagerスクリプトのsetPlane関数に中心座標，横幅，縦幅を渡して実行
+            planeManager.setPlane(center, width, height);
+
             
             // Cameraの位置を設定
-            Vector3 posi = new Vector3((float)centerX, CalculateCameraHeight(width, height), (float)centerZ);
+            Vector3 posi = new Vector3(centerX, CalculateCameraHeight(width, height), centerZ);
             cam.transform.position = posi;
 
             // カメラを真下に向ける (x軸回転で90度)

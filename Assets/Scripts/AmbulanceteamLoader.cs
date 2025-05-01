@@ -134,6 +134,7 @@ public class AmbulanceteamLoader : MonoBehaviour
             int x = 0, y = 0;
             bool shouldUpdatePosition = false;
             List<Vector3> MovePath = new List<Vector3>(); // 経由地点リスト
+            int distance = 0;
 
             foreach (var prop in change["properties"])
             {
@@ -149,6 +150,7 @@ public class AmbulanceteamLoader : MonoBehaviour
                     y = prop["intValue"].ToObject<int>();
                 }
 
+                //経由地点の取得
                 if (propUrn == URN.Property.POSITION_HISTORY && prop["intList"]?["values"] != null)
                 {
                     JArray values = (JArray)prop["intList"]["values"];
@@ -161,6 +163,12 @@ public class AmbulanceteamLoader : MonoBehaviour
                     }
                 }
 
+                //移動距離の取得
+                if (propUrn == URN.Property.TRAVEL_DISTANCE)
+                {
+                    distance = prop["intValue"].ToObject<int>();
+                }
+
             }
 
             if (shouldUpdatePosition)
@@ -169,12 +177,12 @@ public class AmbulanceteamLoader : MonoBehaviour
                 MovePath.Add(newPosition);
                 // Ambulanceteams[entityID].transform.position = newPosition;
                 // MoveAlongPath(Ambulanceteams[entityID], MovePath);
-                StartCoroutine(MoveAlongPath(Ambulanceteams[entityID], MovePath));
+                StartCoroutine(MoveAlongPath(Ambulanceteams[entityID], MovePath, distance));
             }
         }
     }
 
-    IEnumerator MoveAlongPath(GameObject obj, List<Vector3> path)
+    IEnumerator MoveAlongPath(GameObject obj, List<Vector3> path, int distance)
     {
         for (int i = 0; i < path.Count; i++)
         {
@@ -186,7 +194,7 @@ public class AmbulanceteamLoader : MonoBehaviour
                 if (direction != Vector3.zero)
                     obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * 5f);
 
-                obj.transform.position = Vector3.MoveTowards(obj.transform.position, target, 60f / 3f * Time.deltaTime); // 移動速度 5f
+                obj.transform.position = Vector3.MoveTowards(obj.transform.position, target, distance / 1000f / 2f * Time.deltaTime); // 移動速度 5f
                 yield return null;
             }
         }

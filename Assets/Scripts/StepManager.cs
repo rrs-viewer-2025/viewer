@@ -18,6 +18,7 @@ public class StepManager : MonoBehaviour
     CivilianLoader civilianLoader;
     BlockadeLoader blockadeLoader;
     OverviewCamera overviewCamera;
+    RefugeCamera refugeCamera;
 
     void Awake() //確実に準備させるもの
     {
@@ -27,6 +28,7 @@ public class StepManager : MonoBehaviour
         civilianLoader = FindObjectOfType<CivilianLoader>();
         blockadeLoader = FindObjectOfType<BlockadeLoader>();
         overviewCamera = FindObjectOfType<OverviewCamera>();
+        refugeCamera = FindObjectOfType<RefugeCamera>();
     }
 
     void Start()
@@ -53,6 +55,7 @@ public class StepManager : MonoBehaviour
         civilianLoader.SetLogFolderPath(logfolder);
         blockadeLoader.SetLogFolderPath(logfolder);
         overviewCamera.SetLogFolderPath(logfolder);
+        refugeCamera.SetLogFolderPath(logfolder);
         simulation();
 
         // リセットボタンの設定
@@ -67,6 +70,7 @@ public class StepManager : MonoBehaviour
         firebrigadeLoader.LoadInitialConditions();
         civilianLoader.LoadInitialConditions();
         overviewCamera.SetOverviewCamera();
+        refugeCamera.SetRefugeCamera();
         
         StartStep(); // 一度だけ
     }
