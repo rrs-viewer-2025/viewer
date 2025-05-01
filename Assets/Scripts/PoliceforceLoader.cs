@@ -16,17 +16,11 @@ public class PoliceforceLoader : MonoBehaviour
     // public float updateInterval = 1.0f; //更新間隔（秒）
 
     StepManager stepManager;
+    private Coroutine notifyCoroutine;
 
     void Awake()
     {
         stepManager = FindObjectOfType<StepManager>();
-    }
-
-    void Start()
-    {
-        // リセットボタンの設定
-        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
-        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
 
     public void SetLogFolderPath(string path)
@@ -81,9 +75,12 @@ public class PoliceforceLoader : MonoBehaviour
 
     public void StartStep()
     {
-        Debug.Log("StartStep called in PoliceforceLoader"); // ここでStartStepが呼ばれているか確認
+        if (notifyCoroutine != null)
+        {
+            StopCoroutine(notifyCoroutine);
+        }
         getstepdata();
-        StartCoroutine(NotifyStepCompletedWithDelay());
+        notifyCoroutine = StartCoroutine(NotifyStepCompletedWithDelay());
     }
 
     void getstepdata()
@@ -214,16 +211,18 @@ public class PoliceforceLoader : MonoBehaviour
     }
 
     // リセット処理
-    void ResetSimulation()
+    public void Reset()
     {
+        if (notifyCoroutine != null)
+        {
+            StopCoroutine(notifyCoroutine);
+            notifyCoroutine = null;
+        }
         // Step = 1; // ステップを1に戻す
         foreach (var policeforce in Policeforces.Values)
         {
             Destroy(policeforce); // 土木隊を削除
         }
         Policeforces.Clear(); // 土木隊の辞書をクリア
-
-        // LoadInitialConditions(); // 初期状態から再読込
-        stepManager.ResetComplete();
     }
 }

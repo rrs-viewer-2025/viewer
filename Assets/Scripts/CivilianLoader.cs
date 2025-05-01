@@ -18,17 +18,11 @@ public class CivilianLoader : MonoBehaviour
 
     StepManager stepManager;
     int Step;
+    private Coroutine notifyCoroutine;
 
     void Awake()
     {
         stepManager = FindObjectOfType<StepManager>();
-    }
-
-    void Start()
-    {
-        // リセットボタンの設定
-        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
-        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
 
     public void SetLogFolderPath(string path)
@@ -99,11 +93,14 @@ public class CivilianLoader : MonoBehaviour
 
     public void StartStep()
     {
-        Debug.Log("StartStep called in CivilianLoader"); // ここでStartStepが呼ばれているか確認
+        if (notifyCoroutine != null)
+        {
+            StopCoroutine(notifyCoroutine);
+        }
         Step = stepManager.GetCurrentStep();
         getstepdata();
         LoadCitizenLoad();
-        StartCoroutine(NotifyStepCompletedWithDelay());
+        notifyCoroutine = StartCoroutine(NotifyStepCompletedWithDelay());
     }
 
     void getstepdata() //市民のパラメータの変更を記録する処理を後で追加しようかな
@@ -330,16 +327,18 @@ public class CivilianLoader : MonoBehaviour
     }
 
     // リセット処理
-    void ResetSimulation()
+    public void Reset()
     {
+        if (notifyCoroutine != null)
+        {
+            StopCoroutine(notifyCoroutine);
+            notifyCoroutine = null;
+        }
         // Step = 1; // ステップを1に戻す
         foreach (var citizen in civilians.Values)
         {
             Destroy(citizen); // 市民を削除
         }
         civilians.Clear(); // 市民の辞書をクリア
-
-        // LoadInitialConditions(); // 初期状態から再読込
-        stepManager.ResetComplete();
     }
 }

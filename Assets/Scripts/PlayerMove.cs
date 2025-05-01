@@ -58,10 +58,6 @@ public class PlayerCharaControl : MonoBehaviour
         {
             Debug.LogError($"[PlayerCharaControl] config.json not found at {path}");
         }
-
-        // リセットボタンの設定
-        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
-        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
 
     void Update()
@@ -149,10 +145,5 @@ public class PlayerCharaControl : MonoBehaviour
             if (mat.Left > 0) h = -1.0f;
             if (mat.Right > 0) h = 1.0f;
         }
-    }
-
-    void ResetSimulation()
-    {
-        transform.position = new Vector3(250, 0, 120);
     }
 }
