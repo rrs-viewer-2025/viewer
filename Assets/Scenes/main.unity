@@ -1476,6 +1476,8 @@ MonoBehaviour:
   - {fileID: 1497741403}
   zoomSpeed: 1
   panSpeed: 5
+  ball: {fileID: 1429246308}
+  minimap: {fileID: 1732988749}
 --- !u!114 &635096966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2980,7 +2982,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1429246309
 Transform:
   m_ObjectHideFlags: 0
@@ -3668,7 +3670,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1732988750
 RectTransform:
   m_ObjectHideFlags: 0
