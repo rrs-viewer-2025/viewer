@@ -14,11 +14,13 @@ public class OverviewCamera : MonoBehaviour
     int? Max_Y = null, Min_Y = null;
     Camera cam;
     PlaneManager planeManager;
+    PlayerStartPosition playerStartPosition;
 
     void Awake()
     {
         cam = GetComponent<Camera>();
         planeManager = FindObjectOfType<PlaneManager>();
+        playerStartPosition = FindObjectOfType<PlayerStartPosition>();
     }
 
     public void SetLogFolderPath(string path)
@@ -113,6 +115,8 @@ public class OverviewCamera : MonoBehaviour
             //PlaneManagerスクリプトのsetPlane関数に中心座標，横幅，縦幅を渡して実行
             planeManager.setPlane(center, width, height);
 
+            //PlayerStartPositionスクリプトのsetStartPositionにcenterX, centerZを渡して実行
+            playerStartPosition.setCenterPosition(centerX, centerZ, width, height);
             
             // Cameraの位置を設定
             Vector3 posi = new Vector3(centerX, CalculateCameraHeight(width, height), centerZ);
