@@ -196,18 +196,12 @@ public class mesh : MonoBehaviour
         MeshCollider collider = building.AddComponent<MeshCollider>();
         Mesh combinedMesh = CombineMeshes(meshes);
         collider.sharedMesh = combinedMesh;
-        collider.convex = false; // 凸形状にしてすり抜け防止
+        collider.convex = true; // 凸形状にしてすり抜け防止
 
         // 高速移動物体に対しても正しく衝突判定を行うようにContinuous設定
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
-        // 反発力を調整するための物理マテリアル
-        PhysicMaterial physicMaterial = new PhysicMaterial();
-        physicMaterial.bounciness = 0.2f;  // 反発力を適度に設定
-        physicMaterial.staticFriction = 1f;
-        physicMaterial.dynamicFriction = 1f;
-
-        collider.material = physicMaterial;
+      
     }
 
 }
