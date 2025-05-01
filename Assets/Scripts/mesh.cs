@@ -188,18 +188,26 @@ public class mesh : MonoBehaviour
     // Colliderを追加するメソッド
     void AddColliderToBuilding(GameObject building, List<Mesh> meshes)
     {
+        // 物理エンジンに影響を与えないように、動かないオブジェクトとして扱う
+        Rigidbody rb = building.AddComponent<Rigidbody>();
+        rb.isKinematic = true;  // 物理エンジンの影響を受けないように設定
+
         // メッシュに基づいてColliderを追加
         MeshCollider collider = building.AddComponent<MeshCollider>();
         Mesh combinedMesh = CombineMeshes(meshes);
         collider.sharedMesh = combinedMesh;
-        collider.convex = true; // 凸形状にしてすり抜け防止
-
-        // Rigidbodyを追加して動かないようにする（物理エンジンに影響されないように）
-        Rigidbody rb = building.AddComponent<Rigidbody>();
-        rb.isKinematic = true;  // 物理エンジンによる動きを防止
+        collider.convex = false; // 凸形状にしてすり抜け防止
 
         // 高速移動物体に対しても正しく衝突判定を行うようにContinuous設定
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+        // 反発力を調整するための物理マテリアル
+        PhysicMaterial physicMaterial = new PhysicMaterial();
+        physicMaterial.bounciness = 0.2f;  // 反発力を適度に設定
+        physicMaterial.staticFriction = 1f;
+        physicMaterial.dynamicFriction = 1f;
+
+        collider.material = physicMaterial;
     }
 
 }
