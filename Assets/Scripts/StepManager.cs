@@ -19,6 +19,7 @@ public class StepManager : MonoBehaviour
     BlockadeLoader blockadeLoader;
     OverviewCamera overviewCamera;
     RefugeCamera refugeCamera;
+    RoadMesh roadMesh;
 
     void Awake() //確実に準備させるもの
     {
@@ -29,6 +30,7 @@ public class StepManager : MonoBehaviour
         blockadeLoader = FindObjectOfType<BlockadeLoader>();
         overviewCamera = FindObjectOfType<OverviewCamera>();
         refugeCamera = FindObjectOfType<RefugeCamera>();
+        roadMesh = FindObjectOfType<RoadMesh>();
     }
 
     void Start()
@@ -56,6 +58,7 @@ public class StepManager : MonoBehaviour
         blockadeLoader.SetLogFolderPath(logfolder);
         overviewCamera.SetLogFolderPath(logfolder);
         refugeCamera.SetLogFolderPath(logfolder);
+        roadMesh.SetLogFolderPath(logfolder);
         simulation();
 
         // リセットボタンの設定
@@ -71,6 +74,7 @@ public class StepManager : MonoBehaviour
         civilianLoader.LoadInitialConditions();
         overviewCamera.SetOverviewCamera();
         refugeCamera.SetRefugeCamera();
+        roadMesh.LoadInitialConditions();
         
         StartStep(); // 一度だけ
     }
