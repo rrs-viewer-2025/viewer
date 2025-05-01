@@ -62,8 +62,8 @@ public class StepManager : MonoBehaviour
         simulation();
 
         // リセットボタンの設定
-        // Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
-        // resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
+        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
+        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
 
     void simulation()
@@ -132,21 +132,26 @@ public class StepManager : MonoBehaviour
         blockadeLoader.StartStep();
     }
 
-    public void ResetComplete() //各スクリプトがリセット処理完了したら実行
-    {
-        resetcompletedCount++;
-        if(resetcompletedCount >= scriptsToWait)
-        {
-            RestartSimulation();
-        }
-    }
+    // public void ResetComplete() //各スクリプトがリセット処理完了したら実行
+    // {
+    //     resetcompletedCount++;
+    //     if(resetcompletedCount >= scriptsToWait)
+    //     {
+    //         simulation();
+    //     }
+    // }
 
     // リセット処理
-    void RestartSimulation()
+    void ResetSimulation()
     {
         currentStep = 1; // ステップを1に戻す
         completedCount = 0;
         resetcompletedCount = 0;
+        ambulanceteamLoader.Reset();
+        policeforceLoader.Reset();
+        civilianLoader.Reset();
+        firebrigadeLoader.Reset();
+        blockadeLoader.Reset();
         simulation();
     }
 }

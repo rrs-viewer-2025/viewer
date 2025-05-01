@@ -14,20 +14,13 @@ public class AmbulanceteamLoader : MonoBehaviour
     private Dictionary<int, GameObject> Ambulanceteams = new Dictionary<int, GameObject>(); //IDとオブジェクトの紐付け
     // private float lastUpdateTime = 0f; //最後に更新した時間
     // public float updateInterval = 1.0f; //更新間隔（秒）
+    private Coroutine notifyCoroutine;
 
     StepManager stepManager;
 
     void Awake()
     {
         stepManager = FindObjectOfType<StepManager>();
-    }
-    
-
-    void Start()
-    {
-        // リセットボタンの設定
-        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
-        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
 
     public void SetLogFolderPath(string path)
@@ -82,9 +75,12 @@ public class AmbulanceteamLoader : MonoBehaviour
 
     public void StartStep()
     {
-        Debug.Log("StartStep called in AmbulanceteamLoader"); // ここでStartStepが呼ばれているか確認
+        if (notifyCoroutine != null)
+        {
+            StopCoroutine(notifyCoroutine);
+        }
         getstepdata();
-        StartCoroutine(NotifyStepCompletedWithDelay());
+        notifyCoroutine = StartCoroutine(NotifyStepCompletedWithDelay());
     }
 
     void getstepdata()
@@ -211,16 +207,18 @@ public class AmbulanceteamLoader : MonoBehaviour
 
 
     // リセット処理
-    void ResetSimulation()
+    public void Reset()
     {
+        if (notifyCoroutine != null)
+        {
+            StopCoroutine(notifyCoroutine);
+            notifyCoroutine = null;
+        }
         // Step = 1; // ステップを1に戻す
         foreach (var Ambulance in Ambulanceteams.Values)
         {
             Destroy(Ambulance); // 救急隊を削除
         }
         Ambulanceteams.Clear(); // 救急隊の辞書をクリア
-
-        // LoadInitialConditions(); // 初期状態から再読込
-        stepManager.ResetComplete();
     }
 }

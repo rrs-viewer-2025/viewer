@@ -18,17 +18,11 @@ public class BlockadeLoader : MonoBehaviour
     private Dictionary<int, List<GameObject>> Blockades = new Dictionary<int, List<GameObject>>();
 
     StepManager stepManager;
+    private Coroutine notifyCoroutine;
 
     void Awake()
     {
         stepManager = FindObjectOfType<StepManager>();
-    }
-
-    void Start()
-    {
-        // リセットボタンの設定
-        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
-        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
 
     public void SetLogFolderPath(string path)
@@ -38,9 +32,12 @@ public class BlockadeLoader : MonoBehaviour
 
     public void StartStep()
     {
-        Debug.Log("StartStep called in PoliceforceLoader"); // ここでStartStepが呼ばれているか確認
+        if (notifyCoroutine != null)
+        {
+            StopCoroutine(notifyCoroutine);
+        }
         getstepdata();
-        StartCoroutine(NotifyStepCompletedWithDelay());
+        notifyCoroutine = StartCoroutine(NotifyStepCompletedWithDelay());
     }
 
     void getstepdata()
@@ -168,8 +165,13 @@ public class BlockadeLoader : MonoBehaviour
         stepManager.NotifyCompleted();
     }
 
-    void ResetSimulation()
+    public void Reset()
     {
+        if (notifyCoroutine != null)
+        {
+            StopCoroutine(notifyCoroutine);
+            notifyCoroutine = null;
+        }
         // Step = 1; // ステップを1に戻す
         foreach (var list in Blockades.Values)
         {
@@ -179,7 +181,5 @@ public class BlockadeLoader : MonoBehaviour
             }
         }
         Blockades.Clear(); // 瓦礫リストをクリア
-
-        stepManager.ResetComplete();
     }
 }

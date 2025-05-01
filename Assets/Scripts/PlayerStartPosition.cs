@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerStartPosition : MonoBehaviour
 {
@@ -13,6 +14,12 @@ public class PlayerStartPosition : MonoBehaviour
     void Awake()
     {
         if(player == null) player = this.gameObject;
+    }
+    void Start()
+    {
+        // リセットボタンの設定
+        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
+        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
     public void setCenterPosition(float X, float Z, float width, float height)
     {
@@ -50,5 +57,10 @@ public class PlayerStartPosition : MonoBehaviour
         {
             return false;
         }
+    }
+
+    void ResetSimulation()
+    {
+        player.transform.position = posi;
     }
 }
