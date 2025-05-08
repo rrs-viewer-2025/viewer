@@ -146,4 +146,11 @@ public class PlayerCharaControl : MonoBehaviour
             if (mat.Right > 0) h = 1.0f;
         }
     }
+
+    // 歩くアニメーションのメソッド
+    public void OnFootstep()
+    {
+        // Debug.Log("Footstep!");
+        // AudioSource.PlayClipAtPoint(footstepClip, transform.position); なども可
+    }
 }
