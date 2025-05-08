@@ -17,4 +17,11 @@ public class CivilianAnimation : MonoBehaviour
         runFlag = true;
         anim.SetBool("Run", runFlag);
     }
+
+    // 歩くアニメーションのメソッド
+    public void OnFootstep()
+    {
+        // Debug.Log("Footstep!");
+        // AudioSource.PlayClipAtPoint(footstepClip, transform.position); なども可
+    }
 }
