@@ -3,7 +3,7 @@ viewer制作リポジトリです。
 このリポジトリにはRRS-ActionViewerについてのソースが記載されています。
 
 ## 使用技術
-![Unity](https://img.shields.io/badge/Unity-2022.3.13f1-blue?logo=unity)
+![Unity](https://img.shields.io/badge/Unity-6000.0.47f1-blue?logo=unity)
 ![C#](https://img.shields.io/badge/C%23-Programming-239120?logo=csharp&logoColor=white)
 
 ## 特徴
