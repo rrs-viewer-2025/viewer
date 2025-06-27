@@ -7,6 +7,7 @@ public class RefugeLoader : MonoBehaviour
 {
     public GameObject cubePrefab; // Cube プレハブ
     private string logfolder;
+    public Material defaultMaterial; // 建物に使うマテリアル（Inspectorで設定可能）
 
     void Start()
     {
@@ -24,6 +25,10 @@ public class RefugeLoader : MonoBehaviour
             string jsonText = File.ReadAllText(filePath);
             JObject json = JObject.Parse(jsonText);
             JArray entities = (JArray)json["initialCondition"]["entities"];
+
+            int RefugeId = 0; // 各建物に一意な名前をつけるためのID
+
+            Material parentMaterial = GetComponent<MeshRenderer>()?.sharedMaterial ?? defaultMaterial;
 
             foreach (var entity in entities)
             {
@@ -48,6 +53,8 @@ public class RefugeLoader : MonoBehaviour
 
                     // 座標とエッジ情報を取得
                     List<Vector3> edges = new List<Vector3>();
+                    List<Vector3> apexList = new List<Vector3>(); // 床形状の頂点リスト
+                    List<Mesh> meshes = new List<Mesh>(); // メッシュを蓄積するリスト
                     foreach (var prop in entity["properties"])
                     {
                         int propUrn = prop["urn"].ToObject<int>();
@@ -78,15 +85,36 @@ public class RefugeLoader : MonoBehaviour
                                 Vector3 start1 = new Vector3(startX / 1000f, 0, startY / 1000f);   
                                 Vector3 end1 = new Vector3(startX / 1000f, floor * height, startY / 1000f);
                                 edges.Add(start1);
-                                edges.Add(end1);                            
+                                edges.Add(end1);
+                                apexList.Add(start1); //床ポリゴン用                            
                             }
                         }
                     }
 
                     // 建物を描画
-                    // Debug.Log($"Building {entityID}: Total edges added = {edges.Count}");
-
                     DrawBuilding(new Vector3(x / 1000f, 0, y / 1000f), edges);
+                    meshes.AddRange(MakeMeshes(apexList));
+
+                    // 建物単位のGameObjectを作成して、子として追加
+                    GameObject building = new GameObject("Refuge_" + RefugeId++);
+                    building.tag = "Refuge"; // ← 追加
+                    building.transform.parent = this.transform;
+
+                    // メッシュとマテリアルを設定
+                    MeshFilter mf = building.AddComponent<MeshFilter>();
+                    MeshRenderer mr = building.AddComponent<MeshRenderer>();
+
+                    // ここで親のマテリアルを使用
+                    mr.material = parentMaterial;
+
+                    // メッシュを統合して1つにまとめてセット
+                    mf.mesh = CombineMeshes(meshes);
+
+                    // コライダーを追加し、Is Trigger をオンにする
+                    MeshCollider collider = building.AddComponent<MeshCollider>();
+                    collider.sharedMesh = mf.mesh;
+                    collider.convex = true;
+                    collider.isTrigger = true;
                 }
             }
         }
@@ -109,5 +137,62 @@ public class RefugeLoader : MonoBehaviour
             GameObject cube = Instantiate(cubePrefab, (start + end) / 2, Quaternion.LookRotation(direction));
             cube.transform.localScale = new Vector3(0.1f, 0.1f, direction.magnitude); // 厚みを薄く、長さに合わせて調整
         }
+    }
+
+    // meshの生成
+    List<Mesh> MakeMeshes(List<Vector3> list)
+    {
+        int count = list.Count;
+        int triCount = (count - 2) * 3;
+        List<Mesh> meshes = new List<Mesh>();
+
+        Vector3[] vertices = new Vector3[count];
+        for(int i = 0; i < count; i++)
+        {
+            vertices[i] = list[i];
+            vertices[i].y = 0.1f;
+        }
+
+        int[] tris = new int[triCount];
+        for(int i = 0, j = 1; i < triCount; i += 3, j++)
+        {
+            tris[i] = 0;
+            tris[i + 1] = j;
+            tris[i + 2] = j + 1;
+
+            Vector3 normal = Vector3.Cross(
+                vertices[tris[i + 1]] - vertices[tris[i]],
+                vertices[tris[i + 2]] - vertices[tris[i]]
+            );
+            if (Vector3.Dot(normal, Vector3.up) < 0)
+            {
+                int temp = tris[i + 1];
+                tris[i + 1] = tris[i + 2];
+                tris[i + 2] = temp;
+            }
+        }
+
+        Mesh mesh = new Mesh();
+        mesh.vertices = vertices;
+        mesh.triangles = tris;
+        mesh.RecalculateNormals();
+        meshes.Add(mesh);
+
+        return meshes;
+    }
+
+    Mesh CombineMeshes(List<Mesh> meshes)
+    {
+        CombineInstance[] combine = new CombineInstance[meshes.Count];
+        for (int i = 0; i < meshes.Count; i++)
+        {
+            combine[i].mesh = meshes[i];
+            combine[i].transform = Matrix4x4.identity;
+        }
+
+        Mesh finalMesh = new Mesh();
+        finalMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32; // 頂点数6万以上対応
+        finalMesh.CombineMeshes(combine, true, false);
+        return finalMesh;
     }
 }

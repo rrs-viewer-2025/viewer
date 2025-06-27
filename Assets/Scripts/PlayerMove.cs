@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class PlayerCharaControl : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class PlayerCharaControl : MonoBehaviour
     private Animator anim;
     private bool runFlag;
     Rigidbody rb;
+
+   //private bool RefugeOn; //避難所に到達したかを管理する
 
     private float v;
     private float h;
@@ -152,5 +155,13 @@ public class PlayerCharaControl : MonoBehaviour
     {
         // Debug.Log("Footstep!");
         // AudioSource.PlayClipAtPoint(footstepClip, transform.position); なども可
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Refuge")
+        {
+            SceneManager.LoadScene("Goal");
+        }
     }
 }
