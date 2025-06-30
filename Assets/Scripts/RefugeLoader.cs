@@ -92,13 +92,14 @@ public class RefugeLoader : MonoBehaviour
                     }
 
                     // 建物を描画
-                    DrawBuilding(new Vector3(x / 1000f, 0, y / 1000f), edges);
+                    // DrawBuilding(new Vector3(x / 1000f, 0, y / 1000f), edges);
                     meshes.AddRange(MakeMeshes(apexList));
 
                     // 建物単位のGameObjectを作成して、子として追加
                     GameObject building = new GameObject("Refuge_" + RefugeId++);
-                    building.tag = "Refuge"; // ← 追加
                     building.transform.parent = this.transform;
+
+                    DrawBuilding(new Vector3(x / 1000f, 0, y / 1000f), edges);
 
                     // メッシュとマテリアルを設定
                     MeshFilter mf = building.AddComponent<MeshFilter>();
@@ -109,12 +110,7 @@ public class RefugeLoader : MonoBehaviour
 
                     // メッシュを統合して1つにまとめてセット
                     mf.mesh = CombineMeshes(meshes);
-
-                    // コライダーを追加し、Is Trigger をオンにする
-                    MeshCollider collider = building.AddComponent<MeshCollider>();
-                    collider.sharedMesh = mf.mesh;
-                    collider.convex = true;
-                    collider.isTrigger = true;
+                    
                 }
             }
         }
@@ -124,7 +120,6 @@ public class RefugeLoader : MonoBehaviour
         }
     }
 
-    // Cubeを使って建物を描画
     void DrawBuilding(Vector3 buildingPosition, List<Vector3> edges)
     {
         for (int i = 0; i < edges.Count; i += 2)
@@ -136,6 +131,20 @@ public class RefugeLoader : MonoBehaviour
             Vector3 direction = end - start;
             GameObject cube = Instantiate(cubePrefab, (start + end) / 2, Quaternion.LookRotation(direction));
             cube.transform.localScale = new Vector3(0.1f, 0.1f, direction.magnitude); // 厚みを薄く、長さに合わせて調整
+
+            // BoxCollider の設定
+            BoxCollider collider = cube.GetComponent<BoxCollider>();
+            if (collider == null)
+            {
+                collider = cube.AddComponent<BoxCollider>();
+            }
+
+            collider.isTrigger = true;
+            collider.size = new Vector3(1f, 70f, 1f);   // 必要に応じてX/Zも調整可
+            collider.center = new Vector3(0f, -35f, 0f); // Yセンターを下にずらす
+
+            // タグ設定
+            cube.tag = "Refuge";
         }
     }
 
