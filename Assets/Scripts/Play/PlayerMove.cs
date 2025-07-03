@@ -170,6 +170,6 @@ public class PlayerCharaControl : MonoBehaviour
     // コルーチンのため別メソッド
     void LoadGoalScene()
     {
-        SceneManager.LoadScene("Goal");
+        SceneManager.LoadScene("result");
     }
 }
