@@ -16,6 +16,6 @@ public class ButtonController : MonoBehaviour
 
     void OnButtonClick()
     {
-        SceneManager.LoadScene("main"); // 移動先のシーン名を指定
+        SceneManager.LoadScene("intro"); // 移動先のシーン名を指定
     }
 }

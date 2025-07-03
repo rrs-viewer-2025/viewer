@@ -851,8 +851,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30B9\u30BF\u30FC\u30C8"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6b03e85e56a89499998cdd0c316e9e9d, type: 2}
-  m_sharedMaterial: {fileID: 8899649577277796497, guid: 6b03e85e56a89499998cdd0c316e9e9d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ef6aa836566b04e43a58d212ef94c3d9, type: 2}
+  m_sharedMaterial: {fileID: -8973156362186261276, guid: ef6aa836566b04e43a58d212ef94c3d9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
