@@ -9,11 +9,12 @@ public class PlayerCharaControl : MonoBehaviour
 {
     public float forwardSpeed = 5.0f;//前進速度
     public float rotationSpeed = 100.0f;//回転速度
+    public GameObject Info_end; // ゴールオブジェクト
     private Animator anim;
     private bool runFlag;
     Rigidbody rb;
 
-   //private bool RefugeOn; //避難所に到達したかを管理する
+    //private bool RefugeOn; //避難所に到達したかを管理する
 
     private float v;
     private float h;
@@ -33,8 +34,8 @@ public class PlayerCharaControl : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        
-         // JoyconManager から Joy-Con のリストを取得
+
+        // JoyconManager から Joy-Con のリストを取得
         joycons = JoyconManager.Instance.j;
 
         // 少なくとも1つJoy-Conが接続されていたら使う
@@ -75,13 +76,14 @@ public class PlayerCharaControl : MonoBehaviour
         {
             Mat();
         }
-        
-        if(joycon != null){
+
+        if (joycon != null)
+        {
             var stick = joycon.GetStick();
             left = joyconManager.getLeftRight(); //右のジョイコンか左のジョイコンか確認
             //Debug.Log("Joy-Con Input:" + stick[0] + stick[1]);  // 入力値を確認
 
-            if(left) //左のジョイコン
+            if (left) //左のジョイコン
             {
                 v = stick[0];
                 h = -stick[1];
@@ -91,7 +93,7 @@ public class PlayerCharaControl : MonoBehaviour
                 v = -stick[0];
                 h = stick[1];
             }
-            
+
         }
         else
         {
@@ -105,8 +107,6 @@ public class PlayerCharaControl : MonoBehaviour
                 Mat();
             }
         }
-     
-        
 
         // 共通処理（Runアニメーションと移動・回転）
         if (Mathf.Abs(v) > 0.1f || Mathf.Abs(h) > 0.1f)
@@ -157,11 +157,19 @@ public class PlayerCharaControl : MonoBehaviour
         // AudioSource.PlayClipAtPoint(footstepClip, transform.position); なども可
     }
 
+    // Goalシーンに遷移するメソッド
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Refuge")
+        if (other.gameObject.tag == "Refuge")
         {
-            SceneManager.LoadScene("Goal");
+            Info_end.SetActive(true);
+            Invoke("LoadGoalScene", 5f); // 5秒後にシーン遷移
         }
+    }
+
+    // コルーチンのため別メソッド
+    void LoadGoalScene()
+    {
+        SceneManager.LoadScene("Goal");
     }
 }
