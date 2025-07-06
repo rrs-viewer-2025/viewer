@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerCharaControl : MonoBehaviour
 {
+    public Timer timerScript; //Timerスクリプトをアタッチする
     public float forwardSpeed = 5.0f;//前進速度
     public float rotationSpeed = 100.0f;//回転速度
     public GameObject Info_end; // ゴールオブジェクト
@@ -162,6 +163,12 @@ public class PlayerCharaControl : MonoBehaviour
     {
         if (other.gameObject.tag == "Refuge")
         {
+            if (timerScript != null)
+            {
+                //クリア時間取得
+                TimeData.clearTime = timerScript.LimitTime - timerScript.timeRemaining;
+                timerScript.StopTimer(); //タイマーを停止させる
+            }
             Info_end.SetActive(true);
             Invoke("LoadGoalScene", 5f); // 5秒後にシーン遷移
         }
