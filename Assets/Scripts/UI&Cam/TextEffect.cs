@@ -22,6 +22,9 @@ public class TextEffect : MonoBehaviour
     // 表示コルーチンを管理（重複防止）
     private Coroutine _showCoroutine;
 
+    // ScenesManager
+    public string targetSceneName = "main"; // インスペクタで設定可
+
     // オブジェクトが有効化されたら自動で再生開始
     private void OnEnable()
     {
@@ -55,9 +58,8 @@ public class TextEffect : MonoBehaviour
             }
         }
 
-        // 最後のテキストは出しっぱなしで、5秒待ってシーン遷移
-        yield return new WaitForSeconds(5f);
-        UnityEngine.SceneManagement.SceneManager.LoadScene("main");
+        // シーン遷移
+        FadeSceneController.Instance.StartFadeOutToScene(targetSceneName);
 
         _showCoroutine = null;
     }

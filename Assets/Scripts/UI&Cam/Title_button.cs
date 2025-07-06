@@ -1,21 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class ButtonController : MonoBehaviour
 {
-    Button button;
+    public string targetSceneName = "intro"; // インスペクタで設定可
 
     void Start()
     {
-        button = GetComponent<Button>();
+        Button button = GetComponent<Button>();
         button.onClick.AddListener(OnButtonClick);
     }
 
     void OnButtonClick()
     {
-        SceneManager.LoadScene("intro"); // 移動先のシーン名を指定
+        // フェード付きでシーン遷移
+        if (FadeSceneController.Instance != null)
+        {
+            FadeSceneController.Instance.StartFadeOutToScene(targetSceneName);
+        }
+        else
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(targetSceneName);
+        }
     }
 }
