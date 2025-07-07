@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneChange : MonoBehaviour
 {
     void Start () {
-        Invoke("ChangeScene", 5.0f);
+        Invoke("ChangeScene", 10.0f);
     }
     
     // Update is called once per frame
