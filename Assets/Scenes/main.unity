@@ -1481,7 +1481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aeee95d4322b45b1906be2520654937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LimitTime: 40
+  LimitTime: 300
   timeRemaining: 0
   timerText: {fileID: 1500505348}
   normalColor: {r: 1, g: 1, b: 1, a: 1}

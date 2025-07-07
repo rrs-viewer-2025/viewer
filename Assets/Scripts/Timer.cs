@@ -45,6 +45,7 @@ public class Timer : MonoBehaviour
             if(!timeover)
             {
                 timerText.text = "00:00";
+                GameData.hinan = false; //避難失敗を格納
                 Info_timeover.SetActive(true);
                 Invoke("LoadResultScene", 3f);
                 timeover = true;

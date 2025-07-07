@@ -166,7 +166,8 @@ public class PlayerCharaControl : MonoBehaviour
             if (timerScript != null)
             {
                 //クリア時間取得
-                TimeData.clearTime = timerScript.LimitTime - timerScript.timeRemaining;
+                GameData.clearTime = timerScript.LimitTime - timerScript.timeRemaining;
+                GameData.hinan = true; //避難成功を格納
                 timerScript.StopTimer(); //タイマーを停止させる
             }
             Info_end.SetActive(true);
