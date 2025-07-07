@@ -42,9 +42,14 @@ public class Timer : MonoBehaviour
         }
         else
         {
-            timerText.text = "00:00";
-            Info_timeover.SetActive(true);
-            Invoke("LoadResultScene", 3f);
+            if(!timeover)
+            {
+                timerText.text = "00:00";
+                Info_timeover.SetActive(true);
+                Invoke("LoadResultScene", 3f);
+                timeover = true;
+            }
+            
         }
     }
 
