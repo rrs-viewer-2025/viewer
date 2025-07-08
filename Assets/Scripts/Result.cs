@@ -22,7 +22,7 @@ public class Result : MonoBehaviour
             cry.SetActive(true);
             timeText.text = "--:--";
             hyoukaText.text = "F";
-            commentText.text = "しっぱいの\nコメント";
+            commentText.text = "まにあわなかったね。\nげんじつはもっと\nあぶないよ";
             return;
         }
 
@@ -31,7 +31,7 @@ public class Result : MonoBehaviour
         int seconds = Mathf.FloorToInt(GameData.clearTime % 60f);
         timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);//クリアタイムの表示
 
-        commentText.text = "せいこうの\nコメント";
+        commentText.text = "よくできたね！\nでもあんしんしないで。\nげんじつはあまくない。";
 
         if( minutes < 1 ) hyoukaText.text = "S"; //1分未満
         else if( minutes < 2) hyoukaText.text = "A"; //1分以上2分未満

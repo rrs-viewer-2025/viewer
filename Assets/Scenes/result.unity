@@ -387,7 +387,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u30B3\u30E1\u30F3\u30C8\n\u30B3\u30E1\u30F3\u30C8"
+  m_text: "\u30B3\u30E1\u30F3\u30C8\u30B3\u30E1\u30F3\u30C8\n\u30B3\u30E1\u30F3\u30C8\u30B3\u30E1\u30F3\u30C8\n\u30B3\u30E1\u30F3\u30C8\u30B3\u30E1\u30F3\u30C8"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f6221c6e71ec94de3b123c6efcb543eb, type: 2}
   m_sharedMaterial: {fileID: 3466541395559548730, guid: f6221c6e71ec94de3b123c6efcb543eb, type: 2}
@@ -426,7 +426,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: -40
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
