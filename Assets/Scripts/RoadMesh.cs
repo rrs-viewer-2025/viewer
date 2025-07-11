@@ -10,11 +10,11 @@ public class RoadMesh : MonoBehaviour
     private List<Mesh> wallMeshes = new List<Mesh>(); //壁のメッシュリスト
     private List<Vector3> apexes;
     bool flag = false;
-    PlayerStartPosition playerStartPosition;
+    //PlayerStartPosition playerStartPosition;
 
     void Awake()
     {
-        playerStartPosition = FindObjectOfType<PlayerStartPosition>();
+        //playerStartPosition = FindObjectOfType<PlayerStartPosition>();
     }
 
     void Start()
@@ -72,10 +72,10 @@ public class RoadMesh : MonoBehaviour
                     }
                     MakeFloorMesh(apexes, apexesCount);
 
-                    if(flag == false)
-                    {
-                        flag = playerStartPosition.check(x, y);
-                    }
+                    // if(flag == false)
+                    // {
+                    //     flag = playerStartPosition.check(x, y);
+                    // }
                 }
             }
         }
