@@ -1,6 +1,8 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TextEffect : MonoBehaviour
 {
@@ -21,6 +23,11 @@ public class TextEffect : MonoBehaviour
 
     // 表示コルーチンを管理（重複防止）
     private Coroutine _showCoroutine;
+
+    // シーン遷移用のフェードアウトパネル
+    [SerializeField] private Image _fadePanel;
+    // フェードアウト速度
+    [SerializeField] private float _sceneTransitionSpeed = 0.1f;
 
     // ScenesManager
     public string targetSceneName = "main"; // インスペクタで設定可
@@ -58,8 +65,11 @@ public class TextEffect : MonoBehaviour
             }
         }
 
+        // エンターが押されたら次のシーンへ遷移
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
         // シーン遷移
-        FadeSceneController.Instance.StartFadeOutToScene(targetSceneName);
+        SceneManager.LoadScene(targetSceneName);
 
         _showCoroutine = null;
     }
