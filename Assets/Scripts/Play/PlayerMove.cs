@@ -168,10 +168,6 @@ public class PlayerCharaControl : MonoBehaviour
             if (mat.Left > 0) h = -1.0f;
             if (mat.Right > 0) h = 1.0f;
         }
-        else
-        {
-            key(); // Matがない時はkey操作
-        }
     }
 
     /// <summary>
@@ -186,11 +182,6 @@ public class PlayerCharaControl : MonoBehaviour
         {
             v = gamepad.leftStick.y.ReadValue();
             h = gamepad.leftStick.x.ReadValue();
-        }
-        else
-        {
-            Debug.LogWarning("ゲームパッドが接続されていません");
-            key();
         }
     }
 
