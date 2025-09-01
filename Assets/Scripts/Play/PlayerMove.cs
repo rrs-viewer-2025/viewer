@@ -182,6 +182,8 @@ public class PlayerCharaControl : MonoBehaviour
         {
             v = gamepad.leftStick.y.ReadValue();
             h = gamepad.leftStick.x.ReadValue();
+        } else if (gamepad == null) {
+            Debug.LogWarning("Gamepad not connected");
         }
     }
 
