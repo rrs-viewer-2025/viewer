@@ -22,7 +22,7 @@ public class BlockadeLoader : MonoBehaviour
 
     void Awake()
     {
-        stepManager = FindObjectOfType<StepManager>();
+        stepManager = FindFirstObjectByType<StepManager>();
     }
 
     public void SetLogFolderPath(string path)

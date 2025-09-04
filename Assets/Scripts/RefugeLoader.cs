@@ -11,7 +11,7 @@ public class RefugeLoader : MonoBehaviour
 
     void Start()
     {
-        Setting setting = FindObjectOfType<Setting>();
+        Setting setting = FindFirstObjectByType<Setting>();
         logfolder = setting.LogfolderPath;
         LoadAndDrawBuilding();
     }
