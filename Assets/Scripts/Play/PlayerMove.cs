@@ -33,7 +33,7 @@ public class PlayerCharaControl : MonoBehaviour
     void Awake()
     {
         // JoyconManagerを取得
-        joyconManager = FindObjectOfType<JoyconManager>();
+        joyconManager = FindFirstObjectByType<JoyconManager>();
     }
 
     void Start()
@@ -42,7 +42,7 @@ public class PlayerCharaControl : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         // Setting.csのInterfaceTypeを参照
-        settingScript = FindObjectOfType<Setting>();
+        settingScript = FindFirstObjectByType<Setting>();
         if (settingScript != null)
         {
             interfaceType = settingScript.InterfaceType;
@@ -157,7 +157,7 @@ public class PlayerCharaControl : MonoBehaviour
     /// </summary>
     void Mat()
     {
-        MatAction mat = FindObjectOfType<MatAction>();
+        MatAction mat = FindFirstObjectByType<MatAction>();
 
         if (mat != null)
         {

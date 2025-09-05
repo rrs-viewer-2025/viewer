@@ -21,7 +21,7 @@ public class StepDisplay : MonoBehaviour
 
     void Awake()
     {
-        stepManager = FindObjectOfType<StepManager>();
+        stepManager = FindFirstObjectByType<StepManager>();
     }
 
     void Start()

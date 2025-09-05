@@ -19,7 +19,7 @@ public class OverviewCamera : MonoBehaviour
     void Awake()
     {
         cam = GetComponent<Camera>();
-        planeManager = FindObjectOfType<PlaneManager>();
+        planeManager = FindFirstObjectByType<PlaneManager>();
         //playerStartPosition = FindObjectOfType<PlayerStartPosition>();
     }
 

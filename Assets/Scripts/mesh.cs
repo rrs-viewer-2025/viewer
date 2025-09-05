@@ -12,7 +12,7 @@ public class mesh : MonoBehaviour
     void Start()
     {
         // 設定オブジェクトからログフォルダパスを取得
-        Setting setting = FindObjectOfType<Setting>();
+        Setting setting = FindFirstObjectByType<Setting>();
         logfolder = setting.LogfolderPath;
         LoadInitialConditions(); // 初期状態の読み込みを開始
     }
