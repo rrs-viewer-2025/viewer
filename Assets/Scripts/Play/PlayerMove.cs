@@ -4,6 +4,7 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class PlayerCharaControl : MonoBehaviour
 {
@@ -17,18 +18,22 @@ public class PlayerCharaControl : MonoBehaviour
 
     //private bool RefugeOn; //避難所に到達したかを管理する
 
+    // コントローラの入力値
     private float v;
     private float h;
     private List<Joycon> joycons; // Joy-Conのリスト
     private Joycon joycon;        // 今使うJoy-Con（片方
     private bool left = false;
 
-    private string interfaceType = "key"; // デフォルトはキーボード
+    // Setting.csのInterfaceTypeを参照して共有
+    private Setting settingScript;
+    private string interfaceType;
     JoyconManager joyconManager;
 
     void Awake()
     {
-        joyconManager = FindObjectOfType<JoyconManager>();
+        // JoyconManagerを取得
+        joyconManager = FindFirstObjectByType<JoyconManager>();
     }
 
     void Start()
@@ -36,6 +41,28 @@ public class PlayerCharaControl : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
 
+        // Setting.csのInterfaceTypeを参照
+        settingScript = FindFirstObjectByType<Setting>();
+        if (settingScript != null)
+        {
+            interfaceType = settingScript.InterfaceType;
+            Debug.Log($"[PlayerCharaControl] interface (from Setting): {interfaceType}");
+        }
+        else
+        {
+            interfaceType = "key";
+            Debug.LogWarning("[PlayerCharaControl] Setting.cs not found, defaulting to 'key'");
+        }
+
+        // Joy-Conの接続・初期化処理を関数化
+        SetupJoycon();
+    }
+
+    /// <summary>
+    /// Joy-Conの接続と初期化を行う関数。
+    /// </summary>
+    void SetupJoycon()
+    {
         // JoyconManager から Joy-Con のリストを取得
         joycons = JoyconManager.Instance.j;
 
@@ -43,70 +70,34 @@ public class PlayerCharaControl : MonoBehaviour
         if (joycons.Count > 0)
         {
             joycon = joycons[0]; // 0番目のJoy-Conを使用（通常は左）
-            //Debug.Log("Joy-Con接続成功");
+            Debug.Log("Joy-Con接続成功");
         }
         else
         {
-            //Debug.Log("Joy-Conが接続されていません");
-        }
-
-        // config.jsonからinterfaceを読み込む
-        string path = Path.Combine(Application.streamingAssetsPath, "config.json");
-        if (File.Exists(path))
-        {
-            string json = File.ReadAllText(path);
-            JObject config = JObject.Parse(json);
-            interfaceType = config["interface"]?.ToString() ?? "key";
-            Debug.Log($"[PlayerCharaControl] interface: {interfaceType}");
-        }
-        else
-        {
-            Debug.LogError($"[PlayerCharaControl] config.json not found at {path}");
+            Debug.LogWarning("Joy-Conが接続されていません");
         }
     }
 
     void Update()
     {
-
         // 入力方法に応じて処理分岐
-        if (interfaceType == "key")
+        switch (interfaceType)
         {
-            key();
-        }
-        else if (interfaceType == "mat")
-        {
-            Mat();
+            case "key":
+                key();
+                break;
+            case "mat":
+                Mat();
+                break;
+            case "pad":
+                pad();
+                break;
         }
 
+        // Joy-Con入力がある場合は優先して処理
         if (joycon != null)
         {
-            var stick = joycon.GetStick();
-            left = joyconManager.getLeftRight(); //右のジョイコンか左のジョイコンか確認
-            //Debug.Log("Joy-Con Input:" + stick[0] + stick[1]);  // 入力値を確認
-
-            if (left) //左のジョイコン
-            {
-                v = stick[0];
-                h = -stick[1];
-            }
-            else
-            {
-                v = -stick[0];
-                h = stick[1];
-            }
-
-        }
-        else
-        {
-            // 入力方法に応じて処理分岐
-            if (interfaceType == "key")
-            {
-                key();
-            }
-            else if (interfaceType == "mat")
-            {
-                Mat();
-            }
+            HandleJoyconInput();
         }
 
         // 共通処理（Runアニメーションと移動・回転）
@@ -119,11 +110,35 @@ public class PlayerCharaControl : MonoBehaviour
             runFlag = false;
         }
 
-        anim.SetBool("Run", runFlag);
-        transform.position += transform.forward * forwardSpeed * v * Time.deltaTime;
-        transform.Rotate(0, rotationSpeed * h * Time.deltaTime, 0);
+        anim.SetBool("Run", runFlag); // 入力値に応じて「走る」アニメーションを切り替え
+        transform.position += transform.forward * forwardSpeed * v * Time.deltaTime; // 前進・後退の移動処理
+        transform.Rotate(0, rotationSpeed * h * Time.deltaTime, 0); // 左右の回転処理
     }
 
+    /// <summary>
+    /// Joy-Con入力がある場合の移動・回転値の更新処理。
+    /// </summary>
+    void HandleJoyconInput()
+    {
+        var stick = joycon.GetStick();
+        left = joyconManager.getLeftRight();
+
+        if (left)
+        {
+            v = stick[0];
+            h = -stick[1];
+        }
+        else
+        {
+            v = -stick[0];
+            h = stick[1];
+        }
+    }
+
+    /// <summary>
+    /// キーボード入力によるプレイヤーの移動・ジャンプ処理。
+    /// 縦横の入力値を取得し、スペースキーでジャンプアニメーションと物理ジャンプを実行。
+    /// </summary>
     void key()
     {
         v = Input.GetAxis("Vertical");
@@ -136,18 +151,39 @@ public class PlayerCharaControl : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// MatActionオブジェクトからの入力によるプレイヤーの移動処理。
+    /// Up/Down/Left/Rightの値に応じて移動方向を決定。
+    /// </summary>
     void Mat()
     {
-        v = 0.0f;
-        h = 0.0f;
+        MatAction mat = FindFirstObjectByType<MatAction>();
 
-        MatAction mat = FindObjectOfType<MatAction>();
         if (mat != null)
         {
+            v = 0.0f;
+            h = 0.0f;
             if (mat.Up > 0) v = 1.0f;
             if (mat.Down > 0) v = -1.0f;
             if (mat.Left > 0) h = -1.0f;
             if (mat.Right > 0) h = 1.0f;
+        }
+    }
+
+    /// <summary>
+    /// ゲームパッドからの入力によるプレイヤーの移動処理。
+    /// 縦横の入力値を取得し、移動方向を決定。
+    /// </summary>
+    void pad()
+    {
+        // ゲームパッド（デバイスの取得）
+        var gamepad = Gamepad.current;
+        if (gamepad != null)
+        {
+            v = gamepad.leftStick.y.ReadValue();
+            h = gamepad.leftStick.x.ReadValue();
+        } else if (gamepad == null) {
+            Debug.LogWarning("Gamepad not connected");
         }
     }
 

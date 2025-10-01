@@ -45,12 +45,5 @@ public class MatAction : MonoBehaviour
         Left = (int)leftAction.ReadValue<float>();
         Right = (int)rightAction.ReadValue<float>();
         Stop = (int)stopAction.ReadValue<float>();
-        
-        // 各アクションの値に応じてログを出力
-        // if (Up > 0) Debug.Log("上移動");
-        // if (Down > 0) Debug.Log("下移動");
-        // if (Left > 0) Debug.Log("左移動");
-        // if (Right > 0) Debug.Log("右移動");
-        // if (Stop < 0) Debug.Log("静止");
     }
 }

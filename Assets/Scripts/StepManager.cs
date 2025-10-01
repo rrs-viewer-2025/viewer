@@ -23,19 +23,19 @@ public class StepManager : MonoBehaviour
 
     void Awake() //確実に準備させるもの
     {
-        ambulanceteamLoader = FindObjectOfType<AmbulanceteamLoader>();
-        policeforceLoader = FindObjectOfType<PoliceforceLoader>();
-        firebrigadeLoader = FindObjectOfType<FirebrigadeLoader>();
-        civilianLoader = FindObjectOfType<CivilianLoader>();
-        blockadeLoader = FindObjectOfType<BlockadeLoader>();
-        overviewCamera = FindObjectOfType<OverviewCamera>();
-        refugeCamera = FindObjectOfType<RefugeCamera>();
-        roadMesh = FindObjectOfType<RoadMesh>();
+        ambulanceteamLoader = FindFirstObjectByType<AmbulanceteamLoader>();
+        policeforceLoader = FindFirstObjectByType<PoliceforceLoader>();
+        firebrigadeLoader = FindFirstObjectByType<FirebrigadeLoader>();
+        civilianLoader = FindFirstObjectByType<CivilianLoader>();
+        blockadeLoader = FindFirstObjectByType<BlockadeLoader>();
+        overviewCamera = FindFirstObjectByType<OverviewCamera>();
+        refugeCamera = FindFirstObjectByType<RefugeCamera>();
+        roadMesh = FindFirstObjectByType<RoadMesh>();
     }
 
     void Start()
     {
-        Setting setting = FindObjectOfType<Setting>();
+        Setting setting = FindFirstObjectByType<Setting>();
         logfolder = setting.LogfolderPath;
 
         string filePath = logfolder + "/CONFIG.json";
@@ -122,8 +122,8 @@ public class StepManager : MonoBehaviour
     public void StartStep()
     {
         // 各ステップの開始時に Script1 / Script2 に命令
-        // FindObjectOfType<Script1>().StartStep();
-        // FindObjectOfType<Script2>().StartStep();
+        // FindFirstObjectByType<Script1>().StartStep();
+        // FindFirstObjectByType<Script2>().StartStep();
 
         ambulanceteamLoader.StartStep();
         policeforceLoader.StartStep();

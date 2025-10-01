@@ -12,7 +12,7 @@ public class MapNameLoader : MonoBehaviour
 
     void Start()
     {
-        Setting setting = FindObjectOfType<Setting>();
+        Setting setting = FindFirstObjectByType<Setting>();
         configFolder = setting.LogfolderPath; // 設定クラスからパスを取得
         LoadMapName();
     }
