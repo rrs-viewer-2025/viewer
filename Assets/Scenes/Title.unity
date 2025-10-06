@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 115940864}
   - component: {fileID: 115940863}
   - component: {fileID: 115940866}
+  - component: {fileID: 115940867}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -198,6 +199,24 @@ MonoBehaviour:
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
   m_ScrollDeltaPerTick: 6
+--- !u!114 &115940867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115940861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 471121717442e4684b56f1a0ae0ce6c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSceneName: intro
+  useSpaceKey: 1
+  useController: 1
+  useFadeTransition: 1
+  controllerButtonName: Submit
+  showDebugLog: 0
 --- !u!1 &292129033
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,7 +330,6 @@ GameObject:
   m_Component:
   - component: {fileID: 475756301}
   - component: {fileID: 475756302}
-  - component: {fileID: 475756303}
   m_Layer: 0
   m_Name: ScenesManeger
   m_TagString: Untagged
@@ -348,24 +366,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeImage: {fileID: 1067564821}
   fadeSpeed: 0.5
---- !u!114 &475756303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 475756300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 471121717442e4684b56f1a0ae0ce6c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetSceneName: intro
-  useSpaceKey: 1
-  useController: 1
-  useFadeTransition: 1
-  controllerButtonName: Submit
-  showDebugLog: 0
 --- !u!1 &694180665
 GameObject:
   m_ObjectHideFlags: 0

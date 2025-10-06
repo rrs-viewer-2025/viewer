@@ -604,9 +604,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 996730122}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55ceca825f64948aa91989a2f3fcc792, type: 3}
+  m_Script: {fileID: 11500000, guid: 471121717442e4684b56f1a0ae0ce6c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetSceneName: Title
+  useSpaceKey: 1
+  useController: 1
+  useFadeTransition: 1
+  controllerButtonName: Submit
+  showDebugLog: 0
 --- !u!1 &1057468752
 GameObject:
   m_ObjectHideFlags: 0
