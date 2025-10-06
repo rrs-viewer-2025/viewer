@@ -343,6 +343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1196794295}
   - component: {fileID: 1196794296}
+  - component: {fileID: 1196794297}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -397,6 +398,24 @@ MonoBehaviour:
   _fadePanel: {fileID: 1395106453}
   _sceneTransitionSpeed: 0.1
   targetSceneName: main
+--- !u!114 &1196794297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196794294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 471121717442e4684b56f1a0ae0ce6c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSceneName: main
+  useSpaceKey: 1
+  useController: 1
+  useFadeTransition: 1
+  controllerButtonName: Submit
+  showDebugLog: 0
 --- !u!1 &1230653543
 GameObject:
   m_ObjectHideFlags: 0
