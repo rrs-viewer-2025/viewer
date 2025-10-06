@@ -3,7 +3,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public Camera[] cameras;  // カメラの配列
-    private int currentCameraIndex = 2; // 現在のカメラのインデックス
+    public int currentCameraIndex = 2; // 現在のカメラのインデックス（インスペクターで変更可能）
     public float zoomSpeed = 1f;
     public float panSpeed = 5.0f;
 
