@@ -916,7 +916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc18882eda0b44cfa3a4dac5577f229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LogfolderPath: "/Users/x22036xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/Viewer/setting/deserialize-rrs_log-cs/output"
+  LogfolderPath: /Users/k22065kk/lab/rrs_viewer/ds-logs/kobe
   InterfaceType: key
 --- !u!4 &298378966
 Transform:
@@ -1641,7 +1641,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &572701300
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1797,6 +1797,7 @@ MonoBehaviour:
   - {fileID: 1009411137}
   - {fileID: 558178438}
   - {fileID: 968390657}
+  currentCameraIndex: 2
   zoomSpeed: 1
   panSpeed: 5
   ball: {fileID: 1429246308}
@@ -2939,7 +2940,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &989496221
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4391,7 +4392,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapNameText: {fileID: 1819601258}
-  configFolder: 
+  configFolder: /Users/k22065kk/lab/rrs_viewer/ds-logs/kobe
 --- !u!1 &1732988749
 GameObject:
   m_ObjectHideFlags: 0
@@ -5088,7 +5089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   citizenPrefab: {fileID: 3191293194562004155, guid: 344e5bc5b26a34542848678562e23c45, type: 3}
-  logfolder: "/Users/x22036xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/Viewer/setting/deserialize-rrs_log-cs/output/"
+  logfolder: /Users/k22065kk/lab/rrs_viewer/ds-logs/kobe
 --- !u!4 &2100497534
 Transform:
   m_ObjectHideFlags: 0
