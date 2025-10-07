@@ -411,10 +411,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetSceneName: main
-  useSpaceKey: 1
-  useController: 1
   useFadeTransition: 1
-  controllerButtonName: Submit
   showDebugLog: 0
 --- !u!1 &1230653543
 GameObject:

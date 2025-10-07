@@ -1,33 +1,84 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 /// <summary>
-/// スペースキーまたは外部コントローラーでシーン遷移を行う汎用スクリプト
+/// 設定ファイルからのインターフェース設定に応じてシーン遷移を行う汎用スクリプト
+/// Setting.csと連携してconfig.jsonの設定を参照
 /// </summary>
 public class InputSceneChanger : MonoBehaviour
 {
     [Header("シーン設定")]
     [SerializeField] private string targetSceneName = "main"; // 遷移先シーン名（インスペクターで設定可能）
     
-    [Header("入力設定")]
-    [SerializeField] private bool useSpaceKey = true; // スペースキーを使用するか
-    [SerializeField] private bool useController = true; // コントローラーを使用するか
+    [Header("遷移設定")]
     [SerializeField] private bool useFadeTransition = true; // フェード遷移を使用するか
-    
-    [Header("コントローラー設定")]
-    [SerializeField] private string controllerButtonName = "Submit"; // コントローラーボタン名（Submit, Jump, Fire1など）
     
     [Header("デバッグ")]
     [SerializeField] private bool showDebugLog = false; // デバッグログを表示するか
 
     private bool canChangeScene = true; // シーン変更可能フラグ
+    
+    // Setting.csのInterfaceTypeを参照して入力方法を決定
+    private Setting settingScript;
+    private string interfaceType;
+    
+    // Joy-Con関連
+    private List<Joycon> joycons;
+    private Joycon joycon;
+    private JoyconManager joyconManager;
+
+    void Awake()
+    {
+        // JoyconManagerを取得
+        joyconManager = FindFirstObjectByType<JoyconManager>();
+    }
 
     void Start()
     {
+        // Setting.csのInterfaceTypeを参照
+        settingScript = FindFirstObjectByType<Setting>();
+        if (settingScript != null)
+        {
+            interfaceType = settingScript.InterfaceType;
+            Debug.Log($"[InputSceneChanger] interface (from Setting): {interfaceType}");
+        }
+        else
+        {
+            interfaceType = "key";
+            Debug.LogWarning("[InputSceneChanger] Setting.cs not found, defaulting to 'key'");
+        }
+
+        // Joy-Conの接続・初期化処理
+        SetupJoycon();
+
         if (showDebugLog)
         {
-            Debug.Log($"InputSceneChanger initialized. Target scene: {targetSceneName}");
+            Debug.Log($"InputSceneChanger initialized. Target scene: {targetSceneName}, Interface: {interfaceType}");
+        }
+    }
+
+    /// <summary>
+    /// Joy-Conの接続と初期化を行う関数。
+    /// </summary>
+    void SetupJoycon()
+    {
+        if (JoyconManager.Instance != null)
+        {
+            // JoyconManager から Joy-Con のリストを取得
+            joycons = JoyconManager.Instance.j;
+
+            // 少なくとも1つJoy-Conが接続されていたら使う
+            if (joycons.Count > 0)
+            {
+                joycon = joycons[0]; // 0番目のJoy-Conを使用（通常は左）
+                Debug.Log("[InputSceneChanger] Joy-Con接続成功");
+            }
+            else
+            {
+                Debug.LogWarning("[InputSceneChanger] Joy-Conが接続されていません");
+            }
         }
     }
 
@@ -37,31 +88,24 @@ public class InputSceneChanger : MonoBehaviour
 
         bool shouldChangeScene = false;
 
-        // スペースキー入力チェック
-        if (useSpaceKey && Input.GetKeyDown(KeyCode.Space))
+        // 入力方法に応じて処理分岐
+        switch (interfaceType)
         {
-            shouldChangeScene = true;
-            if (showDebugLog) Debug.Log("Space key pressed - changing scene");
+            case "key":
+                shouldChangeScene = CheckKeyInput();
+                break;
+            case "mat":
+                shouldChangeScene = CheckMatInput();
+                break;
+            case "pad":
+                shouldChangeScene = CheckPadInput();
+                break;
         }
 
-        // コントローラー入力チェック（旧Input Systemを使用）
-        if (useController && Input.GetButtonDown(controllerButtonName))
+        // Joy-Con入力がある場合は優先して処理
+        if (joycon != null)
         {
-            shouldChangeScene = true;
-            if (showDebugLog) Debug.Log($"Controller button '{controllerButtonName}' pressed - changing scene");
-        }
-
-        // 追加のコントローラーボタンチェック（汎用性を高めるため）
-        if (useController)
-        {
-            // ゲームパッドのAボタン（Xbox）、×ボタン（PlayStation）など
-            if (Input.GetButtonDown("Fire1") || 
-                Input.GetButtonDown("Jump") || 
-                Input.GetKeyDown(KeyCode.JoystickButton0))
-            {
-                shouldChangeScene = true;
-                if (showDebugLog) Debug.Log("Controller button pressed - changing scene");
-            }
+            shouldChangeScene = shouldChangeScene || CheckJoyconInput();
         }
 
         // シーン遷移実行
@@ -69,6 +113,92 @@ public class InputSceneChanger : MonoBehaviour
         {
             ChangeScene();
         }
+    }
+
+    /// <summary>
+    /// キーボード入力によるシーン遷移チェック。
+    /// スペースキーまたはエンターキーでシーン遷移。
+    /// </summary>
+    bool CheckKeyInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+        {
+            if (showDebugLog) Debug.Log("Key pressed - changing scene");
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// MatActionからの入力によるシーン遷移チェック。
+    /// マット上での任意の入力でシーン遷移。
+    /// </summary>
+    bool CheckMatInput()
+    {
+        MatAction mat = FindFirstObjectByType<MatAction>();
+        if (mat != null)
+        {
+            // マット上で何らかの入力があればシーン遷移
+            if (mat.Up > 0 || mat.Down > 0 || mat.Left > 0 || mat.Right > 0)
+            {
+                if (showDebugLog) Debug.Log("Mat input detected - changing scene");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// ゲームパッドからの入力によるシーン遷移チェック。
+    /// New Input Systemを使用してボタン入力を検出。
+    /// </summary>
+    bool CheckPadInput()
+    {
+        var gamepad = Gamepad.current;
+        if (gamepad != null)
+        {
+            // 各種ボタンの入力チェック
+            if (gamepad.buttonSouth.wasPressedThisFrame ||      // A ボタン (Xbox) / × ボタン (PlayStation)
+                gamepad.buttonEast.wasPressedThisFrame ||       // B ボタン (Xbox) / ○ ボタン (PlayStation)
+                gamepad.buttonWest.wasPressedThisFrame ||       // X ボタン (Xbox) / □ ボタン (PlayStation)
+                gamepad.buttonNorth.wasPressedThisFrame ||      // Y ボタン (Xbox) / △ ボタン (PlayStation)
+                gamepad.startButton.wasPressedThisFrame ||      // Start ボタン
+                gamepad.selectButton.wasPressedThisFrame)       // Select/Back ボタン
+            {
+                if (showDebugLog) Debug.Log("Gamepad button pressed - changing scene");
+                return true;
+            }
+        }
+        else if (gamepad == null && showDebugLog)
+        {
+            Debug.LogWarning("Gamepad not connected");
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Joy-Con入力によるシーン遷移チェック。
+    /// Joy-Conのボタン入力を検出。
+    /// </summary>
+    bool CheckJoyconInput()
+    {
+        if (joycon != null)
+        {
+            // Joy-Conの各種ボタンをチェック
+            if (joycon.GetButtonDown(Joycon.Button.DPAD_DOWN) ||
+                joycon.GetButtonDown(Joycon.Button.DPAD_UP) ||
+                joycon.GetButtonDown(Joycon.Button.DPAD_LEFT) ||
+                joycon.GetButtonDown(Joycon.Button.DPAD_RIGHT) ||
+                joycon.GetButtonDown(Joycon.Button.SHOULDER_1) ||
+                joycon.GetButtonDown(Joycon.Button.SHOULDER_2) ||
+                joycon.GetButtonDown(Joycon.Button.SR) ||
+                joycon.GetButtonDown(Joycon.Button.SL))
+            {
+                if (showDebugLog) Debug.Log("Joy-Con button pressed - changing scene");
+                return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>
