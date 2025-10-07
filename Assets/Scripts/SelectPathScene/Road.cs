@@ -9,10 +9,12 @@ public class RoadNode
     public int EntityID; //道路ID
     public Vector3 posi; // 道路の中心座標
     public List<int> neighbours; // 隣接している道路のIDを管理するリスト
+    public List<double> edgeLength; // 各エッジの長さ
 
     public RoadNode()
     {
         neighbours = new List<int>();
+        edgeLength = new List<double>();
     }
 }
 
@@ -65,7 +67,8 @@ public class Road : MonoBehaviour
                 {
                     int apexesCount = 0; // 頂点のカウント
                     
-                    Vector3 position = new Vector3();
+                    Vector3 startposition = new Vector3();
+                    Vector3 endposition = new Vector3();
                     int x = 0, y = 0;
 
                     foreach (var prop in entity["properties"])
@@ -78,8 +81,16 @@ public class Road : MonoBehaviour
                             {
                                 int startX = edge["startX"].ToObject<int>();
                                 int startY = edge["startY"].ToObject<int>();
-                                position = new Vector3(startX / 1000f, 0, startY / 1000f);
-                                apexes.Add(position);
+                                int endX = edge["endX"].ToObject<int>();
+                                int endY = edge["endY"].ToObject<int>();
+
+                                startposition = new Vector3(startX / 1000f, 0, startY / 1000f);
+                                endposition = new Vector3(endX / 1000f, 0, endY / 1000f);
+
+                                double length = Vector3.Distance(startposition, endposition);
+                                node.edgeLength.Add(length);
+
+                                apexes.Add(startposition);
                                 apexesCount++;
 
                                 int neighbourID = edge["neighbour"].ToObject<int>();
@@ -93,7 +104,7 @@ public class Road : MonoBehaviour
                         if (propUrn == URN.Property.Y) y = prop["intValue"].ToObject<int>(); 
                     }
                     MakeFloorMesh(apexes, apexesCount);
-                    node.posi = position; //道路の座標格納
+                    node.posi = new Vector3(x / 1000f, 0, y / 1000f); //道路の座標格納
 
                     roadGragh[node.EntityID] = node;
 

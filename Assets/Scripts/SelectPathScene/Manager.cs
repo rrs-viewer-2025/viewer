@@ -12,10 +12,12 @@ public class Manager : MonoBehaviour
     Road road;
     MinimapCameraFitter minimapcamerafitter;
     AStar astar;
+    PathFind_WidthBase pfwb;
     PathDrawer pathdrawer;
 
     Dictionary<int, RoadNode> roadGraph = new Dictionary<int, RoadNode>();
     List<int> Path1 = new List<int>(); //AStarで探索した経路
+    List<int> Path2 = new List<int>();
 
     void Awake()
     {
@@ -23,6 +25,7 @@ public class Manager : MonoBehaviour
         road = FindObjectOfType<Road>();
         minimapcamerafitter = FindObjectOfType<MinimapCameraFitter>();
         astar = FindObjectOfType<AStar>();
+        pfwb = FindObjectOfType<PathFind_WidthBase>();
         pathdrawer = FindObjectOfType<PathDrawer>();
     }
 
@@ -57,7 +60,7 @@ public class Manager : MonoBehaviour
 
     void pathfind()
     {
-        int start = 32765;
+        int start = 1782;
         int goal = 18733;
 
         RoadNode node = new RoadNode();
@@ -68,7 +71,11 @@ public class Manager : MonoBehaviour
 
         astar.SetStartGoal(start,goal);
         astar.SetRoadGragh(roadGraph);
+        pfwb.SetStartGoal(start,goal);
+        pfwb.SetRoadGragh(roadGraph);
+
         Path1 = astar.FindPath();
+        Path2 = pfwb.FindPath();
 
         Debug.Log("Pathの中身チェック");
         foreach (int i in Path1)
@@ -81,5 +88,6 @@ public class Manager : MonoBehaviour
     {
         pathdrawer.SetRoadGragh(roadGraph);
         pathdrawer.DrawPath(Path1, "path1");
+        pathdrawer.DrawPath(Path2, "path2");
     }
 }
