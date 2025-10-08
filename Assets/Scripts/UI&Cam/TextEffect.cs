@@ -29,9 +29,6 @@ public class TextEffect : MonoBehaviour
     // フェードアウト速度
     [SerializeField] private float _sceneTransitionSpeed = 0.1f;
 
-    // ScenesManager
-    public string targetSceneName = "main"; // インスペクタで設定可
-
     // オブジェクトが有効化されたら自動で再生開始
     private void OnEnable()
     {
@@ -64,12 +61,6 @@ public class TextEffect : MonoBehaviour
                 yield return StartCoroutine(FadeOutCoroutine());
             }
         }
-
-        // エンターが押されたら次のシーンへ遷移
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-
-        // シーン遷移
-        SceneManager.LoadScene(targetSceneName);
 
         _showCoroutine = null;
     }

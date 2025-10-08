@@ -397,7 +397,6 @@ MonoBehaviour:
   - "\u3055\u3042\u3001\n\u3058\u3057\u3093\u304C\u304A\u304D\u305F\u3042\u3068\u306E\u307E\u3061\u3067\n\u3072\u306A\u3093\u3092\u3057\u3066\u307F\u3088\u3046\u3002\n"
   _fadePanel: {fileID: 1395106453}
   _sceneTransitionSpeed: 0.1
-  targetSceneName: main
 --- !u!114 &1196794297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,7 +409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 471121717442e4684b56f1a0ae0ce6c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetSceneName: main
+  targetSceneName: SelectPath
   useSpaceKey: 1
   useController: 1
   useFadeTransition: 1
