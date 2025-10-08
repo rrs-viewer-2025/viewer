@@ -19,7 +19,7 @@ public class PathFind_WidthBase : MonoBehaviour
         goalID = goal;
     }
 
-    public void SetRoadGragh(Dictionary<int, RoadNode> dictionary)
+    public void SetRoadGraph(Dictionary<int, RoadNode> dictionary)
     {
         roadGragh = dictionary;
     }
@@ -86,19 +86,26 @@ public class PathFind_WidthBase : MonoBehaviour
                 }
 
                 // --- 幅考慮付きコスト計算 ---
-                // 道路の幅をどれくらい重要視するのか
-                double alpha = 3.0;
 
-                // 現在の道路から隣接道路までの距離
                 double distance = Vector3.Distance(roadGragh[n].posi, roadGragh[neighbourID].posi);
-                
-                // 道路の幅
-                double width = getroadwidth(neighbourID, n);
-                width = Mathf.Max((float)width, 0.1f);
-
-                // コスト計算
-                double widthAdjustedCost = distance / Math.Pow(width, alpha);
+                double width = Math.Max(getroadwidth(neighbourID, n), 0.5); // 下限0.5m
+                double widthAdjustedCost = distance * (1.0 + (1.0 / Math.Sqrt(width)));
                 double G = gScore[n] + widthAdjustedCost;
+
+
+                // // 道路の幅をどれくらい重要視するのか
+                // double alpha = 3.0;
+
+                // // 現在の道路から隣接道路までの距離
+                // double distance = Vector3.Distance(roadGragh[n].posi, roadGragh[neighbourID].posi);
+                
+                // // 道路の幅
+                // double width = getroadwidth(neighbourID, n);
+                // width = Mathf.Max((float)width, 0.1f);
+
+                // // コスト計算
+                // double widthAdjustedCost = distance / Math.Pow(width, alpha);
+                // double G = gScore[n] + widthAdjustedCost;
 
                 //L1にまだ格納してない場合，または格納されているがGがより小さい場合
                 if(!L1.Contains(neighbourID) || G < gScore.GetValueOrDefault(neighbourID, double.MaxValue))

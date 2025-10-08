@@ -184,7 +184,7 @@ public class Road : MonoBehaviour
         meshFilter.mesh = finalMesh;
     }
 
-    public Dictionary<int, RoadNode> getRoadGragh()
+    public Dictionary<int, RoadNode> getRoadGraph()
     {
         return roadGragh;
     }
