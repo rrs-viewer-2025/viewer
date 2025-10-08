@@ -917,7 +917,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LogfolderPath: /Users/k22065kk/lab/rrs_viewer/ds-logs/kobe
-  InterfaceType: key
+  InterfaceType: pad
 --- !u!4 &298378966
 Transform:
   m_ObjectHideFlags: 0
