@@ -55,9 +55,10 @@ public class InputSceneChanger : MonoBehaviour
         if (useController)
         {
             // ゲームパッドのAボタン（Xbox）、×ボタン（PlayStation）など
-            if (Input.GetButtonDown("Fire1") || 
-                Input.GetButtonDown("Jump") || 
-                Input.GetKeyDown(KeyCode.JoystickButton0))
+            if (Input.GetKeyDown(KeyCode.JoystickButton0) || 
+                Input.GetKeyDown(KeyCode.JoystickButton1) || 
+                Input.GetKeyDown(KeyCode.JoystickButton2) || 
+                Input.GetKeyDown(KeyCode.JoystickButton3))
             {
                 shouldChangeScene = true;
                 if (showDebugLog) Debug.Log("Controller button pressed - changing scene");
