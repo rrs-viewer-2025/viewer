@@ -25,6 +25,16 @@ public class PanelController : MonoBehaviour
     // 遷移先シーン名
     private string targetSceneName = "main";
 
+    // Manager.cs
+    Manager mg;
+
+    int i = -1;
+
+    void Awake()
+    {
+        mg = FindObjectOfType<Manager>();
+    }
+
     void Start()
     {
         panelImage = GetComponent<Image>();
@@ -42,6 +52,8 @@ public class PanelController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Joystick1Button3))
         {
             HandleCursorSelection(cursorY, targetSceneName);
+            i = 1;
+            Globaldata.path = mg.getPath(i);
         }
         
         // Bボタン（Joystick1Button1）でcursorBを選択
@@ -54,12 +66,16 @@ public class PanelController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Joystick1Button0))
         {
             HandleCursorSelection(cursorA, targetSceneName);
+            i = 2;
+            Globaldata.path = mg.getPath(i);
         }
         
         // Xボタン（Joystick1Button2）でcursorXを選択
         if (Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
             HandleCursorSelection(cursorX, targetSceneName);
+            i = 3;
+            Globaldata.path = mg.getPath(i);
         }
     }
     
