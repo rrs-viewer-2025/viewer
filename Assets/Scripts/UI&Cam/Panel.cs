@@ -152,7 +152,7 @@ public class PanelController : MonoBehaviour
         }
     }
 
-    // ボタンごとに別の音を鳴らす
+    // ボタンごとに別の音を鳴らす（再生中の音は停止）
     private void PlayButtonSound(AudioClip clip)
     {
         if (audioSource == null)
@@ -167,6 +167,15 @@ public class PanelController : MonoBehaviour
             return;
         }
 
-        audioSource.PlayOneShot(clip);
+        // 既に再生中の音声を停止
+        if (audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+
+        // 新しい音声を再生
+        audioSource.clip = clip;
+        audioSource.Play();
     }
+
 }
