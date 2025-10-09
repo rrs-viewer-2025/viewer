@@ -78,7 +78,7 @@ public class Manager : MonoBehaviour
 
     void pathfind()
     {
-        int start = 1782;
+        int start = 30797;
         int goal = 18733;
 
         foreach(var refuge in refugeGraph)
