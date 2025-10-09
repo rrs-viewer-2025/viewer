@@ -55,6 +55,8 @@ public class Manager : MonoBehaviour
         simulation();
         pathfind();
         pathdraw();
+
+        Globaldata.roadGraph = roadGraph;
     }
 
     void simulation()
@@ -108,5 +110,25 @@ public class Manager : MonoBehaviour
         pathdrawer.DrawPath(Path1, "path1");
         pathdrawer.DrawPath(Path2, "path2");
         pathdrawer.DrawPath(Path3, "path3");
+    }
+
+    public List<int> getPath(int i)
+    {
+        if(i == 1)
+        {
+            Debug.Log("path1をセット");
+            return Path1;
+        } 
+        if(i == 2)
+        {
+            Debug.Log("path2をセット");
+            return Path2;
+        }
+        if(i == 3)
+        {
+            Debug.Log("path3をセット");
+            return Path3;
+        }
+        return new List<int>();
     }
 }
