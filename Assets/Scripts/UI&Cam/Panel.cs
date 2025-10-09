@@ -28,6 +28,16 @@ public class PanelController : MonoBehaviour
     public AudioClip aButtonClip;
     public AudioClip xButtonClip;
 
+    // Manager.cs
+    Manager mg;
+
+    int i = -1;
+
+    void Awake()
+    {
+        mg = FindObjectOfType<Manager>();
+    }
+
     void Start()
     {
         panelImage = GetComponent<Image>();
@@ -52,6 +62,8 @@ public class PanelController : MonoBehaviour
         {
             HandleCursorSelection(cursorY, targetSceneName);
             PlayButtonSound(yButtonClip);
+            i = 1;
+            Globaldata.path = mg.getPath(i);
         }
 
         // Bボタン（Joystick1Button1）でcursorBを選択
@@ -66,6 +78,8 @@ public class PanelController : MonoBehaviour
         {
             HandleCursorSelection(cursorA, targetSceneName);
             PlayButtonSound(aButtonClip);
+            i = 2;
+            Globaldata.path = mg.getPath(i);
         }
 
         // Xボタン（Joystick1Button2）でcursorXを選択
@@ -73,6 +87,9 @@ public class PanelController : MonoBehaviour
         {
             HandleCursorSelection(cursorX, targetSceneName);
             PlayButtonSound(xButtonClip);
+
+            i = 3;
+            Globaldata.path = mg.getPath(i);
         }
     }
 
