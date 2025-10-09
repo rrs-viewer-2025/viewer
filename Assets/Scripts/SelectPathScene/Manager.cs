@@ -114,9 +114,21 @@ public class Manager : MonoBehaviour
 
     public List<int> getPath(int i)
     {
-        if(i == 1) return Path1;
-        if(i == 2) return Path2;
-        if(i == 3) return Path3;
+        if(i == 1)
+        {
+            Debug.Log("path1をセット");
+            return Path1;
+        } 
+        if(i == 2)
+        {
+            Debug.Log("path2をセット");
+            return Path2;
+        }
+        if(i == 3)
+        {
+            Debug.Log("path3をセット");
+            return Path3;
+        }
         return new List<int>();
     }
 }
