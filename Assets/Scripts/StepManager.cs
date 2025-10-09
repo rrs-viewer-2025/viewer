@@ -20,6 +20,7 @@ public class StepManager : MonoBehaviour
     OverviewCamera overviewCamera;
     RefugeCamera refugeCamera;
     RoadMesh roadMesh;
+    MainPathDraw mpd;
 
     void Awake() //確実に準備させるもの
     {
@@ -31,6 +32,7 @@ public class StepManager : MonoBehaviour
         overviewCamera = FindFirstObjectByType<OverviewCamera>();
         refugeCamera = FindFirstObjectByType<RefugeCamera>();
         roadMesh = FindFirstObjectByType<RoadMesh>();
+        mpd = FindFirstObjectByType<MainPathDraw>();
     }
 
     void Start()
@@ -71,6 +73,7 @@ public class StepManager : MonoBehaviour
         overviewCamera.SetOverviewCamera();
         refugeCamera.SetRefugeCamera();
         roadMesh.LoadInitialConditions();
+        mpd.PathDraw();
         
         StartStep(); // 一度だけ
     }
