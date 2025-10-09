@@ -82,7 +82,7 @@ public class PanelController : MonoBehaviour
     void Update()
     {
         // Yボタン（Joystick1Button3）でcursorYを選択
-        if (Input.GetKeyDown(KeyCode.Joystick1Button3))
+        if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha2))
         {
             HandleCursorSelection(cursorY, targetSceneName);
 
@@ -98,7 +98,7 @@ public class PanelController : MonoBehaviour
         }
 
         // Bボタン（Joystick1Button1）でcursorBを選択
-        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+        if (Input.GetKeyDown(KeyCode.Joystick1Button2) || Input.GetKeyDown(KeyCode.Alpha3))
         {
             HandleCursorSelection(cursorB, targetSceneName);
 
@@ -114,7 +114,7 @@ public class PanelController : MonoBehaviour
         }
 
         // Aボタン（Joystick1Button0）でcursorAを選択
-        if (Input.GetKeyDown(KeyCode.Joystick1Button0))
+        if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
         {
             HandleCursorSelection(cursorA, targetSceneName);
 
