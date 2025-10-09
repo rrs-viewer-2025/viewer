@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-// ★追加
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -12,28 +11,38 @@ public class PanelController : MonoBehaviour
     private GameObject cursorB;
     private GameObject cursorA;
     private GameObject cursorX;
-    
+
     // パネルのImageコンポーネント
     private Image panelImage;
-    
-    // 現在選択されているカーソル
+
     private GameObject currentSelectedCursor = null;
-    
-    // 最後に押されたボタンを記録（2回押し判定用）
     private GameObject lastPressedCursor = null;
-    
-    // 遷移先シーン名
     private string targetSceneName = "main";
+
+    // Audio
+    private AudioSource audioSource;
+
+    // ボタンごとの音声を設定（Inspector で割り当てる）
+    public AudioClip yButtonClip;
+    public AudioClip bButtonClip;
+    public AudioClip aButtonClip;
+    public AudioClip xButtonClip;
 
     void Start()
     {
         panelImage = GetComponent<Image>();
-        
+
         // シーン内のカーソルオブジェクトを名前で取得
         cursorY = GameObject.Find("cursorY");
         cursorB = GameObject.Find("cursorB");
         cursorA = GameObject.Find("cursorA");
         cursorX = GameObject.Find("cursorX");
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource がアタッチされていません！");
+        }
     }
 
     void Update()
@@ -42,27 +51,31 @@ public class PanelController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Joystick1Button3))
         {
             HandleCursorSelection(cursorY, targetSceneName);
+            PlayButtonSound(yButtonClip);
         }
-        
+
         // Bボタン（Joystick1Button1）でcursorBを選択
         if (Input.GetKeyDown(KeyCode.Joystick1Button1))
         {
             HandleCursorSelection(cursorB, targetSceneName);
+            PlayButtonSound(bButtonClip);
         }
-        
+
         // Aボタン（Joystick1Button0）でcursorAを選択
         if (Input.GetKeyDown(KeyCode.Joystick1Button0))
         {
             HandleCursorSelection(cursorA, targetSceneName);
+            PlayButtonSound(aButtonClip);
         }
-        
+
         // Xボタン（Joystick1Button2）でcursorXを選択
         if (Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
             HandleCursorSelection(cursorX, targetSceneName);
+            PlayButtonSound(xButtonClip);
         }
     }
-    
+
     // カーソル選択処理
     private void HandleCursorSelection(GameObject targetCursor, string sceneName)
     {
@@ -72,27 +85,28 @@ public class PanelController : MonoBehaviour
             TransitionToScene(sceneName);
             return;
         }
-        
+
         // 他のカーソルの不透明度を0にリセット
         ResetAllCursorsOpacity();
-        
+
         // 選択されたカーソルの不透明度を1に設定
         SetPanelOpacity(targetCursor, 1.0f);
-        
+
         // 現在選択されているカーソルを更新
         currentSelectedCursor = targetCursor;
         lastPressedCursor = targetCursor;
     }
-    
+
     // 全てのカーソルの不透明度を0にリセット
     private void ResetAllCursorsOpacity()
     {
+    
         SetPanelOpacity(cursorY, 0.0f);
         SetPanelOpacity(cursorB, 0.0f);
         SetPanelOpacity(cursorA, 0.0f);
         SetPanelOpacity(cursorX, 0.0f);
     }
-    
+
     // 指定したオブジェクトのImageコンポーネントの不透明度を設定するメソッド
     private void SetPanelOpacity(GameObject targetObject, float alpha)
     {
@@ -106,7 +120,6 @@ public class PanelController : MonoBehaviour
             }
         }
     }
-    
     // シーン遷移処理
     private void TransitionToScene(string sceneName)
     {
@@ -120,5 +133,23 @@ public class PanelController : MonoBehaviour
         {
             Debug.LogError($"シーン '{sceneName}' の読み込みに失敗しました: {e.Message}");
         }
+    }
+
+    // ボタンごとに別の音を鳴らす
+    private void PlayButtonSound(AudioClip clip)
+    {
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource がアタッチされていません！");
+            return;
+        }
+
+        if (clip == null)
+        {
+            Debug.LogWarning("AudioClip が設定されていません！");
+            return;
+        }
+
+        audioSource.PlayOneShot(clip);
     }
 }
