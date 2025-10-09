@@ -67,10 +67,12 @@ public class PanelController : MonoBehaviour
         }
 
         // Bボタン（Joystick1Button1）でcursorBを選択
-        if (Input.GetKeyDown(KeyCode.Joystick1Button1))
+        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
             HandleCursorSelection(cursorB, targetSceneName);
             PlayButtonSound(bButtonClip);
+            i = 2;
+            Globaldata.path = mg.getPath(i);
         }
 
         // Aボタン（Joystick1Button0）でcursorAを選択
@@ -78,19 +80,16 @@ public class PanelController : MonoBehaviour
         {
             HandleCursorSelection(cursorA, targetSceneName);
             PlayButtonSound(aButtonClip);
-            i = 2;
+            i = 3;
             Globaldata.path = mg.getPath(i);
         }
 
         // Xボタン（Joystick1Button2）でcursorXを選択
-        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
-        {
-            HandleCursorSelection(cursorX, targetSceneName);
-            PlayButtonSound(xButtonClip);
-
-            i = 3;
-            Globaldata.path = mg.getPath(i);
-        }
+        // if (Input.GetKeyDown(KeyCode.Joystick1Button1))
+        // {
+        //     HandleCursorSelection(cursorX, targetSceneName);
+        //     PlayButtonSound(xButtonClip);
+        // }
     }
 
     // カーソル選択処理

@@ -60,10 +60,6 @@ public class StepManager : MonoBehaviour
         refugeCamera.SetLogFolderPath(logfolder);
         roadMesh.SetLogFolderPath(logfolder);
         simulation();
-
-        // リセットボタンの設定
-        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
-        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
     }
 
     void simulation()
@@ -92,7 +88,6 @@ public class StepManager : MonoBehaviour
     public void NotifyCompleted() //他のスクリプトの処理が完了したらこいつを実行
     {
         completedCount++; //完了した数のカウント
-        Debug.Log($"Advancing to step {currentStep}"); // ここでcurrentStepが更新されているか確認
         if (completedCount >= scriptsToWait) //全部のスクリプトが完了したら
         {
             AdvanceStep(); //この関数を実行
@@ -110,7 +105,6 @@ public class StepManager : MonoBehaviour
 
         if (currentStep < maxStep)
         {
-            Debug.Log($"Step advanced! Now at Step {currentStep}");
             StartStep();
         }
         else
