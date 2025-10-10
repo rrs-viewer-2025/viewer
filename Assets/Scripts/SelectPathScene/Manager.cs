@@ -26,25 +26,24 @@ public class Manager : MonoBehaviour
     List<int> Path1 = new List<int>(); //AStarで探索した経路
     List<int> Path2 = new List<int>();
     List<int> Path3 = new List<int>();
-    List<int> Path4 = new List<int>();
 
     void Awake()
     {
-        overviewCamera = FindObjectOfType<OverviewCamera>();
-        road = FindObjectOfType<Road>();
-        building = FindObjectOfType<Building>();
-        refuge = FindObjectOfType<Refuge>();
-        minimapcamerafitter = FindObjectOfType<MinimapCameraFitter>();
+        overviewCamera = Object.FindFirstObjectByType<OverviewCamera>();
+        road = Object.FindFirstObjectByType<Road>();
+        building = Object.FindFirstObjectByType<Building>();
+        refuge = Object.FindFirstObjectByType<Refuge>();
+        minimapcamerafitter = Object.FindFirstObjectByType<MinimapCameraFitter>();
 
-        astar = FindObjectOfType<AStar>();
-        pfwb = FindObjectOfType<PathFind_WidthBase>();
-        pfbb = FindObjectOfType<PathFind_BrokennessBase>();
-        pathdrawer = FindObjectOfType<PathDrawer>();
+        astar = Object.FindFirstObjectByType<AStar>();
+        pfwb = Object.FindFirstObjectByType<PathFind_WidthBase>();
+        pfbb = Object.FindFirstObjectByType<PathFind_BrokennessBase>();
+        pathdrawer = Object.FindFirstObjectByType<PathDrawer>();
     }
 
     void Start()
     {
-        Setting setting = FindObjectOfType<Setting>();
+        Setting setting = Object.FindFirstObjectByType<Setting>();
         logfolder = setting.LogfolderPath;
 
         road.SetLogFolderPath(logfolder);

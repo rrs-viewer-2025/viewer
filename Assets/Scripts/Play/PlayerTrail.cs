@@ -38,4 +38,9 @@ public class PlayerTrail : MonoBehaviour
             }
         }
     }
+
+    public List<Vector3> getPlayerPosiList()
+    {
+        return positions;
+    }
 }
