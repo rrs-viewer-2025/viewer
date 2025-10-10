@@ -27,7 +27,7 @@ public class PanelController : MonoBehaviour
     public AudioClip yButtonClip;
     public AudioClip bButtonClip;
     public AudioClip aButtonClip;
-    public AudioClip xButtonClip;
+    public AudioClip startClip;
 
     // セリフ表示関連
     // 表示するTextMeshProUGUI
@@ -42,6 +42,7 @@ public class PanelController : MonoBehaviour
 
     int i = -1;
 
+    [System.Obsolete]
     void Awake()
     {
         mg = FindObjectOfType<Manager>();
@@ -77,12 +78,18 @@ public class PanelController : MonoBehaviour
         {
             Debug.LogError("AudioSource がアタッチされていません！");
         }
+
+
+        if (startClip != null && audioSource != null)
+        {
+            PlayButtonSound(startClip);
+        }
     }
 
     void Update()
     {
         // Yボタン（Joystick1Button3）でcursorYを選択
-        if (Input.GetKeyDown(KeyCode.Joystick1Button3))
+        if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha2))
         {
             HandleCursorSelection(cursorY, targetSceneName);
 
@@ -98,7 +105,7 @@ public class PanelController : MonoBehaviour
         }
 
         // Bボタン（Joystick1Button1）でcursorBを選択
-        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+        if (Input.GetKeyDown(KeyCode.Joystick1Button2) || Input.GetKeyDown(KeyCode.Alpha3))
         {
             HandleCursorSelection(cursorB, targetSceneName);
 
@@ -114,7 +121,7 @@ public class PanelController : MonoBehaviour
         }
 
         // Aボタン（Joystick1Button0）でcursorAを選択
-        if (Input.GetKeyDown(KeyCode.Joystick1Button0))
+        if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
         {
             HandleCursorSelection(cursorA, targetSceneName);
 

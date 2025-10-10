@@ -208,8 +208,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc18882eda0b44cfa3a4dac5577f229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+
   LogfolderPath: "/Users/x22036xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/Viewer/setting/deserialize-rrs_log-cs/output"
   InterfaceType: pad
+
 --- !u!1 &144091972
 GameObject:
   m_ObjectHideFlags: 0
@@ -1304,7 +1306,6 @@ GameObject:
   - component: {fileID: 882211113}
   - component: {fileID: 882211112}
   - component: {fileID: 882211115}
-  - component: {fileID: 882211117}
   - component: {fileID: 882211116}
   m_Layer: 0
   m_Name: EventSystem
@@ -1389,7 +1390,7 @@ MonoBehaviour:
   yButtonClip: {fileID: 0}
   bButtonClip: {fileID: 0}
   aButtonClip: {fileID: 0}
-  xButtonClip: {fileID: 0}
+  startClip: {fileID: 0}
 --- !u!82 &882211116
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1402,103 +1403,6 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!82 &882211117
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 882211111}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 17e4cfc1636734827a717009938071a8, type: 3}
-  m_Resource: {fileID: 8300000, guid: 17e4cfc1636734827a717009938071a8, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -2399,7 +2303,10 @@ MonoBehaviour:
   yButtonClip: {fileID: 8300000, guid: 2ed4100d0cbde440b9a04afea7454a98, type: 3}
   bButtonClip: {fileID: 8300000, guid: d21bc7bac8a6840b19e94b377aba3b30, type: 3}
   aButtonClip: {fileID: 8300000, guid: ae8e0805ccff94cef966839aa0bfc5d3, type: 3}
-  xButtonClip: {fileID: 0}
+
+  startClip: {fileID: 8300000, guid: 17e4cfc1636734827a717009938071a8, type: 3}
+
+
 --- !u!82 &1688077904
 AudioSource:
   m_ObjectHideFlags: 0
