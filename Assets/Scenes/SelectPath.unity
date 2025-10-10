@@ -208,10 +208,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc18882eda0b44cfa3a4dac5577f229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-
-  LogfolderPath: "/Users/x22036xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/Viewer/setting/deserialize-rrs_log-cs/output"
-  InterfaceType: pad
-
+  LogfolderPath: /Users/k22116kk/kobe
+  InterfaceType: 
 --- !u!1 &144091972
 GameObject:
   m_ObjectHideFlags: 0
@@ -2303,10 +2301,7 @@ MonoBehaviour:
   yButtonClip: {fileID: 8300000, guid: 2ed4100d0cbde440b9a04afea7454a98, type: 3}
   bButtonClip: {fileID: 8300000, guid: d21bc7bac8a6840b19e94b377aba3b30, type: 3}
   aButtonClip: {fileID: 8300000, guid: ae8e0805ccff94cef966839aa0bfc5d3, type: 3}
-
-  startClip: {fileID: 8300000, guid: 17e4cfc1636734827a717009938071a8, type: 3}
-
-
+  startClip: {fileID: 0}
 --- !u!82 &1688077904
 AudioSource:
   m_ObjectHideFlags: 0
