@@ -26,13 +26,14 @@ public class PanelController : MonoBehaviour
     public AudioClip yButtonClip;
     public AudioClip bButtonClip;
     public AudioClip aButtonClip;
-    public AudioClip xButtonClip;
+    public AudioClip startClip;
 
     // Manager.cs
     Manager mg;
 
     int i = -1;
 
+    [System.Obsolete]
     void Awake()
     {
         mg = FindObjectOfType<Manager>();
@@ -52,6 +53,12 @@ public class PanelController : MonoBehaviour
         if (audioSource == null)
         {
             Debug.LogError("AudioSource がアタッチされていません！");
+        }
+
+
+        if (startClip != null && audioSource != null)
+        {
+            PlayButtonSound(startClip);
         }
     }
 
