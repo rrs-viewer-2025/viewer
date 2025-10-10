@@ -8,7 +8,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Camera))]
 public class OverviewCamera : MonoBehaviour
 {
-    public float padding = 5f;   // 余白
+    public float padding = 10f;   // 余白
     string logfolder;
     int? Max_X = null, Min_X = null;
     int? Max_Y = null, Min_Y = null;

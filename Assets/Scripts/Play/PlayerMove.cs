@@ -30,10 +30,13 @@ public class PlayerCharaControl : MonoBehaviour
     private string interfaceType;
     JoyconManager joyconManager;
 
+    PlayerTrail pt;
+
     void Awake()
     {
         // JoyconManagerを取得
         joyconManager = FindFirstObjectByType<JoyconManager>();
+        pt = FindFirstObjectByType<PlayerTrail>();
     }
 
     void Start()
@@ -199,6 +202,7 @@ public class PlayerCharaControl : MonoBehaviour
     {
         if (other.gameObject.tag == "Refuge")
         {
+            Globaldata.playerposi = pt.getPlayerPosiList();
             if (timerScript != null)
             {
                 //クリア時間取得
