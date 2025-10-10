@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.SceneManagement;
 
 public class PanelController : MonoBehaviour
@@ -28,6 +29,14 @@ public class PanelController : MonoBehaviour
     public AudioClip aButtonClip;
     public AudioClip startClip;
 
+    // セリフ表示関連
+    // 表示するTextMeshProUGUI
+    private TMP_Text displayText;
+    // 各ボタンで表示する内容
+    private string yButtonText = "細い道を避けて避難所に到達するよ！";
+    private string bButtonText = "倒れやすい建物を避けて避難所に到達するよ！";
+    private string aButtonText = "最短経路で避難所に到達するよ！";
+
     // Manager.cs
     Manager mg;
 
@@ -37,6 +46,21 @@ public class PanelController : MonoBehaviour
     void Awake()
     {
         mg = FindObjectOfType<Manager>();
+        
+        // シーン内の"text"オブジェクトを取得し、TextMeshProUGUIを参照
+        GameObject textObj = GameObject.Find("text");
+        if (textObj != null)
+        {
+            displayText = textObj.GetComponent<TMP_Text>();
+            if (displayText == null)
+            {
+                Debug.LogError("'text'オブジェクトにTMP_Textコンポーネントがありません。");
+            }
+        }
+        else
+        {
+            Debug.LogError("シーン内に'text'オブジェクトが見つかりません。");
+        }
     }
 
     void Start()
@@ -65,36 +89,49 @@ public class PanelController : MonoBehaviour
     void Update()
     {
         // Yボタン（Joystick1Button3）でcursorYを選択
-        if (Input.GetKeyDown(KeyCode.Joystick1Button3))
+        if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha2))
         {
             HandleCursorSelection(cursorY, targetSceneName);
+
+            // Yボタンの音を再生
             PlayButtonSound(yButtonClip);
+
+            // セリフの格納
+            SetText(aButtonText);
+
+            // パスの選択
             i = 1;
             Globaldata.path = mg.getPath(i);
         }
 
         // Bボタン（Joystick1Button1）でcursorBを選択
-        if (Input.GetKeyDown(KeyCode.Joystick1Button1))
+        if (Input.GetKeyDown(KeyCode.Joystick1Button2) || Input.GetKeyDown(KeyCode.Alpha3))
         {
             HandleCursorSelection(cursorB, targetSceneName);
-            PlayButtonSound(bButtonClip);
-        }
 
-        // Aボタン（Joystick1Button0）でcursorAを選択
-        if (Input.GetKeyDown(KeyCode.Joystick1Button0))
-        {
-            HandleCursorSelection(cursorA, targetSceneName);
-            PlayButtonSound(aButtonClip);
+            // Bボタンの音を再生
+            PlayButtonSound(bButtonClip);
+
+            // セリフの格納
+            SetText(yButtonText);
+
+            // パスの選択
             i = 2;
             Globaldata.path = mg.getPath(i);
         }
 
-        // Xボタン（Joystick1Button2）でcursorXを選択
-        if (Input.GetKeyDown(KeyCode.Joystick1Button2))
+        // Aボタン（Joystick1Button0）でcursorAを選択
+        if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
         {
-            HandleCursorSelection(cursorX, targetSceneName);
-            PlayButtonSound(xButtonClip);
+            HandleCursorSelection(cursorA, targetSceneName);
 
+            // Aボタンの音を再生
+            PlayButtonSound(aButtonClip);
+
+            // セリフの格納
+            SetText(bButtonText);
+
+            // パスの選択
             i = 3;
             Globaldata.path = mg.getPath(i);
         }
@@ -124,7 +161,7 @@ public class PanelController : MonoBehaviour
     // 全てのカーソルの不透明度を0にリセット
     private void ResetAllCursorsOpacity()
     {
-    
+
         SetPanelOpacity(cursorY, 0.0f);
         SetPanelOpacity(cursorB, 0.0f);
         SetPanelOpacity(cursorA, 0.0f);
@@ -184,5 +221,12 @@ public class PanelController : MonoBehaviour
         audioSource.clip = clip;
         audioSource.Play();
     }
-
+    
+    void SetText(string text)
+    {
+        if (displayText != null)
+        {
+            displayText.text = text;
+        }
+    }
 }

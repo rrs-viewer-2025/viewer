@@ -78,7 +78,7 @@ public class Manager : MonoBehaviour
 
     void pathfind()
     {
-        int start = 1782;
+        int start = 30797;
         int goal = 18733;
 
         foreach(var refuge in refugeGraph)
@@ -114,9 +114,21 @@ public class Manager : MonoBehaviour
 
     public List<int> getPath(int i)
     {
-        if(i == 1) return Path1;
-        if(i == 2) return Path2;
-        if(i == 3) return Path3;
+        if(i == 1)
+        {
+            Debug.Log("path1をセット");
+            return Path1;
+        } 
+        if(i == 2)
+        {
+            Debug.Log("path2をセット");
+            return Path2;
+        }
+        if(i == 3)
+        {
+            Debug.Log("path3をセット");
+            return Path3;
+        }
         return new List<int>();
     }
 }
