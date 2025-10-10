@@ -27,7 +27,7 @@ public class PanelController : MonoBehaviour
     public AudioClip yButtonClip;
     public AudioClip bButtonClip;
     public AudioClip aButtonClip;
-    public AudioClip xButtonClip;
+    public AudioClip startClip;
 
     // セリフ表示関連
     // 表示するTextMeshProUGUI
@@ -42,6 +42,7 @@ public class PanelController : MonoBehaviour
 
     int i = -1;
 
+    [System.Obsolete]
     void Awake()
     {
         mg = FindObjectOfType<Manager>();
@@ -76,6 +77,12 @@ public class PanelController : MonoBehaviour
         if (audioSource == null)
         {
             Debug.LogError("AudioSource がアタッチされていません！");
+        }
+
+
+        if (startClip != null && audioSource != null)
+        {
+            PlayButtonSound(startClip);
         }
     }
 
