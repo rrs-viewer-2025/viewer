@@ -962,7 +962,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LogfolderPath: "/Users/x22036xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/Viewer/setting/deserialize-rrs_log-cs/output"
-  InterfaceType: pad
+  InterfaceType: key
 --- !u!4 &935256236
 Transform:
   m_ObjectHideFlags: 0
