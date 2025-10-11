@@ -13,6 +13,12 @@ public class Timer : MonoBehaviour
     public GameObject Info_timeover;
     private bool timeover = false;
     private bool isStopped = false;
+    PlayerTrail pt;
+
+    void Awake()
+    {
+        pt = FindFirstObjectByType<PlayerTrail>();
+    }
 
     void Start()
     {
@@ -44,6 +50,7 @@ public class Timer : MonoBehaviour
         {
             if(!timeover)
             {
+                Globaldata.playerposi = pt.getPlayerPosiList();
                 timerText.text = "00:00";
                 GameData.hinan = false; //避難失敗を格納
                 Info_timeover.SetActive(true);
