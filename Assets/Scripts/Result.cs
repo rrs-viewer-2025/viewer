@@ -24,8 +24,8 @@ public class Result : MonoBehaviour
             return;
         }
 
-        int minutes = Mathf.FloorToInt(GameData.clearTime / 60f);
-        int seconds = Mathf.FloorToInt(GameData.clearTime % 60f);
+        int minutes = Mathf.FloorToInt(GameData.clearTime / 36f);
+        int seconds = Mathf.FloorToInt(GameData.clearTime % 36f);
         timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);//クリアタイムの表示
 
         commentText.text = "よくできたね！\nでもあんしんしないで。\nげんじつはあまくない。";

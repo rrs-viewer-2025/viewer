@@ -22,6 +22,7 @@ public class StepManager : MonoBehaviour
     RoadMesh roadMesh;
     MainPathDraw mpd;
     PlayerPosition pp;
+    main_minimap mm;
 
     void Awake() //確実に準備させるもの
     {
@@ -35,6 +36,7 @@ public class StepManager : MonoBehaviour
         roadMesh = FindFirstObjectByType<RoadMesh>();
         mpd = FindFirstObjectByType<MainPathDraw>();
         pp = FindFirstObjectByType<PlayerPosition>();
+        mm = FindFirstObjectByType<main_minimap>();
     }
 
     void Start()
@@ -77,6 +79,7 @@ public class StepManager : MonoBehaviour
         refugeCamera.SetRefugeCamera();
         roadMesh.LoadInitialConditions();
         mpd.PathDraw();
+        mm.DrawPath();
         
         StartStep(); // 一度だけ
     }
