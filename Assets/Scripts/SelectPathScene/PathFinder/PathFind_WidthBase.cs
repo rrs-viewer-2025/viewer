@@ -17,6 +17,7 @@ public class PathFind_WidthBase : MonoBehaviour
     {
         startID = start;
         goalID = goal;
+        goalID = 22670;
     }
 
     public void SetRoadGraph(Dictionary<int, RoadNode> dictionary)

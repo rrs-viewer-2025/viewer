@@ -2493,7 +2493,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineMaterial1: {fileID: 2100000, guid: 5f82975f5f0274e3d8b46b60ffbec26c, type: 2}
-  lineMaterial2: {fileID: 2100000, guid: 482070b652206471abaf0f5c6c4fe4fa, type: 2}
+  lineMaterial2: {fileID: 2100000, guid: f43414420c3c94df6bdddb86e8d4b189, type: 2}
 --- !u!1 &2111091625
 GameObject:
   m_ObjectHideFlags: 0

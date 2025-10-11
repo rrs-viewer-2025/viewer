@@ -16,6 +16,7 @@ public class AStar : MonoBehaviour
     {
         startID = start;
         goalID = goal;
+        goalID = 19490;
     }
 
     public void SetRoadGraph(Dictionary<int, RoadNode> dictionary)
