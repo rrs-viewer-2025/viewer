@@ -44,8 +44,11 @@ public class PlayerTrail : MonoBehaviour
         return positions;
     }
 
-    public void Clearposilist()
+    public void Resetposilist()
     {
         positions.Clear();
+        // 現在位置を新しい始点として登録
+        Vector3 startPos = transform.position + Vector3.up * 0.2f;
+        positions.Add(startPos);
     }
 }
