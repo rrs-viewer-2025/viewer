@@ -31,12 +31,14 @@ public class PlayerCharaControl : MonoBehaviour
     JoyconManager joyconManager;
 
     PlayerTrail pt;
+    PlayerPosition pp;
 
     void Awake()
     {
         // JoyconManagerを取得
         joyconManager = FindFirstObjectByType<JoyconManager>();
         pt = FindFirstObjectByType<PlayerTrail>();
+        pp = FindFirstObjectByType<PlayerPosition>();
     }
 
     void Start()
@@ -185,7 +187,16 @@ public class PlayerCharaControl : MonoBehaviour
         {
             v = gamepad.leftStick.y.ReadValue();
             h = gamepad.leftStick.x.ReadValue();
-        } else if (gamepad == null) {
+
+            // ギブアップ
+            if (Input.GetKeyDown(KeyCode.JoystickButton0)) // Aボタン
+            {
+                pt.Clearposilist();
+                pp.SetPosition();
+            }
+        }
+        else if (gamepad == null)
+        {
             Debug.LogWarning("Gamepad not connected");
         }
     }

@@ -43,4 +43,9 @@ public class PlayerTrail : MonoBehaviour
     {
         return positions;
     }
+
+    public void Clearposilist()
+    {
+        positions.Clear();
+    }
 }
