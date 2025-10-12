@@ -154,6 +154,12 @@ public class PlayerCharaControl : MonoBehaviour
             anim.SetTrigger("Jump");
             rb.AddForce(transform.up * 1000 * 8, ForceMode.Force);
         }
+
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            pp.SetPosition();
+            pt.Resetposilist();
+        }
     }
 
     /// <summary>
@@ -191,7 +197,7 @@ public class PlayerCharaControl : MonoBehaviour
             // ギブアップ
             if (Input.GetKeyDown(KeyCode.JoystickButton0)) // Aボタン
             {
-                pt.Clearposilist();
+                pt.Resetposilist();
                 pp.SetPosition();
             }
         }
@@ -216,10 +222,10 @@ public class PlayerCharaControl : MonoBehaviour
             Globaldata.playerposi = pt.getPlayerPosiList();
             if (timerScript != null)
             {
-                //クリア時間取得
-                GameData.clearTime = timerScript.LimitTime - timerScript.timeRemaining;
-                GameData.hinan = true; //避難成功を格納
                 timerScript.StopTimer(); //タイマーを停止させる
+                //クリア時間取得
+                GameData.clearTime = timerScript.GetTime();
+                GameData.hinan = true; //避難成功を格納
             }
             Info_end.SetActive(true);
             Invoke("LoadGoalScene", 5f); // 5秒後にシーン遷移

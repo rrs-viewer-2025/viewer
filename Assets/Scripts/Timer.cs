@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour
 {
-    public float LimitTime = 180f;
+    float LimitTime = 180f;
     public float timeRemaining;
     public TextMeshProUGUI timerText;
     public Color normalColor = Color.white;
@@ -69,6 +69,11 @@ public class Timer : MonoBehaviour
     public void StopTimer()
     {
         isStopped = true;
+    }
+
+    public float GetTime()
+    {
+        return LimitTime - timeRemaining;
     }
 
 }
