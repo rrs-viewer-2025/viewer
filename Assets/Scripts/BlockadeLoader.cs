@@ -9,39 +9,40 @@ using UnityEngine.UI;
 public class BlockadeLoader : MonoBehaviour
 {
     public GameObject BlockadePrefab;
-    public int MaxStep = 270;
-    public int Step = 1;
+    // public int MaxStep = 270;
+    // public int Step = 1;
     public string logfolder;
-    private float lastUpdateTime = 0f; //最後に更新した時間
-    public float updateInterval = 1.0f; //更新間隔（秒）
+    // private float lastUpdateTime = 0f; //最後に更新した時間
+    // public float updateInterval = 1.0f; //更新間隔（秒）
     // IDと頂点リストの格納用
     private Dictionary<int, List<GameObject>> Blockades = new Dictionary<int, List<GameObject>>();
 
-    void Start()
-    {
-        Setting setting = FindObjectOfType<Setting>();
-        logfolder = setting.LogfolderPath;
+    StepManager stepManager;
+    private Coroutine notifyCoroutine;
 
-        // リセットボタンの設定
-        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
-        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
+    void Awake()
+    {
+        stepManager = FindFirstObjectByType<StepManager>();
     }
 
-    void Update()
+    public void SetLogFolderPath(string path)
     {
-        if (Time.time - lastUpdateTime > updateInterval)
+        logfolder = path;
+    }
+
+    public void StartStep()
+    {
+        if (notifyCoroutine != null)
         {
-            if (Step <= MaxStep)
-            {
-                getstepdata();
-                Step++;
-                lastUpdateTime = Time.time; // 更新時間をリセット
-            }
+            StopCoroutine(notifyCoroutine);
         }
+        getstepdata();
+        notifyCoroutine = StartCoroutine(NotifyStepCompletedWithDelay());
     }
 
     void getstepdata()
     {
+        int Step = stepManager.GetCurrentStep();
         string filePath = logfolder + "/" + Step + "/UPDATES.json";
 
         if (File.Exists(filePath))
@@ -158,9 +159,20 @@ public class BlockadeLoader : MonoBehaviour
         }
     }
 
-    void ResetSimulation()
+    IEnumerator NotifyStepCompletedWithDelay()
     {
-        Step = 1; // ステップを1に戻す
+        yield return new WaitForSeconds(3f); // 2秒待つ
+        stepManager.NotifyCompleted();
+    }
+
+    public void Reset()
+    {
+        if (notifyCoroutine != null)
+        {
+            StopCoroutine(notifyCoroutine);
+            notifyCoroutine = null;
+        }
+        // Step = 1; // ステップを1に戻す
         foreach (var list in Blockades.Values)
         {
             foreach (var obj in list)

@@ -9,20 +9,30 @@ public class RoadMesh : MonoBehaviour
     private string logfolder;
     private List<Mesh> wallMeshes = new List<Mesh>(); //壁のメッシュリスト
     private List<Vector3> apexes;
+    bool flag = false;
+    //PlayerStartPosition playerStartPosition;
+
+    void Awake()
+    {
+        //playerStartPosition = FindObjectOfType<PlayerStartPosition>();
+    }
 
     void Start()
     {
         MeshFilter meshFilter = GetComponent<MeshFilter>();
         meshFilter.mesh = new Mesh(); // 初期化
 
-        Setting setting = FindObjectOfType<Setting>();
-        logfolder = setting.LogfolderPath;
         LoadInitialConditions(); // 初期状態読み込み
 
         CombineAllMeshes(); // すべての壁を統合
     }
 
-    void LoadInitialConditions()
+    public void SetLogFolderPath(string path)
+    {
+        logfolder = path;
+    }
+
+    public void LoadInitialConditions()
     {
         string filePath = logfolder + "/INITIAL_CONDITIONS.json";
         if (File.Exists(filePath))
@@ -40,6 +50,7 @@ public class RoadMesh : MonoBehaviour
                     int apexesCount = 0;
                     
                     Vector3 position = new Vector3();
+                    int x = 0, y = 0;
 
                     foreach (var prop in entity["properties"])
                     {
@@ -56,8 +67,15 @@ public class RoadMesh : MonoBehaviour
                                 apexesCount++;
                             }
                         }
+                        if (propUrn == URN.Property.X) x = prop["intValue"].ToObject<int>();
+                        if (propUrn == URN.Property.Y) y = prop["intValue"].ToObject<int>(); 
                     }
                     MakeFloorMesh(apexes, apexesCount);
+
+                    // if(flag == false)
+                    // {
+                    //     flag = playerStartPosition.check(x, y);
+                    // }
                 }
             }
         }
@@ -96,11 +114,6 @@ public class RoadMesh : MonoBehaviour
                 mytriangles[k + 1] = mytriangles[k + 2];
                 mytriangles[k + 2] = temp;
                 
-                Debug.Log($"三角形 {k/3}: 時計回り → 修正（反時計回り）");
-            }
-            else
-            {
-                Debug.Log($"三角形 {k/3}: 反時計回り");
             }
         }
 

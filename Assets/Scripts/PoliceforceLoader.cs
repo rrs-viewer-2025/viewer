@@ -8,38 +8,27 @@ using UnityEngine.UI;
 public class PoliceforceLoader : MonoBehaviour
 {
     public GameObject PoliceforcePrefab; // 救急隊のプレハブ
-    public int MaxStep = 270; //最大ステップ
-    public int Step = 1; //現在のステップ
+    // public int MaxStep = 270; //最大ステップ
+    // public int Step = 1; //現在のステップ
     private string logfolder;
     private Dictionary<int, GameObject> Policeforces = new Dictionary<int, GameObject>(); //IDとオブジェクトの紐付け
-    private float lastUpdateTime = 0f; //最後に更新した時間
-    public float updateInterval = 1.0f; //更新間隔（秒）
+    // private float lastUpdateTime = 0f; //最後に更新した時間
+    // public float updateInterval = 1.0f; //更新間隔（秒）
 
-    void Start()
+    StepManager stepManager;
+    private Coroutine notifyCoroutine;
+
+    void Awake()
     {
-        Setting setting = FindObjectOfType<Setting>();
-        logfolder = setting.LogfolderPath;
-        LoadInitialConditions(); //初期状態の読み込み
-
-        // リセットボタンの設定
-        Button resetButton = GameObject.Find("ResetButton").GetComponent<Button>();
-        resetButton.onClick.AddListener(ResetSimulation); // リセットボタンをクリックしたときにResetSimulationを呼び出す
+        stepManager = FindFirstObjectByType<StepManager>();
     }
 
-    void Update()
+    public void SetLogFolderPath(string path)
     {
-        if (Time.time - lastUpdateTime > updateInterval)
-        {
-            if (Step <= MaxStep)
-            {
-                getstepdata();
-                Step++;
-                lastUpdateTime = Time.time; // 更新時間をリセット
-            }
-        }
+        logfolder = path;
     }
 
-    void LoadInitialConditions()
+    public void LoadInitialConditions()
     {
         string filePath = logfolder + "/INITIAL_CONDITIONS.json";
 
@@ -67,7 +56,7 @@ public class PoliceforceLoader : MonoBehaviour
                     GameObject Policeforce = Instantiate(PoliceforcePrefab, position, Quaternion.identity);
 
                     Policeforces[entityID] = Policeforce; //IDとオブジェクトの紐付け
-                    
+
                     // コライダーがなければ追加
                     if (Policeforce.GetComponent<Collider>() == null)
                     {
@@ -84,8 +73,19 @@ public class PoliceforceLoader : MonoBehaviour
         }
     }
 
+    public void StartStep()
+    {
+        if (notifyCoroutine != null)
+        {
+            StopCoroutine(notifyCoroutine);
+        }
+        getstepdata();
+        notifyCoroutine = StartCoroutine(NotifyStepCompletedWithDelay());
+    }
+
     void getstepdata()
     {
+        int Step = stepManager.GetCurrentStep();
         string updatePath = logfolder + "/" + Step + "/UPDATES.json";
 
         if (!File.Exists(updatePath))
@@ -129,6 +129,8 @@ public class PoliceforceLoader : MonoBehaviour
 
             int x = 0, y = 0;
             bool shouldUpdatePosition = false;
+            List<Vector3> MovePath = new List<Vector3>(); // 経由地点リスト
+            int distance = 0;
 
             foreach (var prop in change["properties"])
             {
@@ -143,26 +145,84 @@ public class PoliceforceLoader : MonoBehaviour
                 {
                     y = prop["intValue"].ToObject<int>();
                 }
+
+                if (propUrn == URN.Property.POSITION_HISTORY && prop["intList"]?["values"] != null)
+                {
+                    JArray values = (JArray)prop["intList"]["values"];
+                    for (int i = 0; i < values.Count; i += 2)
+                    {
+                        int historyX = values[i].ToObject<int>();
+                        int historyY = values[i + 1].ToObject<int>();
+                        Vector3 his_posi = new Vector3(historyX / 1000f, 2, historyY / 1000f);
+                        MovePath.Add(his_posi);
+                    }
+                }
+                if (propUrn == URN.Property.TRAVEL_DISTANCE)
+                {
+                    distance = prop["intValue"].ToObject<int>();
+                }
             }
 
             if (shouldUpdatePosition)
             {
-                Vector3 position = new Vector3(x / 1000f, 2, y / 1000f); // スケール調整
-                Policeforces[entityID].transform.position = position;
+                Vector3 position = new Vector3(x / 1000f, 2, y / 1000f); // ゴール地点
+                MovePath.Add(position);
+                //Policeforces[entityID].transform.position = position;
+                StartCoroutine(MoveAlongPath(Policeforces[entityID], MovePath, distance));
+            }
+        }  
+    }
+
+    IEnumerator MoveAlongPath(GameObject obj, List<Vector3> path, int distance)
+    {
+        for (int i = 0; i < path.Count; i++)
+        {
+            Vector3 target = path[i];
+
+            while (Vector3.Distance(obj.transform.position, target) > 0.05f)
+            {
+                Vector3 direction = (target - obj.transform.position).normalized;
+
+                if (direction != Vector3.zero)
+                {
+                    Vector3 flatDirection = new Vector3(direction.x, 0f, direction.z);
+                    if (flatDirection != Vector3.zero)
+                    {
+                        Quaternion targetRotation = Quaternion.LookRotation(flatDirection);
+                        targetRotation *= Quaternion.Euler(0f, -90f, 0f); // ←補正角度
+                        obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, targetRotation, Time.deltaTime * 5f);
+                    }
+                }
+
+                obj.transform.position = Vector3.MoveTowards(obj.transform.position, target, distance / 1000f / 2f * Time.deltaTime); // 移動速度 5f
+                yield return null;
             }
         }
+
+        // Debug.Log($"【移動完了】{obj.name} が目的地に到達");
+    }
+
+
+
+    IEnumerator NotifyStepCompletedWithDelay()
+    {
+        yield return new WaitForSeconds(3f); // 2秒待つ
+        stepManager.NotifyCompleted();
     }
 
     // リセット処理
-    void ResetSimulation()
+    public void Reset()
     {
-        Step = 1; // ステップを1に戻す
+        if (notifyCoroutine != null)
+        {
+            StopCoroutine(notifyCoroutine);
+            notifyCoroutine = null;
+        }
+        // Step = 1; // ステップを1に戻す
         foreach (var policeforce in Policeforces.Values)
         {
-            Destroy(policeforce); // 市民を削除
+            Destroy(policeforce); // 土木隊を削除
         }
-        Policeforces.Clear(); // 市民の辞書をクリア
-
-        LoadInitialConditions(); // 初期状態から再読込
+        Policeforces.Clear(); // 土木隊の辞書をクリア
     }
 }

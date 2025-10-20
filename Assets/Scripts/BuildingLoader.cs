@@ -10,7 +10,7 @@ public class BuildingDrawer : MonoBehaviour
 
     void Start()
     {
-        Setting setting = FindObjectOfType<Setting>();
+        Setting setting = FindFirstObjectByType<Setting>();
         logfolder = setting.LogfolderPath;
         LoadAndDrawBuilding();
     }
@@ -42,7 +42,7 @@ public class BuildingDrawer : MonoBehaviour
                         if (propUrn == 4615) y = prop["intValue"].ToObject<int>(); // Y座標
                         if (propUrn == 4618) {
                             floor = prop["intValue"].ToObject<int>();
-                            Debug.Log($"Building {entityID}: Found floor value = {floor} (before edge processing)");
+                            // Debug.Log($"Building {entityID}: Found floor value = {floor} (before edge processing)");
                         }
                     }
 
@@ -62,17 +62,17 @@ public class BuildingDrawer : MonoBehaviour
                                 int endX = edge["endX"].ToObject<int>();
                                 int endY = edge["endY"].ToObject<int>();
 
-                                Debug.Log($"Building {entityID}: Processing edge from ({startX}, {startY}) to ({endX}, {endY})");
+                                //Debug.Log($"Building {entityID}: Processing edge from ({startX}, {startY}) to ({endX}, {endY})");
 
                                 for(int i=1; i<=floor; i++){
-                                    Debug.Log($"Building {entityID}: Drawing edges for floor {i} of {floor} (inside loop)");
+                                    //Debug.Log($"Building {entityID}: Drawing edges for floor {i} of {floor} (inside loop)");
                                     Vector3 start = new Vector3(startX / 1000f, height*i, startY / 1000f);
                                     Vector3 end = new Vector3(endX / 1000f, height*i, endY / 1000f);
 
                                     edges.Add(start);
                                     edges.Add(end);
 
-                                    Debug.Log($"Building {entityID} - Floor {i}: Edge from {start} to {end}");
+                                    //Debug.Log($"Building {entityID} - Floor {i}: Edge from {start} to {end}");
                                 }
 
                                 Vector3 start1 = new Vector3(startX / 1000f, 0, startY / 1000f);   
@@ -84,7 +84,7 @@ public class BuildingDrawer : MonoBehaviour
                     }
 
                     // 建物を描画
-                    Debug.Log($"Building {entityID}: Total edges added = {edges.Count}");
+                    //Debug.Log($"Building {entityID}: Total edges added = {edges.Count}");
 
                     DrawBuilding(new Vector3(x / 1000f, 0, y / 1000f), edges);
                 }

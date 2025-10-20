@@ -12,7 +12,7 @@ public class mesh : MonoBehaviour
     void Start()
     {
         // 設定オブジェクトからログフォルダパスを取得
-        Setting setting = FindObjectOfType<Setting>();
+        Setting setting = FindFirstObjectByType<Setting>();
         logfolder = setting.LogfolderPath;
         LoadInitialConditions(); // 初期状態の読み込みを開始
     }
@@ -85,9 +85,12 @@ public class mesh : MonoBehaviour
 
             // ここで親のマテリアルを使用
             mr.material = parentMaterial;
-            
+
             // メッシュを統合して1つにまとめてセット
             mf.mesh = CombineMeshes(meshes);
+
+            // すり抜け防止のためにColliderを追加
+            AddColliderToBuilding(building, meshes);
         }
     }
 
@@ -181,4 +184,24 @@ public class mesh : MonoBehaviour
         finalMesh.CombineMeshes(combine, true, false);
         return finalMesh;
     }
+
+    // Colliderを追加するメソッド
+    void AddColliderToBuilding(GameObject building, List<Mesh> meshes)
+    {
+        // 物理エンジンに影響を与えないように、動かないオブジェクトとして扱う
+        Rigidbody rb = building.AddComponent<Rigidbody>();
+        rb.isKinematic = true;  // 物理エンジンの影響を受けないように設定
+
+        // メッシュに基づいてColliderを追加
+        MeshCollider collider = building.AddComponent<MeshCollider>();
+        Mesh combinedMesh = CombineMeshes(meshes);
+        collider.sharedMesh = combinedMesh;
+        collider.convex = true; // 凸形状にしてすり抜け防止
+
+        // 高速移動物体に対しても正しく衝突判定を行うようにContinuous設定
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+      
+    }
+
 }
