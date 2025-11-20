@@ -916,7 +916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc18882eda0b44cfa3a4dac5577f229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LogfolderPath: /Users/k22065kk/lab/rrs_viewer/ds-logs/kobe
+  LogfolderPath: /Users/k22065kk/lab/RRS/ds-logs/kobe
   InterfaceType: pad
 --- !u!4 &298378966
 Transform:
