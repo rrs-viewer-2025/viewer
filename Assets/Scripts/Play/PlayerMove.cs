@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class PlayerCharaControl : MonoBehaviour
 {
@@ -12,6 +13,13 @@ public class PlayerCharaControl : MonoBehaviour
     public float forwardSpeed = 5.0f;//前進速度
     public float rotationSpeed = 100.0f;//回転速度
     public GameObject Info_end; // ゴールオブジェクト
+    public GameObject Info_collide;   // 瓦礫衝突時の UI
+    private int collideCount = 0;   // 接触している瓦礫の数
+    private Coroutine blinkCoroutine;
+    private bool isBlinking = false;
+    public float blinkInterval = 1.0f; // 点滅間隔
+
+
     private Animator anim;
     private bool runFlag;
     Rigidbody rb;
@@ -295,6 +303,68 @@ public class PlayerCharaControl : MonoBehaviour
             Invoke("LoadGoalScene", 5f); // 5秒後にシーン遷移
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Blockade"))
+        {
+            collideCount++;
+
+            // 初めて接触した時だけ点滅を開始する
+            if (!isBlinking)
+            {
+                Info_collide.SetActive(true);
+                blinkCoroutine = StartCoroutine(BlinkUI());
+                isBlinking = true;
+            }
+        }
+    }
+
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Blockade"))
+        {
+            collideCount--;
+
+            if (collideCount <= 0)
+            {
+                collideCount = 0;
+
+                // 点滅停止
+                if (blinkCoroutine != null)
+                    StopCoroutine(blinkCoroutine);
+
+                isBlinking = false;
+
+                // 完全に非表示に戻す
+                Info_collide.SetActive(false);
+            }
+        }
+    }
+
+
+    private IEnumerator BlinkUI()
+    {
+        // ON
+        Info_collide.SetActive(true);
+        yield return new WaitForSeconds(blinkInterval);
+
+        // OFF
+        Info_collide.SetActive(false);
+        yield return new WaitForSeconds(blinkInterval);
+
+        // この点滅サイクルが終わったので解除
+        isBlinking = false;
+
+        // まだ瓦礫に当たっているなら再度点滅を開始
+        if (collideCount > 0)
+        {
+            blinkCoroutine = StartCoroutine(BlinkUI());
+            isBlinking = true;
+        }
+    }
+
 
     // コルーチンのため別メソッド
     void LoadGoalScene()
