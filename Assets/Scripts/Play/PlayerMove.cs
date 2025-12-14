@@ -14,10 +14,26 @@ public class PlayerCharaControl : MonoBehaviour
     public float rotationSpeed = 100.0f;//回転速度
     public GameObject Info_end; // ゴールオブジェクト
     public GameObject Info_collide;   // 瓦礫衝突時の UI
+    public GameObject Info_timeover;
     private int collideCount = 0;   // 接触している瓦礫の数
     private Coroutine blinkCoroutine;
     private bool isBlinking = false;
     public float blinkInterval = 1.0f; // 点滅間隔
+    [Header("HP Settings")]
+    public Slider hpSlider;
+    public float maxHP = 100f;
+    public float currentHP;
+    public float damagePerSecond = 1f; // 瓦礫に触れている間の毎秒ダメージ
+    private bool isTouchingDebris = false;
+    private float debrisTouchTime = 0f;   // 瓦礫に触れている時間
+    public float requireTouchTime = 1f;   // ダメージ開始までの待ち時間（秒）
+    private bool debrisDamageActive = false; // ダメージ発生中かどうか
+    private float damageTimer = 0f;
+    public float damageInterval = 2.0f;  // ダメージ間隔（秒）
+    private bool collideForcedOffByTimeover = false;
+
+
+
 
 
     private Animator anim;
@@ -98,6 +114,17 @@ public class PlayerCharaControl : MonoBehaviour
 
         // Joy-Conの接続・初期化処理を関数化
         SetupJoycon();
+
+        currentHP = maxHP;
+        if (hpSlider != null)
+        {
+            hpSlider.maxValue = maxHP;
+            hpSlider.value = currentHP;
+        }
+
+        if (Info_timeover != null)
+            Info_timeover.SetActive(false);
+
     }
 
     /// <summary>
@@ -163,6 +190,83 @@ public class PlayerCharaControl : MonoBehaviour
         anim.SetBool("Run", runFlag); // 入力値に応じて「走る」アニメーションを切り替え
         transform.position += transform.forward * forwardSpeed * v * Time.deltaTime; // 前進・後退の移動処理
         transform.Rotate(0, rotationSpeed * h * Time.deltaTime, 0); // 左右の回転処理
+
+        // --- 瓦礫接触時間を計測し、1秒後にダメージ開始 ---
+        if (isTouchingDebris)
+        {
+            debrisTouchTime += Time.deltaTime;
+
+            if (!debrisDamageActive && debrisTouchTime >= requireTouchTime)
+            {
+                debrisDamageActive = true;
+
+                Info_collide.SetActive(true);
+
+                if (!isBlinking)
+                {
+                    blinkCoroutine = StartCoroutine(BlinkUI());
+                    isBlinking = true;
+                }
+
+                // ★ ダメージ開始 → タイマー赤
+                if (timerScript != null)
+                    timerScript.SetWarning(true);
+            }
+
+        }
+        else
+        {
+            // 触れていないのでリセット
+            debrisTouchTime = 0f;
+            debrisDamageActive = false;
+        }
+
+        // --- ダメージ継続処理（一定間隔で減らす） ---
+        if (debrisDamageActive)
+        {
+            damageTimer += Time.deltaTime;
+
+            // damageInterval（例：1秒）ごとに1回だけダメージ
+            if (damageTimer >= damageInterval)
+            {
+                damageTimer = 0f;
+
+                Info_collide.SetActive(true);
+
+                if (timerScript != null)
+                {
+                    timerScript.timeRemaining -= 5f;
+
+                    if (timerScript.timeRemaining <= 0)
+                    {
+                        timerScript.timeRemaining = 0;
+
+                        ForceDisableCollideUI();
+                        PlayerDie();
+                    }
+
+                }
+            }
+        }
+        else
+        {
+            // 離れたらリセット
+            damageTimer = 0f;
+        }
+
+
+        if (!collideForcedOffByTimeover &&
+        timerScript != null &&
+        timerScript.timeRemaining <= 0f)
+        {
+            collideForcedOffByTimeover = true;
+
+            if (Info_collide != null && Info_collide.activeSelf)
+                Info_collide.SetActive(false);
+        }
+
+
+
     }
 
     /// <summary>
@@ -291,34 +395,37 @@ public class PlayerCharaControl : MonoBehaviour
     {
         if (other.gameObject.tag == "Refuge")
         {
+            ForceDisableCollideUI();
+
+            // ↓↓↓ ここから下は元のまま ↓↓↓
             Globaldata.playerposi = pt.getPlayerPosiList();
+
             if (timerScript != null)
             {
-                timerScript.StopTimer(); //タイマーを停止させる
-                //クリア時間取得
+                timerScript.StopTimer();
                 GameData.clearTime = timerScript.GetTime();
                 GameData.hinan = true; //避難成功を格納
             }
+
             Info_end.SetActive(true);
             Invoke("LoadGoalScene", 5f); // 5秒後にシーン遷移
         }
     }
+
+
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Blockade"))
         {
             collideCount++;
+            isTouchingDebris = true;
 
-            // 初めて接触した時だけ点滅を開始する
-            if (!isBlinking)
-            {
-                Info_collide.SetActive(true);
-                blinkCoroutine = StartCoroutine(BlinkUI());
-                isBlinking = true;
-            }
+        
         }
     }
+
+
 
 
     private void OnCollisionExit(Collision collision)
@@ -330,18 +437,26 @@ public class PlayerCharaControl : MonoBehaviour
             if (collideCount <= 0)
             {
                 collideCount = 0;
+                isTouchingDebris = false;
+
+                debrisTouchTime = 0f;
+                debrisDamageActive = false;
+
+                if (timerScript != null)
+                    timerScript.SetWarning(false);
+
 
                 // 点滅停止
                 if (blinkCoroutine != null)
                     StopCoroutine(blinkCoroutine);
-
                 isBlinking = false;
-
                 // 完全に非表示に戻す
                 Info_collide.SetActive(false);
             }
+
         }
     }
+
 
 
     private IEnumerator BlinkUI()
@@ -371,4 +486,42 @@ public class PlayerCharaControl : MonoBehaviour
     {
         SceneManager.LoadScene("result");
     }
+
+    void PlayerDie()
+    {
+        ForceDisableCollideUI();
+
+        if (currentHP == 0)
+            Info_timeover.SetActive(true);
+
+        Invoke("LoadGoalScene", 5f);
+    }
+
+
+    // ★ 追加：ゲーム終了時に瓦礫UIを強制OFFする
+    void ForceDisableCollideUI()
+    {
+        if (Info_collide != null && Info_collide.activeSelf)
+            Info_collide.SetActive(false);
+
+        // 点滅していたら止める
+        if (blinkCoroutine != null)
+        {
+            StopCoroutine(blinkCoroutine);
+            blinkCoroutine = null;
+        }
+        isBlinking = false;
+
+        // 瓦礫関連の状態を止める
+        collideCount = 0;
+        isTouchingDebris = false;
+        debrisTouchTime = 0f;
+        debrisDamageActive = false;
+        damageTimer = 0f;
+
+        if (timerScript != null)
+            timerScript.SetWarning(false);
+    }
+
+
 }
