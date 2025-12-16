@@ -280,8 +280,14 @@ public class TextEffect : MonoBehaviour
                 int pressed = controller.LastPressedButton; // 押されたボタン番号
                 Debug.Log($"ボタン {pressed} が押されました");
 
-                _selectedAnswer = pressed;
-                _isWaitingForAnswer = false;
+                if(pressed < choices && pressed >= 0){
+                    _selectedAnswer = pressed;
+                    _isWaitingForAnswer = false;
+                }
+                else
+                {
+                    Debug.Log($"無効なボタン {pressed} が押されました（有効範囲: 0〜{choices - 1}）");
+                }
             }
 
             yield return null;
