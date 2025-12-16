@@ -31,6 +31,9 @@ public class PlayerCharaControl : MonoBehaviour
     private float damageTimer = 0f;
     public float damageInterval = 2.0f;  // ダメージ間隔（秒）
     private bool collideForcedOffByTimeover = false;
+    public GameObject time_delete;   // 時間減少表示UI
+    public float timeDeleteDisplayTime = 1.5f; // 表示時間（秒）
+    private Coroutine timeDeleteCoroutine;
 
 
 
@@ -124,6 +127,9 @@ public class PlayerCharaControl : MonoBehaviour
 
         if (Info_timeover != null)
             Info_timeover.SetActive(false);
+        if (time_delete != null)
+            time_delete.SetActive(false);
+
 
     }
 
@@ -191,7 +197,7 @@ public class PlayerCharaControl : MonoBehaviour
         transform.position += transform.forward * forwardSpeed * v * Time.deltaTime; // 前進・後退の移動処理
         transform.Rotate(0, rotationSpeed * h * Time.deltaTime, 0); // 左右の回転処理
 
-        // --- 瓦礫接触時間を計測し、1秒後にダメージ開始 ---
+        // 瓦礫接触時間を計測し，1秒後にダメージ開始
         if (isTouchingDebris)
         {
             debrisTouchTime += Time.deltaTime;
@@ -207,10 +213,6 @@ public class PlayerCharaControl : MonoBehaviour
                     blinkCoroutine = StartCoroutine(BlinkUI());
                     isBlinking = true;
                 }
-
-                // ★ ダメージ開始 → タイマー赤
-                if (timerScript != null)
-                    timerScript.SetWarning(true);
             }
 
         }
@@ -221,12 +223,12 @@ public class PlayerCharaControl : MonoBehaviour
             debrisDamageActive = false;
         }
 
-        // --- ダメージ継続処理（一定間隔で減らす） ---
+        //ダメージ継続処理（一定間隔で減らす）
         if (debrisDamageActive)
         {
             damageTimer += Time.deltaTime;
 
-            // damageInterval（例：1秒）ごとに1回だけダメージ
+            // damageIntervalごとに1回ダメージ（繰り返し）
             if (damageTimer >= damageInterval)
             {
                 damageTimer = 0f;
@@ -237,16 +239,23 @@ public class PlayerCharaControl : MonoBehaviour
                 {
                     timerScript.timeRemaining -= 5f;
 
+                    // 赤
+                    timerScript.SetWarning(true);
+
+                    // 少し後に元の色へ戻す
+                    StartCoroutine(ResetTimerColor());
+
+                    ShowTimeDelete();
+
                     if (timerScript.timeRemaining <= 0)
                     {
                         timerScript.timeRemaining = 0;
-
                         ForceDisableCollideUI();
                         PlayerDie();
                     }
-
                 }
             }
+
         }
         else
         {
@@ -413,7 +422,7 @@ public class PlayerCharaControl : MonoBehaviour
     }
 
 
-
+    //瓦礫に当たり続けているときの処理するメソッド
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Blockade"))
@@ -427,7 +436,7 @@ public class PlayerCharaControl : MonoBehaviour
 
 
 
-
+    //瓦礫から離れた時の処理するメソッド
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Blockade"))
@@ -458,7 +467,7 @@ public class PlayerCharaControl : MonoBehaviour
     }
 
 
-
+    //UIの点滅表示メソッド
     private IEnumerator BlinkUI()
     {
         // ON
@@ -498,7 +507,7 @@ public class PlayerCharaControl : MonoBehaviour
     }
 
 
-    // ★ 追加：ゲーム終了時に瓦礫UIを強制OFFする
+    //ゲーム終了時に瓦礫UIを強制OFFするメソッド
     void ForceDisableCollideUI()
     {
         if (Info_collide != null && Info_collide.activeSelf)
@@ -518,6 +527,35 @@ public class PlayerCharaControl : MonoBehaviour
         debrisTouchTime = 0f;
         debrisDamageActive = false;
         damageTimer = 0f;
+
+        if (timerScript != null)
+            timerScript.SetWarning(false);
+    }
+
+    //time_delateを表示するメソッド
+    void ShowTimeDelete()
+    {
+        if (time_delete == null) return;
+
+        // すでに表示中ならリセット
+        if (timeDeleteCoroutine != null)
+            StopCoroutine(timeDeleteCoroutine);
+
+        timeDeleteCoroutine = StartCoroutine(TimeDeleteRoutine());
+    }
+
+    //time_delateを一定時間表示するメソッド
+    IEnumerator TimeDeleteRoutine()
+    {
+        time_delete.SetActive(true);
+        yield return new WaitForSeconds(timeDeleteDisplayTime);
+        time_delete.SetActive(false);
+    }
+
+    //time_delateを消すメソッド
+    IEnumerator ResetTimerColor()
+    {
+        yield return new WaitForSeconds(1.0f); // 赤表示
 
         if (timerScript != null)
             timerScript.SetWarning(false);
