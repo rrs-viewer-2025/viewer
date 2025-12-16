@@ -60,15 +60,21 @@ public class InputSceneChanger : MonoBehaviour
         // 追加のコントローラーボタンチェック（汎用性を高めるため）
         if (useController)
         {
-            // ゲームパッドのAボタン（Xbox）、×ボタン（PlayStation）など
-            // if (Input.GetKeyDown(KeyCode.JoystickButton0) || 
-            //     Input.GetKeyDown(KeyCode.JoystickButton1) || 
-            //     Input.GetKeyDown(KeyCode.JoystickButton2) || 
-            //     Input.GetKeyDown(KeyCode.JoystickButton3))
-            // {
-            //     shouldChangeScene = true;
-            //     if (showDebugLog) Debug.Log("Controller button pressed - changing scene");
-            // }
+            // 現在のシーン名を取得
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            if(currentSceneName == "Title")
+            {
+                // ゲームパッドのAボタン（Xbox）、×ボタン（PlayStation）など
+                if (Input.GetKeyDown(KeyCode.JoystickButton0) || 
+                    Input.GetKeyDown(KeyCode.JoystickButton1) || 
+                    Input.GetKeyDown(KeyCode.JoystickButton2) || 
+                    Input.GetKeyDown(KeyCode.JoystickButton3))
+                {
+                    shouldChangeScene = true;
+                    if (showDebugLog) Debug.Log("Controller button pressed - changing scene");
+                }
+            }
+            
 
             if (Input.GetKeyDown(KeyCode.JoystickButton0))
             {
