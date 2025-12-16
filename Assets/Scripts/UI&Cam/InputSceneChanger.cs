@@ -23,6 +23,9 @@ public class InputSceneChanger : MonoBehaviour
 
     private bool canChangeScene = true; // シーン変更可能フラグ
 
+    public int LastPressedButton { get; private set; } = -1; // 最後に押されたボタン番号
+    public bool ButtonPressed { get; private set; } = false; // ボタンが押された瞬間
+
     void Start()
     {
         if (showDebugLog)
@@ -37,17 +40,20 @@ public class InputSceneChanger : MonoBehaviour
 
         bool shouldChangeScene = false;
 
+        ButtonPressed = false;
+        LastPressedButton = -1;
+
         // スペースキー入力チェック
         if (useSpaceKey && Input.GetKeyDown(KeyCode.Space))
         {
-            shouldChangeScene = true;
+            // shouldChangeScene = true;
             if (showDebugLog) Debug.Log("Space key pressed - changing scene");
         }
 
         // コントローラー入力チェック（旧Input Systemを使用）
         if (useController && Input.GetButtonDown(controllerButtonName))
         {
-            shouldChangeScene = true;
+            // shouldChangeScene = true;
             if (showDebugLog) Debug.Log($"Controller button '{controllerButtonName}' pressed - changing scene");
         }
 
@@ -55,13 +61,38 @@ public class InputSceneChanger : MonoBehaviour
         if (useController)
         {
             // ゲームパッドのAボタン（Xbox）、×ボタン（PlayStation）など
-            if (Input.GetKeyDown(KeyCode.JoystickButton0) || 
-                Input.GetKeyDown(KeyCode.JoystickButton1) || 
-                Input.GetKeyDown(KeyCode.JoystickButton2) || 
-                Input.GetKeyDown(KeyCode.JoystickButton3))
+            // if (Input.GetKeyDown(KeyCode.JoystickButton0) || 
+            //     Input.GetKeyDown(KeyCode.JoystickButton1) || 
+            //     Input.GetKeyDown(KeyCode.JoystickButton2) || 
+            //     Input.GetKeyDown(KeyCode.JoystickButton3))
+            // {
+            //     shouldChangeScene = true;
+            //     if (showDebugLog) Debug.Log("Controller button pressed - changing scene");
+            // }
+
+            if (Input.GetKeyDown(KeyCode.JoystickButton0))
             {
-                shouldChangeScene = true;
-                if (showDebugLog) Debug.Log("Controller button pressed - changing scene");
+                Debug.Log("bottunX");
+                LastPressedButton = 2;
+                ButtonPressed = true;
+            }
+            else if(Input.GetKeyDown(KeyCode.JoystickButton1))
+            {
+                Debug.Log("bottunA");
+                LastPressedButton = 0;
+                ButtonPressed = true;
+            }
+            else if(Input.GetKeyDown(KeyCode.JoystickButton2))
+            {
+                Debug.Log("bottunB");
+                LastPressedButton = 1;
+                ButtonPressed = true;
+            }
+            else if(Input.GetKeyDown(KeyCode.JoystickButton3))
+            {
+                Debug.Log("bottunY");
+                LastPressedButton = 3;
+                ButtonPressed = true;
             }
         }
 
