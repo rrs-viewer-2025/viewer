@@ -5246,9 +5246,6 @@ PrefabInstance:
       addedObject: {fileID: 1551897265}
     - targetCorrespondingSourceObject: {fileID: 4978816779655408403, guid: ce2548dbc81851b488075bf19a61322a, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1551897264}
-    - targetCorrespondingSourceObject: {fileID: 4978816779655408403, guid: ce2548dbc81851b488075bf19a61322a, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1551897263}
     - targetCorrespondingSourceObject: {fileID: 4978816779655408403, guid: ce2548dbc81851b488075bf19a61322a, type: 3}
       insertIndex: -1
@@ -5262,6 +5259,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4978816779655408403, guid: ce2548dbc81851b488075bf19a61322a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1551897259}
+    - targetCorrespondingSourceObject: {fileID: 4978816779655408403, guid: ce2548dbc81851b488075bf19a61322a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1551897267}
   m_SourcePrefab: {fileID: 100100000, guid: ce2548dbc81851b488075bf19a61322a, type: 3}
 --- !u!4 &1551897257 stripped
 Transform:
@@ -5292,7 +5292,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
@@ -5473,33 +5473,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &1551897264
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1551897258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dad84fc74abdf4cefb75bc67ad74e833, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timerScript: {fileID: 482607000}
-  forwardSpeed: 5
-  rotationSpeed: 100
-  Info_end: {fileID: 855165179}
-  Info_collide: {fileID: 361645151}
-  Info_timeover: {fileID: 0}
-  blinkInterval: 1
-  hpSlider: {fileID: 0}
-  maxHP: 100
-  currentHP: 0
-  damagePerSecond: 1
-  requireTouchTime: 1
-  damageInterval: 2
-  gamepadIndex: 0
-  joyconIndex: 0
 --- !u!114 &1551897265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5530,6 +5503,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityID: 0
+--- !u!114 &1551897267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1551897258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b19753a64c75f433fbeea31476152ca1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timerScript: {fileID: 482607000}
+  forwardSpeed: 5
+  rotationSpeed: 100
+  Info_end: {fileID: 855165179}
+  Info_collide: {fileID: 361645151}
+  Info_timeover: {fileID: 0}
+  blinkInterval: 1
+  hpSlider: {fileID: 0}
+  maxHP: 100
+  currentHP: 0
+  damagePerSecond: 1
+  requireTouchTime: 1
+  damageInterval: 2
+  gamepadIndex: 1
+  joyconIndex: 1
+  tetherTarget: {fileID: 1589655474}
+  tetherMaxDistance: 5
+  tetherIgnoreVertical: 1
 --- !u!1001 &1589655473
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5669,7 +5672,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}

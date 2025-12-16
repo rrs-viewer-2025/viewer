@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using System.Collections;
 
-public class PlayerCharaControl : MonoBehaviour
+public class Player2_Move : MonoBehaviour
 {
     public Timer timerScript; //Timerスクリプトをアタッチする
     public float forwardSpeed = 5.0f;//前進速度
@@ -61,6 +61,14 @@ public class PlayerCharaControl : MonoBehaviour
 
     PlayerTrail pt;
     PlayerPosition pp;
+    
+    [Header("Tether")]
+    [Tooltip("相手モデル（離れないようにする対象）をInspectorで指定します。未指定時は自動検出を試みます。")]
+    public Transform tetherTarget;
+    [Tooltip("相手と離れてよい最大距離（メートル）")]
+    public float tetherMaxDistance = 2.0f;
+    [Tooltip("垂直方向（Y軸）を無視して水平距離のみで判定するか")]
+    public bool tetherIgnoreVertical = true;
 
     void Awake()
     {
@@ -114,6 +122,22 @@ public class PlayerCharaControl : MonoBehaviour
 
         // Joy-Conの接続・初期化処理を関数化
         SetupJoycon();
+
+        // --- tetherTarget を自動設定（Inspector未設定時） ---
+        if (tetherTarget == null)
+        {
+            var found = GameObject.Find("player_02");
+            if (found != null)
+            {
+                tetherTarget = found.transform;
+            }
+            else if (transform.parent != null)
+            {
+                var p = transform.parent.Find("player_02");
+                if (p != null) tetherTarget = p;
+            }
+            if (tetherTarget != null) Debug.Log($"[PlayerCharaControl] tetherTarget set to {tetherTarget.name}");
+        }
 
         currentHP = maxHP;
         if (hpSlider != null)
@@ -190,6 +214,22 @@ public class PlayerCharaControl : MonoBehaviour
         anim.SetBool("Run", runFlag); // 入力値に応じて「走る」アニメーションを切り替え
         transform.position += transform.forward * forwardSpeed * v * Time.deltaTime; // 前進・後退の移動処理
         transform.Rotate(0, rotationSpeed * h * Time.deltaTime, 0); // 左右の回転処理
+
+        // --- テザー（相手と離れすぎないように位置を制限） ---
+        if (tetherTarget != null && tetherMaxDistance > 0f)
+        {
+            Vector3 offset = transform.position - tetherTarget.position;
+            Vector3 checkOffset = tetherIgnoreVertical ? new Vector3(offset.x, 0f, offset.z) : offset;
+            float dist = checkOffset.magnitude;
+            if (dist > tetherMaxDistance)
+            {
+                Vector3 clamped = checkOffset.normalized * tetherMaxDistance;
+                Vector3 targetPos = tetherTarget.position + clamped;
+                // 元の高さを保つ
+                targetPos.y = transform.position.y;
+                transform.position = targetPos;
+            }
+        }
 
         // --- 瓦礫接触時間を計測し、1秒後にダメージ開始 ---
         if (isTouchingDebris)
