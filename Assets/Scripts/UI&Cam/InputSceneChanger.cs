@@ -62,7 +62,7 @@ public class InputSceneChanger : MonoBehaviour
         {
             // 現在のシーン名を取得
             string currentSceneName = SceneManager.GetActiveScene().name;
-            if(currentSceneName == "Title")
+            if(currentSceneName == "Title" || currentSceneName == "intro" || currentSceneName == "result")
             {
                 // ゲームパッドのAボタン（Xbox）、×ボタン（PlayStation）など
                 if (Input.GetKeyDown(KeyCode.JoystickButton0) || 
