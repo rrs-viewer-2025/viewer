@@ -30,6 +30,7 @@ public class PanelController : MonoBehaviour
     public AudioClip bButtonClip;
     public AudioClip aButtonClip;
     public AudioClip startClip;
+    public AudioClip okClip;
 
     [SerializeField] private RawImage _map1;
     [SerializeField] private RawImage _map2;
@@ -59,9 +60,10 @@ public class PanelController : MonoBehaviour
     // 表示するTextMeshProUGUI
     private TMP_Text displayText;
     // 各ボタンで表示する内容
-    private string bButtonText = "細い道を避けて\n避難所に到達するよ！";
-    private string aButtonText = "倒れやすい建物を避けて\n避難所に到達するよ！";
-    private string yButtonText = "最短経路で\n避難所に到達するよ！";
+    private string bButtonText = "細い道を避けて\nひなんじょに到達するよ！";
+    private string aButtonText = "倒れやすい建物を避けて\nひなんじょに到達するよ！";
+    private string yButtonText = "いちばん近くの\nひなんじょに到達するよ！";
+    private string okText = "このルートでひなんするよ！";
 
     // Manager.cs
     Manager mg;
@@ -75,6 +77,7 @@ public class PanelController : MonoBehaviour
 
     private bool _isWaitingForAnswer = false; //回答待ちかどうかを管理
     private bool flag = false;
+    private bool kakutei = false; // 同じボタンを連続で2回押したか確認
 
     void Awake()
     {
@@ -275,7 +278,10 @@ public class PanelController : MonoBehaviour
 
     private IEnumerator ShowButtonMessageCoroutine(string message)
     {
-        if (_text == null) yield break;
+        // if (_text == null){
+        //     yield break;
+        // }
+        
 
         _question.gameObject.SetActive(false);
         _text.gameObject.SetActive(false);
@@ -310,15 +316,20 @@ public class PanelController : MonoBehaviour
                 StopAllCoroutines();
                 HandleCursorSelection(cursorY, targetSceneName);
 
-                _map1.gameObject.SetActive(true);
-                _map2.gameObject.SetActive(false);
-                _map3.gameObject.SetActive(false);
+                if(!kakutei)
+                {
+                    _map1.gameObject.SetActive(true);
+                    _map2.gameObject.SetActive(false);
+                    _map3.gameObject.SetActive(false);
 
-                // Yボタンの音を再生
-                PlayButtonSound(yButtonClip);
+                    // Yボタンの音を再生
+                    PlayButtonSound(yButtonClip);
 
-                // セリフ再生（←ここ修正）
-                StartCoroutine(ShowButtonMessageCoroutine(yButtonText));
+                    // セリフ再生（←ここ修正）
+                    StartCoroutine(ShowButtonMessageCoroutine(yButtonText));
+                }
+
+                
 
                 // パスの選択
                 i = 1;
@@ -331,15 +342,20 @@ public class PanelController : MonoBehaviour
                 StopAllCoroutines();
                 HandleCursorSelection(cursorB, targetSceneName);
 
-                _map1.gameObject.SetActive(false);
-                _map2.gameObject.SetActive(true);
-                _map3.gameObject.SetActive(false);
+                if(!kakutei)
+                {
+                    _map1.gameObject.SetActive(false);
+                    _map2.gameObject.SetActive(true);
+                    _map3.gameObject.SetActive(false);
 
-                // Bボタンの音を再生
-                PlayButtonSound(bButtonClip);
+                    // Bボタンの音を再生
+                    PlayButtonSound(bButtonClip);
 
-                // セリフ再生（←ここ修正）
-                StartCoroutine(ShowButtonMessageCoroutine(bButtonText));
+                    // セリフ再生（←ここ修正）
+                    StartCoroutine(ShowButtonMessageCoroutine(bButtonText));
+                }
+
+                
 
                 // パスの選択
                 i = 2;
@@ -352,15 +368,20 @@ public class PanelController : MonoBehaviour
                 StopAllCoroutines();
                 HandleCursorSelection(cursorA, targetSceneName);
 
-                _map1.gameObject.SetActive(false);
-                _map2.gameObject.SetActive(false);
-                _map3.gameObject.SetActive(true);
+                if(!kakutei)
+                {
+                    _map1.gameObject.SetActive(false);
+                    _map2.gameObject.SetActive(false);
+                    _map3.gameObject.SetActive(true);
 
-                // Aボタンの音を再生
-                PlayButtonSound(aButtonClip);
+                    // Aボタンの音を再生
+                    PlayButtonSound(aButtonClip);
 
-                // セリフ再生（←ここ修正）
-                StartCoroutine(ShowButtonMessageCoroutine(aButtonText));
+                    // セリフ再生（←ここ修正）
+                    StartCoroutine(ShowButtonMessageCoroutine(aButtonText));
+                }
+
+                
 
                 // パスの選択
                 i = 3;
@@ -375,7 +396,11 @@ public class PanelController : MonoBehaviour
         // 2回同じものが押された場合は画面遷移
         if (lastPressedCursor == targetCursor)
         {
-            TransitionToScene(sceneName);
+            kakutei = true;
+            StopAllCoroutines();
+            PlayButtonSound(okClip);
+            StartCoroutine(ShowButtonMessageCoroutine(okText));
+            StartCoroutine(ConfirmAndChangeScene(sceneName));
             return;
         }
 
@@ -383,6 +408,16 @@ public class PanelController : MonoBehaviour
         currentSelectedCursor = targetCursor;
         lastPressedCursor = targetCursor;
     }
+
+    private IEnumerator ConfirmAndChangeScene(string sceneName)
+    {
+        // okText を再生
+        yield return StartCoroutine(ShowButtonMessageCoroutine(okText));
+
+        // 再生が終わったら遷移
+        TransitionToScene(sceneName);
+    }
+
 
     // 指定したオブジェクトのImageコンポーネントの不透明度を設定するメソッド
     private void SetPanelOpacity(GameObject targetObject, float alpha)

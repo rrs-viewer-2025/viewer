@@ -1278,7 +1278,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u65E9\u304F\u9003\u3052\u308C\u308B\u9053"
+  m_text: "\u65E9\u304F\u9003\u3052\u3089\u308C\u308B\u9053"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d2ddadc739cb44510a2fe1dddc84fd81, type: 2}
   m_sharedMaterial: {fileID: 7177666945904928683, guid: d2ddadc739cb44510a2fe1dddc84fd81, type: 2}
@@ -2936,6 +2936,7 @@ MonoBehaviour:
   bButtonClip: {fileID: 8300000, guid: d21bc7bac8a6840b19e94b377aba3b30, type: 3}
   aButtonClip: {fileID: 8300000, guid: ae8e0805ccff94cef966839aa0bfc5d3, type: 3}
   startClip: {fileID: 8300000, guid: 17e4cfc1636734827a717009938071a8, type: 3}
+  okClip: {fileID: 8300000, guid: d753973f47bf24fb0952067d317935f1, type: 3}
   _map1: {fileID: 1293153364}
   _map2: {fileID: 915615440}
   _map3: {fileID: 2013546411}
