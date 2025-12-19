@@ -21,6 +21,9 @@ public class TextEffect : MonoBehaviour
     [SerializeField] private GameObject _2choices;
     [SerializeField] private GameObject _3choices;
     [SerializeField] private GameObject _4choices;
+    [SerializeField] private GameObject _2choices_ps;
+    [SerializeField] private GameObject _3choices_ps;
+    [SerializeField] private GameObject _4choices_ps;
 
     // 各文字の表示間隔（秒）
     [SerializeField] private float _delayDuration = 0.1f;
@@ -61,6 +64,8 @@ public class TextEffect : MonoBehaviour
     [SerializeField] private Image _fadePanel;
     // フェードアウト速度
     [SerializeField] private float _sceneTransitionSpeed = 0.1f;
+
+    private string sony = "Sony Interactive Entertainment Wireless Controller";
 
     void Awake()
     {
@@ -153,6 +158,9 @@ public class TextEffect : MonoBehaviour
         _2choices.SetActive(false);
         _3choices.SetActive(false);
         _4choices.SetActive(false);
+        _2choices_ps.SetActive(false);
+        _3choices_ps.SetActive(false);
+        _4choices_ps.SetActive(false);
 
         _text.text = message;
         _text.maxVisibleCharacters = 0;
@@ -196,6 +204,9 @@ public class TextEffect : MonoBehaviour
         _2choices.SetActive(false);
         _3choices.SetActive(false);
         _4choices.SetActive(false);
+        _2choices_ps.SetActive(false);
+        _3choices_ps.SetActive(false);
+        _4choices_ps.SetActive(false);
 
         _question.text = message;
         _question.maxVisibleCharacters = 0;
@@ -236,19 +247,38 @@ public class TextEffect : MonoBehaviour
         _2choices.SetActive(false);
         _3choices.SetActive(false);
         _4choices.SetActive(false);
+        _2choices_ps.SetActive(false);
+        _3choices_ps.SetActive(false);
+        _4choices_ps.SetActive(false);
 
         // 選択肢数に応じて正しいUIセットを表示
         GameObject activeSet = null;
+        Debug.Log(controller.controllerName);
         if (choiceArray.Length == 2){
-            activeSet = _2choices;
+            if(controller.controllerName == sony){
+                activeSet = _2choices_ps;
+            }
+            else{
+                activeSet = _2choices;
+            }
             choices = 2;
         }
         else if (choiceArray.Length == 3){
-            activeSet = _3choices;
+            if(controller.controllerName == sony){
+                activeSet = _3choices_ps;
+            }
+            else{
+                activeSet = _3choices;
+            }
             choices = 3;
         }
         else if (choiceArray.Length == 4){
-            activeSet = _4choices;
+            if(controller.controllerName == sony){
+                activeSet = _4choices_ps;
+            }
+            else{
+                activeSet = _4choices;
+            }
             choices = 4;
         }
         else{
@@ -323,6 +353,9 @@ public class TextEffect : MonoBehaviour
         _2choices.SetActive(false);
         _3choices.SetActive(false);
         _4choices.SetActive(false);
+        _2choices_ps.SetActive(false);
+        _3choices_ps.SetActive(false);
+        _4choices_ps.SetActive(false);
 
         _bubble.gameObject.SetActive(true);
         _question_bubble.gameObject.SetActive(false);

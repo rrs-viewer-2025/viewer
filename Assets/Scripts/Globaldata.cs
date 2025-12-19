@@ -7,4 +7,6 @@ public static class Globaldata
     public static List<int> path = new List<int>();
     public static Dictionary<int, RoadNode> roadGraph = new Dictionary<int, RoadNode>();
     public static List<Vector3> playerposi = new List<Vector3>();
+
+    public static string controllerType = "";
 }
