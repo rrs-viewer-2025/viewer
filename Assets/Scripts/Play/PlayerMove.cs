@@ -242,13 +242,13 @@ public class PlayerCharaControl : MonoBehaviour
         if (playerID == PlayerID.P1)
         {
             v = Input.GetAxis("Vertical_P1") * -1f;
-            h = Input.GetAxis("Horizontal_P1") * -1f;
+            h = Input.GetAxis("Horizontal_P1");
         }
 
         else if (playerID == PlayerID.P2)
         {
             v = Input.GetAxis("Vertical_P2") * -1f;
-            h = Input.GetAxis("Horizontal_P2") * -1f;
+            h = Input.GetAxis("Horizontal_P2");
         }
     }
 
