@@ -1469,6 +1469,7 @@ MonoBehaviour:
   useFadeTransition: 1
   controllerButtonName: Submit
   showDebugLog: 0
+  flag: 0
 --- !u!1 &1057468752
 GameObject:
   m_ObjectHideFlags: 0
@@ -2735,8 +2736,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f52afac30ab12488f8c851509e2c298e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineMaterial1: {fileID: 2100000, guid: 5f82975f5f0274e3d8b46b60ffbec26c, type: 2}
-  lineMaterial2: {fileID: 2100000, guid: f43414420c3c94df6bdddb86e8d4b189, type: 2}
+  lineMaterialRoad: {fileID: 2100000, guid: 5f82975f5f0274e3d8b46b60ffbec26c, type: 2}
+  lineMaterialP1: {fileID: 2100000, guid: f43414420c3c94df6bdddb86e8d4b189, type: 2}
+  lineMaterialP2: {fileID: 2100000, guid: 7eccc72a3058844d3a43429847905c6e, type: 2}
 --- !u!1 &2111091625
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,8 @@ public static class Globaldata
     // 静的変数　どのシーンからもアクセスできる
     public static List<int> path = new List<int>();
     public static Dictionary<int, RoadNode> roadGraph = new Dictionary<int, RoadNode>();
-    public static List<Vector3> playerposi = new List<Vector3>();
+    public static List<Vector3> player1Pos = new List<Vector3>();
+    public static List<Vector3> player2Pos = new List<Vector3>();
 
     public static string controllerType = "";
 }
