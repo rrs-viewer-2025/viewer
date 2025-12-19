@@ -77,7 +77,7 @@ public class PanelController : MonoBehaviour
     private Coroutine _showCoroutine;
 
     private bool _isWaitingForAnswer = false; //回答待ちかどうかを管理
-    private bool flag = false;
+    public bool flag = false;
     private bool kakutei = false; // 同じボタンを連続で2回押したか確認
 
     private string sony = "Sony Interactive Entertainment Wireless Controller";
@@ -316,88 +316,73 @@ public class PanelController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
     }
 
-    void Update()
+    public void selectY()
     {
-        if(flag)
+        StopAllCoroutines();
+        HandleCursorSelection(cursorY, targetSceneName);
+
+        if(!kakutei)
         {
-            // Yボタン（Joystick1Button3）でcursorYを選択
-            if (Input.GetKeyDown(KeyCode.Joystick1Button3) || Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                StopAllCoroutines();
-                HandleCursorSelection(cursorY, targetSceneName);
+            _map1.gameObject.SetActive(true);
+            _map2.gameObject.SetActive(false);
+            _map3.gameObject.SetActive(false);
 
-                if(!kakutei)
-                {
-                    _map1.gameObject.SetActive(true);
-                    _map2.gameObject.SetActive(false);
-                    _map3.gameObject.SetActive(false);
+            // Yボタンの音を再生
+            PlayButtonSound(yButtonClip);
 
-                    // Yボタンの音を再生
-                    PlayButtonSound(yButtonClip);
-
-                    // セリフ再生（←ここ修正）
-                    StartCoroutine(ShowButtonMessageCoroutine(yButtonText));
-                }
-
-                
-
-                // パスの選択
-                i = 1;
-                Globaldata.path = mg.getPath(i);
-            }
-
-            // Bボタン（Joystick1Button1）でcursorBを選択
-            if (Input.GetKeyDown(KeyCode.Joystick1Button2) || Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                StopAllCoroutines();
-                HandleCursorSelection(cursorB, targetSceneName);
-
-                if(!kakutei)
-                {
-                    _map1.gameObject.SetActive(false);
-                    _map2.gameObject.SetActive(true);
-                    _map3.gameObject.SetActive(false);
-
-                    // Bボタンの音を再生
-                    PlayButtonSound(bButtonClip);
-
-                    // セリフ再生（←ここ修正）
-                    StartCoroutine(ShowButtonMessageCoroutine(bButtonText));
-                }
-
-                
-
-                // パスの選択
-                i = 2;
-                Globaldata.path = mg.getPath(i);
-            }
-
-            // Aボタン（Joystick1Button0）でcursorAを選択
-            if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                StopAllCoroutines();
-                HandleCursorSelection(cursorA, targetSceneName);
-
-                if(!kakutei)
-                {
-                    _map1.gameObject.SetActive(false);
-                    _map2.gameObject.SetActive(false);
-                    _map3.gameObject.SetActive(true);
-
-                    // Aボタンの音を再生
-                    PlayButtonSound(aButtonClip);
-
-                    // セリフ再生（←ここ修正）
-                    StartCoroutine(ShowButtonMessageCoroutine(aButtonText));
-                }
-
-                
-
-                // パスの選択
-                i = 3;
-                Globaldata.path = mg.getPath(i);
-            }
+            // セリフ再生（←ここ修正）
+            StartCoroutine(ShowButtonMessageCoroutine(yButtonText));
         }
+
+        // パスの選択
+        i = 1;
+        Globaldata.path = mg.getPath(i);
+    }
+
+    public void selectB()
+    {
+        StopAllCoroutines();
+        HandleCursorSelection(cursorB, targetSceneName);
+
+        if(!kakutei)
+        {
+            _map1.gameObject.SetActive(false);
+            _map2.gameObject.SetActive(true);
+            _map3.gameObject.SetActive(false);
+
+            // Bボタンの音を再生
+            PlayButtonSound(bButtonClip);
+
+            // セリフ再生（←ここ修正）
+            StartCoroutine(ShowButtonMessageCoroutine(bButtonText));
+        }
+
+        // パスの選択
+        i = 2;
+        Globaldata.path = mg.getPath(i);
+    }
+
+    public void selectX()
+    {
+        StopAllCoroutines();
+        HandleCursorSelection(cursorA, targetSceneName);
+
+        if(!kakutei)
+        {
+            _map1.gameObject.SetActive(false);
+            _map2.gameObject.SetActive(false);
+            _map3.gameObject.SetActive(true);
+
+            // Aボタンの音を再生
+            PlayButtonSound(aButtonClip);
+
+            // セリフ再生（←ここ修正）
+            StartCoroutine(ShowButtonMessageCoroutine(aButtonText));
+        }
+
+        // パスの選択
+        i = 3;
+        Globaldata.path = mg.getPath(i);
     }
 
     // カーソル選択処理
@@ -411,6 +396,7 @@ public class PanelController : MonoBehaviour
             PlayButtonSound(okClip);
             StartCoroutine(ShowButtonMessageCoroutine(okText));
             StartCoroutine(ConfirmAndChangeScene(sceneName));
+            
             return;
         }
 
