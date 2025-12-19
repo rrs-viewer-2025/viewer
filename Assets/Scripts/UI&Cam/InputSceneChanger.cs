@@ -27,6 +27,10 @@ public class InputSceneChanger : MonoBehaviour
     public bool ButtonPressed { get; private set; } = false; // ボタンが押された瞬間
     public string controllerName { get; private set; } = "aaa";
 
+    public bool flag = false;
+
+    PanelController pc;
+
     void Start()
     {
         if (showDebugLog)
@@ -65,6 +69,8 @@ public class InputSceneChanger : MonoBehaviour
         {
             Debug.Log("コントローラーは接続されていません");
         }
+
+        pc = FindObjectOfType<PanelController>();
     }
 
     void Update()
@@ -105,6 +111,22 @@ public class InputSceneChanger : MonoBehaviour
                 {
                     shouldChangeScene = true;
                     if (showDebugLog) Debug.Log("Controller button pressed - changing scene");
+                }
+            }
+
+            if(currentSceneName == "SelectPath" && pc.flag)
+            {
+                if(Input.GetKeyDown(KeyCode.JoystickButton3))
+                {
+                    pc.selectY();
+                }
+                else if(Input.GetKeyDown(KeyCode.JoystickButton2))
+                {
+                    pc.selectB();
+                }
+                else if(Input.GetKeyDown(KeyCode.JoystickButton0))
+                {
+                    pc.selectX();
                 }
             }
             

@@ -1757,6 +1757,7 @@ GameObject:
   - component: {fileID: 882211113}
   - component: {fileID: 882211112}
   - component: {fileID: 882211116}
+  - component: {fileID: 882211117}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1922,6 +1923,25 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &882211117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882211111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 471121717442e4684b56f1a0ae0ce6c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSceneName: main
+  useSpaceKey: 1
+  useController: 1
+  useFadeTransition: 1
+  controllerButtonName: Submit
+  showDebugLog: 0
+  flag: 0
 --- !u!1 &915615438
 GameObject:
   m_ObjectHideFlags: 0
@@ -3549,6 +3569,7 @@ MonoBehaviour:
   _tokutyou: {fileID: 1322858500}
   _delayDuration: 0.1
   _fadeDuration: 1
+  flag: 0
 --- !u!1 &1768276584
 GameObject:
   m_ObjectHideFlags: 0
