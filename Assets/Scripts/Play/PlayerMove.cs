@@ -61,7 +61,7 @@ public class PlayerCharaControl : MonoBehaviour
 
     void Awake()
     {
-        pt = FindFirstObjectByType<PlayerTrail>();
+        pt = GetComponent<PlayerTrail>();
         pp = FindFirstObjectByType<PlayerPosition>();
     }
 
@@ -285,8 +285,15 @@ public class PlayerCharaControl : MonoBehaviour
     {
         ForceDisableCollideUI();
 
-        // ↓↓↓ ここから下は元のまま ↓↓↓
-        Globaldata.playerposi = pt.getPlayerPosiList();
+        if (playerID == PlayerID.P1)
+        {
+            Globaldata.player1Pos = pt.getPlayerPosiList();
+        }
+        else if (playerID == PlayerID.P2)
+        {
+            Globaldata.player2Pos = pt.getPlayerPosiList();
+        }
+
         if (timerScript != null)
         {
             timerScript.StopTimer();

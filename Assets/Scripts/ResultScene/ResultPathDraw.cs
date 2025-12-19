@@ -5,39 +5,61 @@ public class ResultPathDraw : MonoBehaviour
 {
     Dictionary<int, RoadNode> roadGraph = Globaldata.roadGraph;
     List<int> path = Globaldata.path;
-    List<Vector3> playerPath = Globaldata.playerposi;
 
-    public Material lineMaterial1; // インスペクタから設定
-    public Material lineMaterial2; // インスペクタから設定
+    List<Vector3> player1Path = Globaldata.player1Pos;
+    List<Vector3> player2Path = Globaldata.player2Pos;
+
+    public Material lineMaterialRoad;   // 想定経路
+    public Material lineMaterialP1;     // Player1
+    public Material lineMaterialP2;     // Player2
 
     public void PathDraw()
     {
-        GameObject go1 = new GameObject("PathLine1");
-        var lr1 = go1.AddComponent<LineRenderer>();
+        // ===== 想定経路 =====
+        CreateLine(
+            "RoadPath",
+            path.Count,
+            lineMaterialRoad,
+            i => roadGraph[path[i]].posi
+        );
 
-        GameObject go2 = new GameObject("PathLine2");
-        var lr2 = go2.AddComponent<LineRenderer>();
-
-        lr1.positionCount = path.Count;
-        lr1.material = lineMaterial1;
-        lr1.widthMultiplier = 5.0f;
-        lr1.useWorldSpace = true;
-
-        lr2.positionCount = playerPath.Count;
-        lr2.material = lineMaterial2;
-        lr2.widthMultiplier = 5.0f;
-        lr2.useWorldSpace = true;
-
-        for (int i = 0; i < path.Count; i++)
+        // ===== Player1 経路 =====
+        if (player1Path != null && player1Path.Count > 0)
         {
-            lr1.SetPosition(i, roadGraph[path[i]].posi);
+            CreateLine(
+                "Player1Path",
+                player1Path.Count,
+                lineMaterialP1,
+                i => player1Path[i]
+            );
         }
 
-        int j = -1;
-        foreach(Vector3 posi in playerPath)
+        // ===== Player2 経路 =====
+        if (player2Path != null && player2Path.Count > 0)
         {
-            j++;
-            lr2.SetPosition(j, posi);
+            CreateLine(
+                "Player2Path",
+                player2Path.Count,
+                lineMaterialP2,
+                i => player2Path[i]
+            );
+        }
+    }
+
+    // LineRenderer生成を共通化
+    void CreateLine(string name, int count, Material mat, System.Func<int, Vector3> getPos)
+    {
+        GameObject go = new GameObject(name);
+        var lr = go.AddComponent<LineRenderer>();
+
+        lr.positionCount = count;
+        lr.material = mat;
+        lr.widthMultiplier = 5.0f;
+        lr.useWorldSpace = true;
+
+        for (int i = 0; i < count; i++)
+        {
+            lr.SetPosition(i, getPos(i));
         }
     }
 }

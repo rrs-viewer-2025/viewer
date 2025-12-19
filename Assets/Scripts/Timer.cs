@@ -50,7 +50,24 @@ public class Timer : MonoBehaviour
             {
                 timeover = true;
 
-                Globaldata.playerposi = pt.getPlayerPosiList();
+                // 全 PlayerTrail を取得
+                PlayerTrail[] trails = FindObjectsByType<PlayerTrail>(FindObjectsSortMode.None);
+
+                foreach (var trail in trails)
+                {
+                    var ctrl = trail.GetComponent<PlayerCharaControl>();
+                    if (ctrl == null) continue;
+
+                    if (ctrl.playerID == PlayerCharaControl.PlayerID.P1)
+                    {
+                        Globaldata.player1Pos = trail.getPlayerPosiList();
+                    }
+                    else if (ctrl.playerID == PlayerCharaControl.PlayerID.P2)
+                    {
+                        Globaldata.player2Pos = trail.getPlayerPosiList();
+                    }
+                }
+
                 timerText.text = "00:00";
                 GameData.hinan = false; //避難失敗を格納
 

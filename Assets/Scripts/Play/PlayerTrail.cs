@@ -11,11 +11,11 @@ public class PlayerTrail : MonoBehaviour
 
     void Start()
     {
-    lineRenderer = GetComponent<LineRenderer>();
-    // LineRendererを無効化（描画しない）
-    lineRenderer.enabled = false;
-    Vector3 startPos = transform.position + Vector3.up * 0.2f;
-    positions.Add(startPos);
+        lineRenderer = GetComponent<LineRenderer>();
+        // LineRendererを無効化（描画しない）
+        lineRenderer.enabled = false;
+        Vector3 startPos = transform.position + Vector3.up * 0.2f;
+        positions.Add(startPos);
     }
 
     void Update()
