@@ -4,7 +4,6 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
 using System.Collections;
 
 public class PlayerCharaControl : MonoBehaviour
@@ -36,6 +35,7 @@ public class PlayerCharaControl : MonoBehaviour
     public GameObject time_delete;   // 時間減少表示UI
     public float timeDeleteDisplayTime = 1.5f; // 表示時間（秒）
     private Coroutine timeDeleteCoroutine;
+
     private Animator anim;
     private bool runFlag;
     Rigidbody rb;
@@ -43,9 +43,14 @@ public class PlayerCharaControl : MonoBehaviour
     // コントローラの入力値
     private float v;
     private float h;
-    [Header("Controller Index")]
-    [Tooltip("Gamepad index used from Unity InputSystem (Gamepad.all)")]
-    [SerializeField] private int gamepadIndex = 0;
+    public enum PlayerID
+    {
+        P1,
+        P2
+    }
+
+    [Header("Player Settings")]
+    public PlayerID playerID = PlayerID.P1;
 
     // Setting.csのInterfaceTypeを参照して共有
     private Setting settingScript;
@@ -77,9 +82,6 @@ public class PlayerCharaControl : MonoBehaviour
             interfaceType = "key";
             Debug.LogWarning("[PlayerCharaControl] Setting.cs not found, defaulting to 'key'");
         }
-
-        // Inspector の値を優先するが、保存済みの値があればそれを読み込む
-        if (PlayerPrefs.HasKey("gamepadIndex")) gamepadIndex = PlayerPrefs.GetInt("gamepadIndex", gamepadIndex);
 
         currentHP = maxHP;
         if (hpSlider != null)
@@ -237,55 +239,17 @@ public class PlayerCharaControl : MonoBehaviour
     // ...existing code...
     void pad()
     {
-        // 全ての接続されているゲームパッドを取得
-        var pads = Gamepad.all;
-        Gamepad gamepad = null;
-
-        // 指定された index のゲームパッドを取得
-        if (pads.Count > 0)
+        if (playerID == PlayerID.P1)
         {
-            if (gamepadIndex >= 0 && gamepadIndex < pads.Count)
-            {
-                gamepad = pads[gamepadIndex];
-            }
-            else
-            {
-                // 範囲外なら先頭を使う（ログを残す）
-                gamepad = pads[0];
-                Debug.LogWarning($"gamepadIndex {gamepadIndex} が範囲外のため index=0 を使用します");
-            }
-        }
-        else
-        {
-            // デバイスリストが空なら current を試す
-            gamepad = Gamepad.current;
+            v = Input.GetAxis("Vertical_P1");
+            h = Input.GetAxis("Horizontal_P1");
         }
 
-        if (gamepad != null)
+        else if (playerID == PlayerID.P2)
         {
-            v = gamepad.leftStick.y.ReadValue();
-            h = gamepad.leftStick.x.ReadValue();
-
-            // if (gamepad.buttonSouth.wasPressedThisFrame || Input.GetKeyDown(KeyCode.JoystickButton0))
-            // {
-            //     pt.Resetposilist();
-            //     pp.SetPosition();
-            // }
+            v = Input.GetAxis("Vertical_P2");
+            h = Input.GetAxis("Horizontal_P2");
         }
-        else
-        {
-            Debug.LogWarning("Gamepad not connected");
-        }
-    }
-
-    /// <summary>
-    /// ランタイムで gamepad index を変更する。
-    /// `saveToPrefs` を true にすると PlayerPrefs に保存され、次回起動時に復元されます。
-    /// </summary>
-    public void SetGamepadIndex(int index, bool saveToPrefs = false)
-    {
-        gamepadIndex = index;
-        if (saveToPrefs) PlayerPrefs.SetInt("gamepadIndex", gamepadIndex);
     }
 
     // 歩くアニメーションのメソッド
