@@ -17,6 +17,7 @@ public class PanelController : MonoBehaviour
     private Image panelImage;
 
     [SerializeField] private GameObject choices;
+    [SerializeField] private GameObject choices_ps;
 
     private GameObject currentSelectedCursor = null;
     private GameObject lastPressedCursor = null;
@@ -79,6 +80,8 @@ public class PanelController : MonoBehaviour
     private bool flag = false;
     private bool kakutei = false; // 同じボタンを連続で2回押したか確認
 
+    private string sony = "Sony Interactive Entertainment Wireless Controller";
+
     void Awake()
     {
         mg = FindObjectOfType<Manager>();
@@ -102,6 +105,7 @@ public class PanelController : MonoBehaviour
     void Start()
     {
         choices.SetActive(false);
+        choices_ps.SetActive(false);
 
         panelImage = GetComponent<Image>();
 
@@ -184,7 +188,8 @@ public class PanelController : MonoBehaviour
     {
         // 適切なテキストを表示
         _question.gameObject.SetActive(false);
-        choices.gameObject.SetActive(false);
+        choices.SetActive(false);
+        choices_ps.SetActive(false);
         _text.gameObject.SetActive(true);
         _tokutyou.gameObject.SetActive(false);
 
@@ -251,8 +256,13 @@ public class PanelController : MonoBehaviour
 
     private IEnumerator ShowChoicesCoroutine()
     {
-        choices.SetActive(true);
-
+        if(Globaldata.controllerType == sony){
+            choices_ps.SetActive(true);
+        }
+        else{
+            choices.SetActive(true);
+        }
+        
         // 0.5秒待ってから次の処理へ（今は見た目だけ出す）
         yield return new WaitForSeconds(0.5f);
     }

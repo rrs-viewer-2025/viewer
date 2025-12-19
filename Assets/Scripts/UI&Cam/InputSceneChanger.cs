@@ -25,12 +25,45 @@ public class InputSceneChanger : MonoBehaviour
 
     public int LastPressedButton { get; private set; } = -1; // 最後に押されたボタン番号
     public bool ButtonPressed { get; private set; } = false; // ボタンが押された瞬間
+    public string controllerName { get; private set; } = "aaa";
 
     void Start()
     {
         if (showDebugLog)
         {
             Debug.Log($"InputSceneChanger initialized. Target scene: {targetSceneName}");
+        }
+
+        string[] controllers = Input.GetJoystickNames();
+        foreach (string c in controllers)
+        {
+            Debug.Log("接続中コントローラー: " + c);
+        }
+
+        if (controllers.Length > 0)
+        {
+            controllerName = controllers[0];
+            Globaldata.controllerType = controllerName;
+            Debug.Log(controllerName);
+
+            if (controllerName.ToLower().Contains("Sony") || controllerName.ToLower().Contains("dualshock"))
+            {
+                //controllerName = "Sony";
+                Debug.Log("PlayStation系コントローラーが接続されています");
+            }
+            else if (controllerName.ToLower().Contains("Logi") || controllerName.ToLower().Contains("f310") || controllerName.ToLower().Contains("f710"))
+            {
+                //controllerName = "Logi";
+                Debug.Log("Logicool(ロジクール)コントローラーが接続されています");
+            }
+            else
+            {
+                Debug.Log("その他のコントローラーが接続されています");
+            }
+        }
+        else
+        {
+            Debug.Log("コントローラーは接続されていません");
         }
     }
 
@@ -62,7 +95,7 @@ public class InputSceneChanger : MonoBehaviour
         {
             // 現在のシーン名を取得
             string currentSceneName = SceneManager.GetActiveScene().name;
-            if(currentSceneName == "Title" || currentSceneName == "intro" || currentSceneName == "result")
+            if(currentSceneName == "Title" || currentSceneName == "result")
             {
                 // ゲームパッドのAボタン（Xbox）、×ボタン（PlayStation）など
                 if (Input.GetKeyDown(KeyCode.JoystickButton0) || 
