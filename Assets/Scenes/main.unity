@@ -5610,7 +5610,7 @@ MonoBehaviour:
   time_delete: {fileID: 1340310101}
   timeDeleteDisplayTime: 1
   gamepadIndex: 1
-  joyconIndex: 0
+  joyconIndex: 1
 --- !u!114 &1551897265
 MonoBehaviour:
   m_ObjectHideFlags: 0
