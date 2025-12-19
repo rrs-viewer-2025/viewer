@@ -9,6 +9,7 @@ using System.Collections;
 
 public class PlayerCharaControl : MonoBehaviour
 {
+    [Header("Movement Settings")]
     public Timer timerScript; //Timerスクリプトをアタッチする
     public float forwardSpeed = 5.0f;//前進速度
     public float rotationSpeed = 100.0f;//回転速度
@@ -19,6 +20,7 @@ public class PlayerCharaControl : MonoBehaviour
     private Coroutine blinkCoroutine;
     private bool isBlinking = false;
     public float blinkInterval = 1.0f; // 点滅間隔
+
     [Header("HP Settings")]
     public Slider hpSlider;
     public float maxHP = 100f;
@@ -34,16 +36,9 @@ public class PlayerCharaControl : MonoBehaviour
     public GameObject time_delete;   // 時間減少表示UI
     public float timeDeleteDisplayTime = 1.5f; // 表示時間（秒）
     private Coroutine timeDeleteCoroutine;
-
-
-
-
-
     private Animator anim;
     private bool runFlag;
     Rigidbody rb;
-
-    //private bool RefugeOn; //避難所に到達したかを管理する
 
     // コントローラの入力値
     private float v;
@@ -51,46 +46,18 @@ public class PlayerCharaControl : MonoBehaviour
     [Header("Controller Index")]
     [Tooltip("Gamepad index used from Unity InputSystem (Gamepad.all)")]
     [SerializeField] private int gamepadIndex = 0;
-    [Tooltip("Joy-Con index used from JoyconManager.Instance.j")]
-    [SerializeField] private int joyconIndex = 0;
-    private List<Joycon> joycons; // Joy-Conのリスト
-    private Joycon joycon;        // 今使うJoy-Con（片方
-    private bool left = false;
 
     // Setting.csのInterfaceTypeを参照して共有
     private Setting settingScript;
     private string interfaceType;
-    JoyconManager joyconManager;
 
     PlayerTrail pt;
     PlayerPosition pp;
 
     void Awake()
     {
-        // JoyconManagerを取得
-        joyconManager = FindFirstObjectByType<JoyconManager>();
         pt = FindFirstObjectByType<PlayerTrail>();
         pp = FindFirstObjectByType<PlayerPosition>();
-    }
-
-    /// <summary>
-    /// Joy-Con入力がある場合の移動・回転値の更新処理。
-    /// </summary>
-    void HandleJoyconInput()
-    {
-        var stick = joycon.GetStick();
-        left = joyconManager.getLeftRight();
-
-        if (left)
-        {
-            v = stick[0];
-            h = -stick[1];
-        }
-        else
-        {
-            v = -stick[0];
-            h = stick[1];
-        }
     }
 
     void Start()
@@ -113,10 +80,6 @@ public class PlayerCharaControl : MonoBehaviour
 
         // Inspector の値を優先するが、保存済みの値があればそれを読み込む
         if (PlayerPrefs.HasKey("gamepadIndex")) gamepadIndex = PlayerPrefs.GetInt("gamepadIndex", gamepadIndex);
-        if (PlayerPrefs.HasKey("joyconIndex")) joyconIndex = PlayerPrefs.GetInt("joyconIndex", joyconIndex);
-
-        // Joy-Conの接続・初期化処理を関数化
-        SetupJoycon();
 
         currentHP = maxHP;
         if (hpSlider != null)
@@ -131,34 +94,6 @@ public class PlayerCharaControl : MonoBehaviour
             time_delete.SetActive(false);
 
 
-    }
-
-    /// <summary>
-    /// Joy-Conの接続と初期化を行う関数。
-    /// </summary>
-    void SetupJoycon()
-    {
-        // JoyconManager から Joy-Con のリストを取得
-        joycons = JoyconManager.Instance.j;
-
-        // 少なくとも1つJoy-Conが接続されていたら使う
-        if (joycons.Count > 0)
-        {
-            if (joyconIndex >= 0 && joyconIndex < joycons.Count)
-            {
-                joycon = joycons[joyconIndex];
-                Debug.Log($"Joy-Con接続成功 (index={joyconIndex})");
-            }
-            else
-            {
-                joycon = joycons[0];
-                Debug.LogWarning($"joyconIndex {joyconIndex} が範囲外のため index=0 を使用します");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Joy-Conが接続されていません");
-        }
     }
 
     void Update()
@@ -179,12 +114,6 @@ public class PlayerCharaControl : MonoBehaviour
             case "pad":
                 pad();
                 break;
-        }
-
-        // Joy-Con入力がある場合は優先して処理
-        if (joycon != null)
-        {
-            HandleJoyconInput();
         }
 
         // 共通処理（Runアニメーションと移動・回転）
@@ -379,21 +308,6 @@ public class PlayerCharaControl : MonoBehaviour
     {
         gamepadIndex = index;
         if (saveToPrefs) PlayerPrefs.SetInt("gamepadIndex", gamepadIndex);
-    }
-
-    /// <summary>
-    /// ランタイムで joycon index を変更する（即座に適用）。
-    /// </summary>
-    public void SetJoyconIndex(int index, bool saveToPrefs = false)
-    {
-        joyconIndex = index;
-        if (saveToPrefs) PlayerPrefs.SetInt("joyconIndex", joyconIndex);
-        // 再選択
-        if (joycons != null && joycons.Count > 0)
-        {
-            if (joyconIndex >= 0 && joyconIndex < joycons.Count) joycon = joycons[joyconIndex];
-            else joycon = joycons[0];
-        }
     }
 
     // 歩くアニメーションのメソッド
