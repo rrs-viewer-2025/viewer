@@ -4294,8 +4294,8 @@ GameObject:
   m_Component:
   - component: {fileID: 907152999}
   - component: {fileID: 907152998}
-  - component: {fileID: 907153000}
   - component: {fileID: 907153001}
+  - component: {fileID: 907153002}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -4333,20 +4333,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &907153000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 907152996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f42f264b4aad4406bcb1bf4c27cc6c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnableIMU: 1
-  EnableLocalize: 1
 --- !u!114 &907153001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4378,6 +4364,24 @@ MonoBehaviour:
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
   m_ScrollDeltaPerTick: 6
+--- !u!114 &907153002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 907152996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 471121717442e4684b56f1a0ae0ce6c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetSceneName: main
+  useSpaceKey: 1
+  useController: 1
+  useFadeTransition: 1
+  controllerButtonName: Submit
+  showDebugLog: 0
 --- !u!1 &939369934
 GameObject:
   m_ObjectHideFlags: 0
@@ -7700,8 +7704,7 @@ MonoBehaviour:
   damageInterval: 2
   time_delete: {fileID: 1340310101}
   timeDeleteDisplayTime: 1
-  gamepadIndex: 1
-  joyconIndex: 1
+  playerID: 1
 --- !u!114 &1551897265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8095,8 +8098,7 @@ MonoBehaviour:
   damageInterval: 2
   time_delete: {fileID: 1340310101}
   timeDeleteDisplayTime: 1
-  gamepadIndex: 0
-  joyconIndex: 0
+  playerID: 0
 --- !u!114 &1589655482
 MonoBehaviour:
   m_ObjectHideFlags: 0
