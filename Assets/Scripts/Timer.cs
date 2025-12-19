@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour
 {
-    float LimitTime = 180f;
+    float LimitTime = 240f;
     public float timeRemaining;
     public TextMeshProUGUI timerText;
     public Color normalColor = Color.white;
