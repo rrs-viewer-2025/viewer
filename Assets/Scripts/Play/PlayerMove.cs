@@ -293,11 +293,11 @@ public class PlayerCharaControl : MonoBehaviour
             rb.AddForce(transform.up * 1000 * 8, ForceMode.Force);
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            pp.SetPosition();
-            pt.Resetposilist();
-        }
+        // if(Input.GetKeyDown(KeyCode.Alpha1))
+        // {
+        //     pp.SetPosition();
+        //     pt.Resetposilist();
+        // }
     }
 
     /// <summary>
@@ -355,11 +355,11 @@ public class PlayerCharaControl : MonoBehaviour
             v = gamepad.leftStick.y.ReadValue();
             h = gamepad.leftStick.x.ReadValue();
 
-            if (gamepad.buttonSouth.wasPressedThisFrame || Input.GetKeyDown(KeyCode.JoystickButton0))
-            {
-                pt.Resetposilist();
-                pp.SetPosition();
-            }
+            // if (gamepad.buttonSouth.wasPressedThisFrame || Input.GetKeyDown(KeyCode.JoystickButton0))
+            // {
+            //     pt.Resetposilist();
+            //     pp.SetPosition();
+            // }
         }
         else
         {
