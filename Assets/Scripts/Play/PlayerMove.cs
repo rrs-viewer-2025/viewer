@@ -163,6 +163,10 @@ public class PlayerCharaControl : MonoBehaviour
 
     void Update()
     {
+        if(GameData.ParentGoal && GameData.ChildGoal)
+        {
+            syuryou();
+        }
         // 入力方法に応じて処理分岐
         switch (interfaceType)
         {
@@ -400,25 +404,42 @@ public class PlayerCharaControl : MonoBehaviour
     }
 
     // Goalシーンに遷移するメソッド
-    private void OnTriggerEnter(Collider other)
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.gameObject.tag == "Refuge")
+    //     {
+    //         ForceDisableCollideUI();
+
+    //         // ↓↓↓ ここから下は元のまま ↓↓↓
+    //         Globaldata.playerposi = pt.getPlayerPosiList();
+
+    //         if (timerScript != null)
+    //         {
+    //             timerScript.StopTimer();
+    //             GameData.clearTime = timerScript.GetTime();
+    //             GameData.hinan = true; //避難成功を格納
+    //         }
+
+    //         Info_end.SetActive(true);
+    //         Invoke("LoadGoalScene", 5f); // 5秒後にシーン遷移
+    //     }
+    // }
+
+    public void syuryou()
     {
-        if (other.gameObject.tag == "Refuge")
+        ForceDisableCollideUI();
+
+        // ↓↓↓ ここから下は元のまま ↓↓↓
+        Globaldata.playerposi = pt.getPlayerPosiList();
+        if (timerScript != null)
         {
-            ForceDisableCollideUI();
-
-            // ↓↓↓ ここから下は元のまま ↓↓↓
-            Globaldata.playerposi = pt.getPlayerPosiList();
-
-            if (timerScript != null)
-            {
-                timerScript.StopTimer();
-                GameData.clearTime = timerScript.GetTime();
-                GameData.hinan = true; //避難成功を格納
-            }
-
-            Info_end.SetActive(true);
-            Invoke("LoadGoalScene", 5f); // 5秒後にシーン遷移
+            timerScript.StopTimer();
+            GameData.clearTime = timerScript.GetTime();
+            GameData.hinan = true; //避難成功を格納
         }
+
+        Info_end.SetActive(true);
+        Invoke("LoadGoalScene", 5f); // 5秒後にシーン遷移
     }
 
 
