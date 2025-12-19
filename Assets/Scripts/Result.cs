@@ -19,7 +19,7 @@ public class Result : MonoBehaviour
         if(!GameData.hinan) //避難失敗時の処理
         {
             timeText.text = "--:--";
-            hyoukaText.text = "F";
+            hyoukaText.text = "E";
             commentText.text = "まにあわなかったね。\nげんじつはもっと\nあぶないよ";
             return;
         }

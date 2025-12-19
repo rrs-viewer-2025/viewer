@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour
 {
-    float LimitTime = 180f;
+    float LimitTime = 240f;
     public float timeRemaining;
     public TextMeshProUGUI timerText;
     public Color normalColor = Color.white;
@@ -13,6 +13,7 @@ public class Timer : MonoBehaviour
     public GameObject Info_timeover;
     private bool timeover = false;
     private bool isStopped = false;
+    private bool damageWarning = false;
     PlayerTrail pt;
 
     void Awake()
@@ -31,33 +32,31 @@ public class Timer : MonoBehaviour
         if (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
+            timeRemaining = Mathf.Max(0f, timeRemaining);
 
             int minutes = Mathf.FloorToInt(timeRemaining / 60f);
             int seconds = Mathf.FloorToInt(timeRemaining % 60f);
-            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            timerText.text = $"{minutes:00}:{seconds:00}";
 
-            // 10秒切ったら赤色に
-            if (timeRemaining < 10f)
+            // ダメージ中でなければ残り時間で色制御
+            if (!damageWarning)
             {
-                timerText.color = warningColor;
-            }
-            else
-            {
-                timerText.color = normalColor;
+                timerText.color = (timeRemaining < 10f) ? warningColor : normalColor;
             }
         }
         else
         {
-            if(!timeover)
+            if (!timeover)
             {
+                timeover = true;
+
                 Globaldata.playerposi = pt.getPlayerPosiList();
                 timerText.text = "00:00";
                 GameData.hinan = false; //避難失敗を格納
+
                 Info_timeover.SetActive(true);
-                Invoke("LoadResultScene", 3f);
-                timeover = true;
+                Invoke(nameof(LoadResultScene), 3f);
             }
-            
         }
     }
 
@@ -76,4 +75,11 @@ public class Timer : MonoBehaviour
         return LimitTime - timeRemaining;
     }
 
+    // Player から呼ばれる
+    public void SetWarning(bool isDamage)
+    {
+        damageWarning = isDamage;
+
+        timerText.color = isDamage ? warningColor : normalColor;
+    }
 }

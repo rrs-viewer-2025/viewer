@@ -5,8 +5,15 @@ using System.IO;
 
 public class Setting : MonoBehaviour
 {
+    private static Setting _instance;
+    private static bool _initialized;
+    public static Setting Instance => _instance;
+
     public string LogfolderPath;   // エディタ時のみInspectorから
     public string InterfaceType;   // エディタ時のみInspectorから
+
+    // 共有・通知用イベント（シーン跨ぎで利用可能）
+    public event System.Action<string> OnInterfaceTypeChanged;
 
     [System.Serializable]
     private class ConfigData
@@ -19,7 +26,22 @@ public class Setting : MonoBehaviour
 
     void Awake()
     {
-        LoadConfig();
+        // シングルトン + シーン跨ぎで維持
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        // 初回のみ設定ロード（以降のシーンでは値を共有）
+        if (!_initialized)
+        {
+            LoadConfig();
+            _initialized = true;
+        }
     }
 
     public void LoadConfig()
@@ -74,5 +96,14 @@ public class Setting : MonoBehaviour
         Debug.Log("[Setting.cs] Reloading config...");
         LoadConfig();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    // コードからインターフェースタイプを更新し、全シーンへ通知
+    public void SetInterfaceType(string newType)
+    {
+        if (InterfaceType == newType) return;
+        InterfaceType = newType;
+        Debug.Log($"[Setting.cs] InterfaceType changed: {InterfaceType}");
+        OnInterfaceTypeChanged?.Invoke(InterfaceType);
     }
 }

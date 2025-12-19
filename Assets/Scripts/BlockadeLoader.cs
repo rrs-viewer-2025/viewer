@@ -75,6 +75,9 @@ public class BlockadeLoader : MonoBehaviour
                                 Vector3 position = new Vector3(x / 1000f, 0, y / 1000f);
                                 GameObject Blockade = Instantiate(BlockadePrefab, position, Quaternion.identity);
                                 blockadeList.Add(Blockade);
+
+                                // タグの追加
+                                Blockade.tag = "Blockade";
                             }
                         }
                     }
