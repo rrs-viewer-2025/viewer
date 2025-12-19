@@ -108,9 +108,6 @@ public class PlayerCharaControl : MonoBehaviour
             case "key":
                 key();
                 break;
-            case "mat":
-                Mat();
-                break;
             case "pad":
                 pad();
                 break;
@@ -231,25 +228,6 @@ public class PlayerCharaControl : MonoBehaviour
         //     pp.SetPosition();
         //     pt.Resetposilist();
         // }
-    }
-
-    /// <summary>
-    /// MatActionオブジェクトからの入力によるプレイヤーの移動処理。
-    /// Up/Down/Left/Rightの値に応じて移動方向を決定。
-    /// </summary>
-    void Mat()
-    {
-        MatAction mat = FindFirstObjectByType<MatAction>();
-
-        if (mat != null)
-        {
-            v = 0.0f;
-            h = 0.0f;
-            if (mat.Up > 0) v = 1.0f;
-            if (mat.Down > 0) v = -1.0f;
-            if (mat.Left > 0) h = -1.0f;
-            if (mat.Right > 0) h = 1.0f;
-        }
     }
 
     /// <summary>
