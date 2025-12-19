@@ -8,6 +8,7 @@ using System.Collections;
 
 public class PlayerCharaControl : MonoBehaviour
 {
+    [Header("Movement Settings")]
     public Timer timerScript; //Timerスクリプトをアタッチする
     public float forwardSpeed = 5.0f;//前進速度
     public float rotationSpeed = 100.0f;//回転速度
@@ -18,6 +19,7 @@ public class PlayerCharaControl : MonoBehaviour
     private Coroutine blinkCoroutine;
     private bool isBlinking = false;
     public float blinkInterval = 1.0f; // 点滅間隔
+
     [Header("HP Settings")]
     public Slider hpSlider;
     public float maxHP = 100f;
@@ -41,7 +43,6 @@ public class PlayerCharaControl : MonoBehaviour
     // コントローラの入力値
     private float v;
     private float h;
-
     public enum PlayerID
     {
         P1,
@@ -50,7 +51,6 @@ public class PlayerCharaControl : MonoBehaviour
 
     [Header("Player Settings")]
     public PlayerID playerID = PlayerID.P1;
-
 
     // Setting.csのInterfaceTypeを参照して共有
     private Setting settingScript;
@@ -109,9 +109,6 @@ public class PlayerCharaControl : MonoBehaviour
         {
             case "key":
                 key();
-                break;
-            case "mat":
-                Mat();
                 break;
             case "pad":
                 pad();
@@ -236,25 +233,6 @@ public class PlayerCharaControl : MonoBehaviour
     }
 
     /// <summary>
-    /// MatActionオブジェクトからの入力によるプレイヤーの移動処理。
-    /// Up/Down/Left/Rightの値に応じて移動方向を決定。
-    /// </summary>
-    void Mat()
-    {
-        MatAction mat = FindFirstObjectByType<MatAction>();
-
-        if (mat != null)
-        {
-            v = 0.0f;
-            h = 0.0f;
-            if (mat.Up > 0) v = 1.0f;
-            if (mat.Down > 0) v = -1.0f;
-            if (mat.Left > 0) h = -1.0f;
-            if (mat.Right > 0) h = 1.0f;
-        }
-    }
-
-    /// <summary>
     /// ゲームパッドからの入力によるプレイヤーの移動処理。
     /// 縦横の入力値を取得し、移動方向を決定。
     /// </summary>
@@ -266,6 +244,7 @@ public class PlayerCharaControl : MonoBehaviour
             v = Input.GetAxis("Vertical_P1");
             h = Input.GetAxis("Horizontal_P1");
         }
+
         else if (playerID == PlayerID.P2)
         {
             v = Input.GetAxis("Vertical_P2");
