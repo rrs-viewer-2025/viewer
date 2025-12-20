@@ -110,6 +110,12 @@ public class InputSceneChanger : MonoBehaviour
                     Input.GetKeyDown(KeyCode.JoystickButton3))
                 {
                     shouldChangeScene = true;
+                    if (currentSceneName == "result")
+                    {
+                        GameData.hinan = false;
+                        GameData.ChildGoal = false;
+                        GameData.ParentGoal = false;
+                    }
                     if (showDebugLog) Debug.Log("Controller button pressed - changing scene");
                 }
             }
