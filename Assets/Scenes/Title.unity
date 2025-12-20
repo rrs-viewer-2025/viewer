@@ -369,7 +369,7 @@ MonoBehaviour:
   titleUI: {fileID: 1067056953}
   videoPanel: {fileID: 1301366320}
   videoPlayer: {fileID: 521599055}
-  titleDisplayTime: 60
+  titleDisplayTime: 10
   videoDisplayTime: 49
 --- !u!1 &521599054
 GameObject:
@@ -956,7 +956,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc18882eda0b44cfa3a4dac5577f229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LogfolderPath: "/Users/x22036xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/Viewer/setting/output"
+  LogfolderPath: "/Users/x22038xx/Desktop/\u7814\u7A76\u5BA4\u95A2\u9023/\u30B3\u30F3\u30C6\u30F3\u30C4\u7528/kobe"
   InterfaceType: pad
 --- !u!4 &1612049116
 Transform:
@@ -1139,7 +1139,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 942ef9512a76246a482cd5841ce8dd70, type: 3}
   m_Resource: {fileID: 8300000, guid: 942ef9512a76246a482cd5841ce8dd70, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.23
   m_Pitch: 1.1
   Loop: 1
   Mute: 0
