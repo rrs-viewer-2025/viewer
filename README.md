@@ -21,48 +21,52 @@ viewer制作リポジトリです。
 
 ## 機能一覧
 
-### ゲーム基本管理
-- `Setting.cs` : 設定ファイル読み込み
-- `StepManager.cs` : ステップ進行管理
-- `StepDisplay.cs` : ステップ数表示
-- `Title_button.cs` : タイトル画面ボタン制御
+本リポジトリは RRS のシミュレーションログを3Dで描画し、キーボード・マット・Joy‑Con 等で操作できます。詳細なスクリプト一覧は本文末の「詳細スクリプト一覧」にまとめています。
 
-### マップ・オブジェクトロード
-- `BuildingLoader.cs` : 建物データロード
-- `CivilianLoader.cs` : 市民データロード
-- `BlockadeLoader.cs` : 障害物ロード
-- `AmbulanceteamLoader.cs` : 救急隊ロード
-- `FirebrigadeLoader.cs` : 消防隊ロード
-- `PoliceforceLoader.cs` : 警察隊ロード
-- `RefugeLoader.cs` : 避難所ロード
-- `MapLoader.cs` : マップ全体ロード
-- `SetEntityID.cs` : エンティティID付与
-- `CitizenCounter.cs` : 市民数カウント
+（簡潔表示のため、個別ファイルの箇条書きは本文末に移動しました）
 
-### キャラクター操作・アニメーション
-- `PlayerMove.cs` : プレイヤー移動
-- `CivilianAnimation.cs` : 市民アニメーション
-- `CivilianState.cs` : 市民ステータス管理
-- `MultiObjectMover.cs` : 複数オブジェクト操作
+## 詳細スクリプト一覧
 
-### カメラ制御
-- `CameraController.cs` : メインカメラ操作
-- `OverviewCamera.cs` : 俯瞰カメラ操作
-- `Minimap.cs` : ミニマップ表示
-- `MapNameDisplay.cs` : マップ名UI表示
+以下は `Assets/Scripts` フォルダの主要スクリプトと簡単な説明です。必要なら参照リンクや更に詳しい説明を追加します。
 
-### 外部デバイス連携
-- `JoyconManager.cs` : Joy-Con管理
-- `Joycon.cs` : Joy-Con操作
-- `MatAction.cs` : マット入力制御
-- `MicController.cs` : マイク入力取得
-- `HIDapi.cs` : HID通信処理
+**ルート（主要スクリプト）**
+- **AmbulanceteamLoader.cs**: 救急チームの読み込み・生成を行うローダー
+- **BlockadeLoader.cs**: 封鎖（バリケード）オブジェクトの読み込み
+- **BuildingLoader.cs**: 建物データの読み込み
+- **ComplexBuildingGenerator.cs**: 複雑な建物の生成ロジック
+- **GameData.cs**: シミュレーションのデータ構造・読み書き
+- **Globaldata.cs**: 全体設定やグローバル変数の管理
+- **MainPathDraw.cs**: メイン経路の描画処理
+- **PlaneManager.cs**: 地面／平面関連の管理
+- **RoadMesh.cs**: 道路メッシュの生成・管理
+- **StepManager.cs / Timer.cs / StepDisplay.cs**: シミュレーションのステップ制御・表示
 
-### その他システム
-- `ComplexBuildingGenerator.cs` : 複雑な建物生成
-- `mesh.cs` : メッシュ制御
-- `RoadMesh.cs` : 道路メッシュ生成
-- `URN.cs` : URN定義
+**フォルダ別（主なもの）**
+- **Assets/Scripts/Civiian/**
+   - **CivilianLoader.cs**: 市民（Civilian）の読み込み・生成
+   - **CivilianAnimation.cs**: 市民アニメーション制御
+   - **CivilianState.cs**: 市民の状態管理（行動状態など）
+
+- **Assets/Scripts/controller/**
+   - **LogitechDualActionHID.cs / LogitechDualActionInputReport.cs**: ゲームパッド（Logitech）入力処理
+
+- **Assets/Scripts/Map/**
+   - **MapLoader.cs**: マップデータの読み込み
+   - **MapNameDisplay.cs**: マップ名やラベルの表示
+
+- **Assets/Scripts/Play/**
+   - **JoyconManager.cs / Joycon.cs / HIDapi.cs**: Joy-Con や HID デバイスの管理
+   - **PlayerMove.cs / PlayerPosition.cs**: プレイヤーの移動・位置管理
+   - **PlayerStartPosition.cs / PlayerTrail.cs**: 開始位置と軌跡表示
+
+- **Assets/Scripts/SelectPathScene/**
+   - **Manager.cs / PathDrawer.cs / Building.cs / Road.cs / Refuge.cs**: 経路選択シーンの管理、経路描画、建物・避難所表現
+   - **MinimapCameraFitter.cs / Gizmo.cs**: ミニマップや描画補助ユーティリティ
+
+- **Assets/Scripts/ResultScene/**
+   - **ResultManager.cs / ResultPathDraw.cs / ResultRoad.cs**: 結果表示シーンの制御と描画
+
+上記は主要スクリプトのサマリです。細かいファイルやユーティリティ（MultiObjectMover.cs、SetEntityID.cs、RefugeCamera.cs など）も多数あります。特定のスクリプトの詳細説明やファイルへの直接リンクを追加希望であれば指示ください。
 
 ## コントリビューション
 1. リポジトリをフォーク。
