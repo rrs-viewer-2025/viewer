@@ -1,6 +1,7 @@
 # Interactive-Evacuation-Route-simulation(話し合い型避難経路体験システム）
 [RoboCup Rescue Simulation](https://www.robocup.or.jp/robocup-rescue/simulation/)を題材にした親子での体験を想定したコンテンツ
-体験後の主な効果として防災意識の向上、避難経路計画の重要性の理解など
+
+体験後の主な効果として防災意識の向上、避難経路計画の重要性の理解などを想定しています
 
 ## 使用技術
 ![Unity](https://img.shields.io/badge/Unity-6000.0.47f1-blue?logo=unity)
